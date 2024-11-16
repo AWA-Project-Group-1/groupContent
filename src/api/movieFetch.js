@@ -71,19 +71,41 @@ export const fetchMovieDetails = async (id) => {
     }
 };
 
-// Fetch upcoming movies
+// Fetch upcoming movies with pagination
 export const fetchUpcomingMovies = async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/movie/upcoming`, {
-            params: {
-                api_key: API_KEY,
-                language: 'en-US',
-                page: 1,
-            },
-        });
-        return response.data.results;
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+
+        let allMovies = [];
+        let page = 1;
+        let totalPages = 1;  // Initialize totalPages to enter the loop
+
+        while (page <= totalPages) {
+            const response = await axios.get(`${BASE_URL}/movie/upcoming`, {
+                params: {
+                    api_key: API_KEY,
+                    language: 'en-US',
+                    page: page,
+                },
+            });
+
+            // Filter and add unreleased movies
+            const unreleasedMovies = response.data.results.filter(
+                (movie) => movie.release_date > todayString
+            );
+            allMovies = allMovies.concat(unreleasedMovies);
+
+            // Update pagination data
+            totalPages = response.data.total_pages;
+            page++;
+        }
+
+        return allMovies; // Return all the filtered unreleased movies
     } catch (error) {
-        console.error("Error fetching upcoming movies:", error);
+        console.error("Error fetching unreleased movies:", error);
         throw error;
     }
 };
+
+
