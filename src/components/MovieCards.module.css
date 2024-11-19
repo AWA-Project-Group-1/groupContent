@@ -1,0 +1,126 @@
+.productcards_container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* Use 2 columns for larger width */
+  gap: 6px; /* Increase space between cards */
+  padding: 0px;
+  max-width: 1200px; /* Optional: adjust the max width */
+  margin: 0 auto;
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+
+.product-card-framework {
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color:white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s;
+  height: 440px; /* Increase height for larger images */
+  overflow: hidden;
+}
+.product-card-framework:hover { 
+  transform: translateY(-2px);  /* Lift card effect */
+  box-shadow: 0 8px 12px rgba(177, 26, 26, 0.7);  /* Stronger shadow on hover */
+  border:solid;
+  border-color: #FF4500;  /* Change the border to a lighter red on hover */
+}
+
+.product-card-framework h4 p{
+  color:white;
+
+}
+.product-card {
+  width: 100%; /* Image fills the card width */
+  height: 300px; /* Adjust height as needed */
+  object-fit: cover; /* Crops to fill container */
+  border-radius: 4px;
+}
+
+h5{
+  color:black;
+  margin-top: 10px;
+}
+p {
+  color:black;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+
+/* .product-card-framework {
+  position: relative; 
+  width: 200px; 
+  height: 300px; 
+} */
+
+.product-card-framework {
+  position: relative; /* Allow absolute positioning inside */
+  width: 200px; /* Or whatever size you want */
+  height: 440px; /* Or whatever size you want */
+}
+
+.button-container {
+  position: center;
+  margin-bottom: 10px;
+
+ 
+}
+
+.button-click {
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  background-color: #ff6f61; /* Or your preferred color */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.button-click:hover {
+  background-color: #e55b4e; /* Darker shade on hover */
+}
+
+/* for pagination */
+
+.pagination-controls {
+  display: flex;
+  justify-content: center; /* Center the pagination buttons */
+  align-items: center;
+  margin-top: 20px; 
+  margin-bottom: 20px; 
+}
+
+.pagination-controls button {
+  padding: 10px 20px;
+  margin: 0 10px; /* Add spacing between buttons */
+  background-color: #d24747;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100px;
+  transition: background-color 0.3s;
+}
+
+.pagination-controls button:disabled {
+  background-color: #d3d3d3;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+  background-color:#d24747;
+}
+
+.pagination-controls span {
+  font-size: 16px;
+  margin: 0 10px;
+  font-weight: bold;
+}

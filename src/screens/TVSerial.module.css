@@ -1,0 +1,81 @@
+.nav-herosection {
+    background-color:white;
+    /* border: 2px solid rgb(223, 200, 200); Temporary for debugging */
+}
+.nav-herosection-moviescard {
+    background-color:white;
+    border: 2px solid rgb(220, 220, 230); /* Temporary for debugging */
+}
+
+
+.allfilter-container {
+    display: flex;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    padding: 0;
+    background-color: rgb(199, 196, 196);
+
+}
+
+
+.genre-filter-container {  
+    flex:1; 
+    margin-left:50px;
+   
+}
+
+
+.allfilter-container label {
+    /* font: ; */
+    color:black;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.year-filter-container {
+    flex:1;
+    margin-left: 10px;
+}
+
+.rating-filter-container {
+    flex:1;
+    margin-left: 10px;
+  
+}
+.search-contianer {
+    margin-right: 40px;
+}
+
+.allfilter-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows wrapping if the screen size is too small */
+    gap: 1rem; /* Adds space between items */
+    align-items: center; /* Aligns items vertically */
+    justify-content: space-between; /* Adjust spacing between elements */
+    padding: 10px; /* Adds some padding */
+}
+
+.genre-filter-container,
+.year-filter-container,
+.popularity-filter-container,
+.search-container {
+    display: flex;
+    flex-direction: column; /* Stacks label and input vertically */
+    gap: 0.5rem; /* Adds space between label and select/input */
+}
+.search-container input {
+    width: 200px; /* Set the desired width */
+    padding: 5px; /* Adjust padding for better appearance */
+    font-size: 14px; /* Set font size to make it compact */
+}
+
+@media (min-width: 768px) {
+    .genre-filter-container,
+    .year-filter-container,
+    .popularity-filter-container,
+    .search-container {
+        flex-direction: row; /* Puts label and input side by side for larger screens */
+        align-items: center;
+    }
+}
