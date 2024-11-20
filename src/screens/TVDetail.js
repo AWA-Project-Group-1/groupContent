@@ -6,17 +6,16 @@ import HeroSection from '../components/HeroSection';
 import Footer  from "../components/Footer"
 // import movieapplogo1 from "../assets/images/movieapplogo1.jpg"
 import movieapplogo1 from "../assets/images/movieapplogo1.jpg"
-const MovieDetail = () => {
-  const { id } = useParams();  
+const TVDetail = () => {
+  const { id } = useParams();  // Get the movieId from the URL
   const [movieDetail, setMovieDetail] = useState(null);
   const [tvSerialCredit, setTvSerialCredit] = useState(null);
 
   const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29';  // API key
   const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMTQwMTUxNC4zNzIzMjk1LCJzdWIiOiI2NzMzMTViNjI5YWE4ZmYyNDRjMGUzODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.0qof6UxtmX1ZydXb7hPBwnROQT3zdyKAbEXhXQ0OO4A';
-  const url = `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=en-US`;  // API endpoint to fetch movie details
-  const urlforcredit = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=${apiKey}&language=en-US`; 
-
-  
+  const url = `https://api.themoviedb.org/3/tv/${id}?api_key=${apiKey}&language=en-US`;  // API endpoint to fetch movie details
+  const urlforcredit = `https://api.themoviedb.org/3/tv/${id}/credits?api_key=${apiKey}&language=en-US`; 
+//   https://api.themoviedb.org/3/credit/credit_id
   // Fetch movie details based on movieId
   useEffect(() => {
     const options = {
@@ -180,4 +179,4 @@ const MovieDetail = () => {
   
 };
 
-export default MovieDetail;
+export default TVDetail;

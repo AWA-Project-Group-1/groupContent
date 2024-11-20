@@ -31,7 +31,7 @@ const Navitation = ({genres}) => {
 
   }
   function movieclickHandler(){
-    navigate("/")
+    navigate("/movies")
   }
   return (
     <div className={styles["nav-container"]}>

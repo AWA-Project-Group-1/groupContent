@@ -9,25 +9,35 @@ import './App.css';
 
 // heyanwen
 import TVSerial from "./screens/TVSerial.js"
-import MovieDetail from "./screens/MovieDetail.js"
+// import TVDetail from "./screens/TVDetail.js"
+import {MoiveTVSerialProvider} from "./context/MoiveTVSerialProvider"
+import MoviePage from "./screens/MoviePage.js"
+import MovieDetail from "./screens/MovieDetail.js";
+import TVDetail from './screens/TVDetail.js';
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ShowTime from "./screens/ShowTime.js"
-import { TVSeriesProvider } from './context/TVSeriesProvider';
+// import { TVSeriesProvider } from './context/TVSeriesProvider';
 
 const App = () => (
-  <TVSeriesProvider>
-      <Router>
-        <Routes>
-          <Route path="/" Component={HomePage} />
-          <Route path="/movie/:id" Component={MovieDetails} />
-          <Route path="/movies/top-rated" element={<AllMovies type="top-rated" />} />
-          <Route path="/movies/upcoming" element={<AllMovies type="upcoming" />} />
-          <Route path='/tvserial' element={<TVSerial />} />
-          <Route path="/detail/:movieId" element={<MovieDetail />} /> 
-          <Route path="/showtime" element={<ShowTime />} /> 
-        </Routes>
-      </Router>
-  </TVSeriesProvider>
+  <MoiveTVSerialProvider>
+    
+        <Router>
+          <Routes>
+            <Route path="/" Component={HomePage} />
+            <Route path="/movie/:id" Component={MovieDetails} />
+            <Route path="/movies/top-rated" element={<AllMovies type="top-rated" />} />
+            <Route path="/movies/upcoming" element={<AllMovies type="upcoming" />} />
+            <Route path='/tvserial' element={<TVSerial />} />
+            <Route path='/movies' element={<MoviePage/>} />
+            {/* <Route path="/detail/:movieId" element={<TVDetail />} />  */}
+            <Route path="/showtime" element={<ShowTime />} /> 
+            <Route path="/detail/movie/:id" element={<MovieDetail />} />
+            <Route path="/detail/tv/:id" element={<TVDetail />} />
+          </Routes>
+        </Router>
+    
+  </MoiveTVSerialProvider>
+  
   
 );
 

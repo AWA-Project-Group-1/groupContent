@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import React, {useState} from 'react'
 import styles from "./MovieCards.module.css"
 
-const MovieCards = ({ movieCards}) => {
+const TVCards = ({ movieCards}) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
@@ -15,7 +15,7 @@ const MovieCards = ({ movieCards}) => {
 
   function productClickHandler(movieId){
     // console.log("This is movieTVSerialData:", data);
-    navigate(`/detail/movie/${movieId}`);
+    navigate(`/detail/tv/${movieId}`);
   }
 
   function addButtonClickHandler(event){
@@ -68,4 +68,4 @@ const MovieCards = ({ movieCards}) => {
   );
 };
 
-export default MovieCards
+export default TVCards

@@ -3,9 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from "../components/Footer"
 import styles from "../screens/TVSerial.module.css"
 import Navigation from "../components/Navigation"
-import TVCards from "../components/TVCards"
+import MovieCards from "../components/MovieCards"
 import HeroSection from "../components/HeroSection"
-// import { TVSeriesContext } from '../context/TVSeriesProvider';
+import { TVSeriesContext } from '../context/TVSeriesProvider';
 import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider"
 // for the year
 import DatePicker from 'react-datepicker';
@@ -14,9 +14,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 // import MovieCarosel from "../components/MovieCarosel"
 const TVSerial = () => {
-    // const tvSeriesData = useContext(TVSeriesContext);
-   
-    const moiveTVSerialData = useContext(MoiveTVSerialContext)    
+    const tvSeriesData = useContext(TVSeriesContext);
+    const moiveTVSerialContext = useContext(MoiveTVSerialContext)
+    
     const [selectGenre, setSelectGenre] = useState('')
     const [genres, setGenres] = useState([]);
     const [selectYear, setSelectYear] = useState('');
@@ -28,7 +28,10 @@ const TVSerial = () => {
     // const url1 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=1&sort_by=popularity.desc`
     const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMTQwMTUxNC4zNzIzMjk1LCJzdWIiOiI2NzMzMTViNjI5YWE4ZmYyNDRjMGUzODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.0qof6UxtmX1ZydXb7hPBwnROQT3zdyKAbEXhXQ0OO4A';
     const urlforgenra = `https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`;
-   
+    // const url2 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=2&sort_by=popularity.desc`
+    // const url3 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=3&sort_by=popularity.desc`
+    // const url4 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=3&sort_by=popularity.desc`
+
     useEffect(() => {
         const options = {
             method: 'GET',
@@ -67,7 +70,7 @@ const TVSerial = () => {
         setSearchQuery(event.target.value);
     };
 
-    const filteredMovies = moiveTVSerialData.tvSeries?.filter((movie) => {
+    const filteredMovies = tvSeriesData.filter((movie) => {
         let isMatch = true;
 
         if (selectGenre && !movie.genre_ids.includes(Number(selectGenre))) {
@@ -159,7 +162,7 @@ const TVSerial = () => {
             </div>
 
             <div>
-                <TVCards movieCards={filteredMovies} />
+                <MovieCards movieCards={filteredMovies} />
             </div>
 
             <Footer />

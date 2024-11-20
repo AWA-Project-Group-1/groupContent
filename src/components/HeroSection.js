@@ -1,12 +1,13 @@
 
 import React, {useContext} from 'react';
 import styles from "./HeroSection.module.css";
-import { TVSeriesContext } from '../context/TVSeriesProvider';
-
+// import { TVSeriesContext } from '../context/TVSeriesProvider';
+import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider"
 
 const HeroSection = () => {
-  const tvSeriesData = useContext(TVSeriesContext);
-  const mostPopularSeries = tvSeriesData.reduce((prev, current) => {
+  // const tvSeriesData = useContext(TVSeriesContext);
+  const moiveTVSerialData = useContext(MoiveTVSerialContext) 
+  const mostPopularSeries = moiveTVSerialData.tvSeries?.reduce((prev, current) => {
     return prev.popularity > current.popularity ? prev : current;
   }, {});
 

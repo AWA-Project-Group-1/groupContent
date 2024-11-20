@@ -2,7 +2,7 @@ import {useState, useEffect}from 'react'
 import Navigation from '../components/Navigation'
 import HeroSection from '../components/HeroSection'
 import Footer from "../components/Footer"
-import styles from "../screens/MovieDetail"
+import styles from "../screens/TVDetail"
 const ShowTime = () => {
     const [showTime, setShowTime] = useState([])
 

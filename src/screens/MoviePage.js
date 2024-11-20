@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from "../components/Footer"
 import styles from "../screens/TVSerial.module.css"
 import Navigation from "../components/Navigation"
+import MovieCards from "../components/MovieCards"
 import TVCards from "../components/TVCards"
 import HeroSection from "../components/HeroSection"
 // import { TVSeriesContext } from '../context/TVSeriesProvider';
@@ -13,9 +14,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 
 // import MovieCarosel from "../components/MovieCarosel"
-const TVSerial = () => {
-    // const tvSeriesData = useContext(TVSeriesContext);
-   
+const MoviePage = () => {
+    
+    
     const moiveTVSerialData = useContext(MoiveTVSerialContext)    
     const [selectGenre, setSelectGenre] = useState('')
     const [genres, setGenres] = useState([]);
@@ -23,12 +24,18 @@ const TVSerial = () => {
     const [selectPopularity, setSelectPopularity] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
+    // const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29'; // API key
+    // const url = `https://api.themoviedb.org/3/trending/tv/day?api_key=${apiKey}`;
+    // const url1 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=1&sort_by=popularity.desc`
+    // const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMjA0NDc2OC4wMDAwOTUsInN1YiI6IjY3MzMxNWI2MjlhYThmZjI0NGMwZTM4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._Du_V8vd4FWEy9zzT9LXi1oaCukl8FWmChOhHtENcNE';
     const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29'; // API key
+    const urlforgenra = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en`;
+    
+    
+    
     // const url = `https://api.themoviedb.org/3/trending/tv/day?api_key=${apiKey}`;
     // const url1 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=1&sort_by=popularity.desc`
     const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMTQwMTUxNC4zNzIzMjk1LCJzdWIiOiI2NzMzMTViNjI5YWE4ZmYyNDRjMGUzODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.0qof6UxtmX1ZydXb7hPBwnROQT3zdyKAbEXhXQ0OO4A';
-    const urlforgenra = `https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`;
-   
     useEffect(() => {
         const options = {
             method: 'GET',
@@ -67,7 +74,7 @@ const TVSerial = () => {
         setSearchQuery(event.target.value);
     };
 
-    const filteredMovies = moiveTVSerialData.tvSeries?.filter((movie) => {
+    const filteredMovies = moiveTVSerialData.movies?.filter((movie) => {
         let isMatch = true;
 
         if (selectGenre && !movie.genre_ids.includes(Number(selectGenre))) {
@@ -159,7 +166,7 @@ const TVSerial = () => {
             </div>
 
             <div>
-                <TVCards movieCards={filteredMovies} />
+                <MovieCards movieCards={filteredMovies} />
             </div>
 
             <Footer />
@@ -167,5 +174,5 @@ const TVSerial = () => {
     );
 }
 
-export default TVSerial;
+export default MoviePage;
 
