@@ -17,6 +17,7 @@ import TVDetail from './screens/TVDetail.js';
 import HeroSection from './components/HeroSection.js';
 import {TVGenreProvider} from "./context/TVGenreProvider.js"
 import { MovieGenreProvider} from "./context/MovieGenreProvider.js"
+import Profile from './screens/ProfilePage.js';
 // import TVGenreProvider from "./context/TVGenreProvider.js"
 
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -40,6 +41,7 @@ const App = () => (
             <Route path="/showtime" element={<ShowTime />} /> 
             <Route path="/detail/movie/:id" element={<MovieDetail />} />
             <Route path="/detail/tv/:id" element={<TVDetail />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Router>
 
