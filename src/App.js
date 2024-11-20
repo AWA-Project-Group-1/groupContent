@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './screens/HomePage';
 import './App.css';
+import Profile from './screens/ProfilePage.js';
 
 
 // heyanwen
@@ -27,6 +28,7 @@ const App = () => (
         <Route path='/movies' element={<MoviePage />} />
         {/* <Route path="/detail/:movieId" element={<TVDetail />} />  */}
         <Route path="/showtime" element={<ShowTime />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/detail/movie/:id" element={<MovieDetail />} />
         <Route path="/detail/tv/:id" element={<TVDetail />} />
       </Routes>

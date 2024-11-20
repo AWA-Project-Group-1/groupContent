@@ -33,6 +33,13 @@ const Navitation = ({genres}) => {
   function movieclickHandler(){
     navigate("/movies")
   }
+
+  function profileclickHandler(){
+    navigate("/profile")
+  }
+
+  
+
   return (
     <div className={styles["nav-container"]}>
       <div className={styles["nav-link" ]} id={styles["movieapplogo-container"]}> 
@@ -81,8 +88,12 @@ const Navitation = ({genres}) => {
           
             <li className={styles["nav-link" ]}><a href="index_hy.html">Group Page</a></li>
             
+            <li className={styles["nav-link" ]}><a href="" onClick={profileclickHandler}>Profile</a></li>
+            
         </ul>
         <hr style={{ border: '1px solid balck', margin: '10px 0' }} />
+
+        
                         
 
     </div>
