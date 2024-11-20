@@ -1,15 +1,16 @@
 // App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+// import MovieDetails from './screens/MovieDetailsPage';
+// import AllMovies from './screens/AllMovies';
 import HomePage from './screens/HomePage';
 import './App.css';
-import Profile from './screens/ProfilePage.js';
 
 
 // heyanwen
 import TVSerial from "./screens/TVSerial.js"
 // import TVDetail from "./screens/TVDetail.js"
-import { MoiveTVSerialProvider } from "./context/MoiveTVSerialProvider"
+import {MoiveTVSerialProvider} from "./context/MoiveTVSerialProvider"
 import MoviePage from "./screens/MoviePage.js"
 import MovieDetail from "./screens/MovieDetail.js";
 import TVDetail from './screens/TVDetail.js';
@@ -24,23 +25,26 @@ import ShowTime from "./screens/ShowTime.js"
 
 const App = () => (
   <MoiveTVSerialProvider>
-    
+    <TVGenreProvider>
+      <MovieGenreProvider>
+
         <Router>
-          <Routes>
-            <Route path="/" Component={HomePage} />
-            {/* <Route path="/movie/:id" Component={MovieDetails} /> */}
-            <Route path="/movies/top-rated" element={<AllMovies type="top-rated" />} />
-            <Route path="/movies/upcoming" element={<AllMovies type="upcoming" />} />
-            <Route path='/tvserial' element={<TVSerial />} />
-            <Route path='/movies' element={<MoviePage/>} />
-            {/* <Route path="/detail/:movieId" element={<TVDetail />} />  */}
-            <Route path="/showtime" element={<ShowTime />} /> 
-            <Route path="/detail/movie/:id" element={<MovieDetail />} />
-            <Route path="/detail/tv/:id" element={<TVDetail />} />
-          </Routes>
-        </Router>
-    
-  </MoiveTVSerialProvider>
+            <Routes>
+              <Route path="/" Component={HomePage} />              
+              <Route path='/tvserial' element={<TVSerial />} />
+              <Route path='/movies' element={<MoviePage/>} />
+              <Route path="/showtime" element={<ShowTime />} /> 
+              <Route path="/detail/movie/:id" element={<MovieDetail />} />
+              <Route path="/detail/tv/:id" element={<TVDetail />} />
+              <Route path="/hero/:tvormovie" element={<HeroSection />} />
+            </Routes>
+          </Router>
+
+
+      </MovieGenreProvider>
+        
+    </TVGenreProvider>         
+</MoiveTVSerialProvider>
   
   
 );
