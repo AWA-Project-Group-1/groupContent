@@ -6,11 +6,7 @@ import MoviePicker from '../components/homepage/randomMovie/MoviePicker';
 import { discoverMovies } from '../api/movieFetch';
 import { topTVSeries } from '../api/tvFetch';
 import 'bootstrap/dist/css/bootstrap.min.css';
-<<<<<<< HEAD
-//import styles from "../screens/TVSerial.module.css"
-=======
 // import styles from "../screens/TVSerial.module.css"
->>>>>>> 9671d7ad1071bcf888aa1a90fc63552f2ea30623
 import Navigation from "../components/Navigation"
 const HomePage = () => {
 
