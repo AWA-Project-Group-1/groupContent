@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchTopMovies } from '../../../api/movieFetch';  // Example API function for fetching top movies
+import { fetchPopularMovies } from '../../../api/movieFetch';  // Example API function for fetching popular movies
 import CustomCarousel from '../../elements/Carousel/Carousel';  // Assuming CustomCarousel is the carousel component
 import ViewAllButton from '../../elements/Button/ViewAllButton';  // Import ViewAllButton component
 import './CarouselSelection.css';  // Import the CSS file
@@ -42,7 +42,7 @@ const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
             <div className="carousel-selection-header">
                 <h2 className="carousel-selection-title">{title}</h2>
                 {/* Using ViewAllButton to toggle the view */}
-                <ViewAllButton link={viewAllLink} onClick={() => setShowAllMovies(!showAllMovies)} />
+                <ViewAllButton link={viewAllLink} />
             </div>
 
             {movies.length > 0 ? (
