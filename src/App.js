@@ -21,13 +21,20 @@ const App = () => (
 
     <Router>
       <Routes>
+        {/* Home Page */}
         <Route path="/" Component={HomePage} />
+
+        {/* Movies Pages */}
         <Route path='/movies' element={<MoviePage />} />
-        <Route path='/tvserial' element={<TVSerial />} />
+        <Route path="/detail/movie/:id" element={<MovieDetail />} />
         <Route path='/movies' element={<MoviePage />} />
         {/* <Route path="/detail/:movieId" element={<TVDetail />} />  */}
+        
+        {/* ShowTime */}
         <Route path="/showtime" element={<ShowTime />} />
-        <Route path="/detail/movie/:id" element={<MovieDetail />} />
+
+        {/* TV Series Pages */}
+        <Route path='/tvserial' element={<TVSerial />} />
         <Route path="/detail/tv/:id" element={<TVDetail />} />
       </Routes>
     </Router>
