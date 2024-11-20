@@ -5,7 +5,7 @@ import MoviePicker from '../components/homepage/randomMovie/MoviePicker';
 import { fetchTopMovies, fetchUpcomingMovies } from '../api/movieFetch';
 import './HomePage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import styles from "../screens/TVSerial.module.css"
+// import styles from "../screens/TVSerial.module.css"
 import Navigation from "../components/Navigation"
 const HomePage = () => (
     <div className="container mt-4">

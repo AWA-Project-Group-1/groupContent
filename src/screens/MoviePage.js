@@ -4,10 +4,11 @@ import Footer from "../components/Footer"
 import styles from "../screens/TVSerial.module.css"
 import Navigation from "../components/Navigation"
 import MovieCards from "../components/MovieCards"
-import TVCards from "../components/TVCards"
+// import TVCards from "../components/TVCards"
 import HeroSection from "../components/HeroSection"
 // import { TVSeriesContext } from '../context/TVSeriesProvider';
 import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider"
+import {MovieGenreContext} from "../context/MovieGenreProvider"
 // for the year
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -16,46 +17,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 // import MovieCarosel from "../components/MovieCarosel"
 const MoviePage = () => {
     
-    
-    const moiveTVSerialData = useContext(MoiveTVSerialContext)    
-    const [selectGenre, setSelectGenre] = useState('')
-    const [genres, setGenres] = useState([]);
+    const MovieGenreData = useContext(MovieGenreContext)   
+    const moiveTVSerialData = useContext(MoiveTVSerialContext)   
+ 
+    const [selectGenre, setSelectGenre] = useState('')   
     const [selectYear, setSelectYear] = useState('');
     const [selectPopularity, setSelectPopularity] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-
-    // const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29'; // API key
-    // const url = `https://api.themoviedb.org/3/trending/tv/day?api_key=${apiKey}`;
-    // const url1 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=1&sort_by=popularity.desc`
-    // const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMjA0NDc2OC4wMDAwOTUsInN1YiI6IjY3MzMxNWI2MjlhYThmZjI0NGMwZTM4MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._Du_V8vd4FWEy9zzT9LXi1oaCukl8FWmChOhHtENcNE';
-    const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29'; // API key
-    const urlforgenra = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en`;
-    
-    
-    
-    // const url = `https://api.themoviedb.org/3/trending/tv/day?api_key=${apiKey}`;
-    // const url1 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=1&sort_by=popularity.desc`
-    const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMTQwMTUxNC4zNzIzMjk1LCJzdWIiOiI2NzMzMTViNjI5YWE4ZmYyNDRjMGUzODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.0qof6UxtmX1ZydXb7hPBwnROQT3zdyKAbEXhXQ0OO4A';
-    useEffect(() => {
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: authorization,
-            },
-        };
-
-        fetch(urlforgenra, options)
-            .then((req) => req.json()) // Parse the JSON data
-            .then((res) => {
-                setGenres(res.genres); // Use res.results for movie 
-                console.log(`This is genres: ${JSON.stringify(res.genres)}`);
-            })
-            .catch((err) => {
-                console.error('Error fetching data:', err); // Handle errors
-            });
-    }, []);
-
    
 
     const handleGenreChange = (event) => {
@@ -82,7 +50,7 @@ const MoviePage = () => {
         }
         
         if (selectYear) {
-            const movieYear = new Date(movie.first_air_date).getFullYear();
+            const movieYear = new Date(movie.release_date).getFullYear();
             const selectedYear = selectYear.getFullYear();
             // console.log(typeof movieYear);
             // console.log(typeof selectedYear);
@@ -97,7 +65,7 @@ const MoviePage = () => {
             isMatch = false;
         }
         // Search filter: Check if search query matches the movie title
-        if (searchQuery && !movie.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+        if (searchQuery && !movie.title.toLowerCase().includes(searchQuery.toLowerCase())) {
             isMatch = false;
         }
 
@@ -107,7 +75,7 @@ const MoviePage = () => {
     return (
         <div className={styles['nav-herosection-moviescard']}>
             <div className={styles['nav-herosection']}>
-                <Navigation genres={genres}/>
+                <Navigation />
                 {/* <hr /> */}
                 <HeroSection />
                 {/* <MovieCarosel images={filteredMovies}/> */}
@@ -118,8 +86,8 @@ const MoviePage = () => {
                     <label>Filter by Genre: </label>
                     <select value={selectGenre} onChange={handleGenreChange}>
                         <option value="">All</option>
-                        {genres.length > 0 ? (
-                            genres.map((genre) => (
+                        {MovieGenreData.length > 0 ? (
+                            MovieGenreData.map((genre) => (
                                 <option key={genre.id} value={genre.id}>
                                     {genre.name}
                                 </option>
@@ -159,7 +127,7 @@ const MoviePage = () => {
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchQueryChange}
-                        placeholder="Search by TV Serial title"
+                        placeholder="Search by Movie Names"
                     />
                 </div>
 

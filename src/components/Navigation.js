@@ -1,27 +1,22 @@
-import React from 'react';
+import React, { useState,useContext } from 'react';
 import styles from "./Navigation.module.css";
 import movieapplogo from "../assets/images/movieapplogo.jpg";
 import { useNavigate } from "react-router-dom"
-
-const Navitation = ({genres}) => {
+import {TVGenreContext} from "../context/TVGenreProvider"
+import {MovieGenreContext} from "../context/MovieGenreProvider"
+// import TVGenreContext from "./context/TVGenreProvider.js"
+const Navitation = () => {
   const navigate = useNavigate();
+  const [genreSelectedForTV, setGenreSelectedForTV] = useState("")
+  const [genreSelectedorMovie, setGenreSelectedForMovie] = useState("")
+  
+  const TVGenreData= useContext(TVGenreContext) 
+  const MovieGenreData= useContext(MovieGenreContext)     
   function showtimeClickHandler(){
     navigate ("/showtime")
   }
- const moviegenre = [ "Action","Adventure","Animation", "Comedy", "Crime", "Documentary", "Drama",
-  "Family",
-  "Fantasy",
-  "History",
-  "Horror",
-  "Music",
-  "Mystery",
-  "Romance",
-  "Science Fiction",
-  "TV Movie",
-  "Thriller",
-  "War",
-  "Western"
-]
+
+
   function tvserialClickHandler(){
     navigate ('/tvserial')
 
@@ -33,6 +28,16 @@ const Navitation = ({genres}) => {
   function movieclickHandler(){
     navigate("/movies")
   }
+
+  function TVgenreInNavigationBar(genre){
+    navigate(`/tvserial?genre=${genre.name}`)
+
+  }
+
+  function MoviegenreInNavigationBar(genre){
+    navigate(`/movies?genre=${genre.name}`)
+
+  }
   return (
     <div className={styles["nav-container"]}>
       <div className={styles["nav-link" ]} id={styles["movieapplogo-container"]}> 
@@ -41,9 +46,7 @@ const Navitation = ({genres}) => {
       {/* <li className={styles["nav-link" ]} id={styles["movieapplogo-container"]}> */}
                 {/* <img src={movieapplog} alt="Movie App Logo" /> Added meaningful alt text */}
             {/* </li> */}
-        <ul className={styles["nav-links"]}>
-
-            
+        <ul className={styles["nav-links"]}>           
 
             <li className={styles["nav-link" ]}><a href="" onClick={ homeclickedHandler}>Home</a> </li>     
         
@@ -53,21 +56,27 @@ const Navitation = ({genres}) => {
                 <ul className={styles["dropdown1"]}>  
 
 
-                  {
-                    moviegenre.map( (movie ) =>
-                      <li><a href="">{movie}</a></li>
-                    )
-                  }               
+                {MovieGenreData && MovieGenreData.length > 0 ? (
+                  MovieGenreData.map((genre) => (
+                    <li key={genre.id}>
+                      <a href=""  onClick={() => MoviegenreInNavigationBar(genre)}>{genre.name}</a>
+                    </li>
+                  ))
+                ) : (
+                  <li>No genres available</li>
+                )}          
                 </ul>
             </li> 
+
+
             <li className={styles["nav-link" ]} id="li1">
                 <a href="" onClick={ tvserialClickHandler }>TV Serial  </a>
                 <span style={{ verticalAlign: 'middle', position: 'relative', top: '-6px' }}>&#8964;</span>
                 <ul className={styles["dropdown1"]}>
-                {genres && genres.length > 0 ? (
-                  genres.map((genre) => (
+                {TVGenreData && TVGenreData.length > 0 ? (
+                  TVGenreData.map((genre) => (
                     <li key={genre.id}>
-                      <a href="pdffiles.html">{genre.name}</a>
+                      <a href=""  onClick={() => TVgenreInNavigationBar(genre)}>{genre.name}</a>
                     </li>
                   ))
                 ) : (

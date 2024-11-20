@@ -7,6 +7,7 @@ import TVCards from "../components/TVCards"
 import HeroSection from "../components/HeroSection"
 // import { TVSeriesContext } from '../context/TVSeriesProvider';
 import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider"
+import {TVGenreContext} from "../context/TVGenreProvider"
 // for the year
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -16,38 +17,40 @@ import 'react-datepicker/dist/react-datepicker.css';
 const TVSerial = () => {
     // const tvSeriesData = useContext(TVSeriesContext);
    
-    const moiveTVSerialData = useContext(MoiveTVSerialContext)    
-    const [selectGenre, setSelectGenre] = useState('')
-    const [genres, setGenres] = useState([]);
+    const moiveTVSerialData = useContext(MoiveTVSerialContext) 
+    const TVGenreData = useContext(TVGenreContext)   
+    // const [genres, setGenres] = useState([]);
+
+    const [selectGenre, setSelectGenre] = useState('')   
     const [selectYear, setSelectYear] = useState('');
     const [selectPopularity, setSelectPopularity] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
-    const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29'; // API key
+    // const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29'; // API key
     // const url = `https://api.themoviedb.org/3/trending/tv/day?api_key=${apiKey}`;
     // const url1 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=1&sort_by=popularity.desc`
-    const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMTQwMTUxNC4zNzIzMjk1LCJzdWIiOiI2NzMzMTViNjI5YWE4ZmYyNDRjMGUzODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.0qof6UxtmX1ZydXb7hPBwnROQT3zdyKAbEXhXQ0OO4A';
-    const urlforgenra = `https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`;
+    // const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMTQwMTUxNC4zNzIzMjk1LCJzdWIiOiI2NzMzMTViNjI5YWE4ZmYyNDRjMGUzODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.0qof6UxtmX1ZydXb7hPBwnROQT3zdyKAbEXhXQ0OO4A';
+    // const urlforTVgenra = `https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`;
    
-    useEffect(() => {
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: authorization,
-            },
-        };
+    // useEffect(() => {
+    //     const options = {
+    //         method: 'GET',
+    //         headers: {
+    //             accept: 'application/json',
+    //             Authorization: authorization,
+    //         },
+    //     };
 
-        fetch(urlforgenra, options)
-            .then((req) => req.json()) // Parse the JSON data
-            .then((res) => {
-                setGenres(res.genres); // Use res.results for movie 
-                console.log(`This is genres: ${JSON.stringify(res.genres)}`);
-            })
-            .catch((err) => {
-                console.error('Error fetching data:', err); // Handle errors
-            });
-    }, []);
+    //     fetch(urlforTVgenra, options)
+    //         .then((req) => req.json()) // Parse the JSON data
+    //         .then((res) => {
+    //             setGenres(res.genres); // Use res.results for movie 
+    //             console.log(`This is genres: ${JSON.stringify(res.genres)}`);
+    //         })
+    //         .catch((err) => {
+    //             console.error('Error fetching data:', err); // Handle errors
+    //         });
+    // }, []);
 
    
 
@@ -100,7 +103,7 @@ const TVSerial = () => {
     return (
         <div className={styles['nav-herosection-moviescard']}>
             <div className={styles['nav-herosection']}>
-                <Navigation genres={genres}/>
+                <Navigation />
                 {/* <hr /> */}
                 <HeroSection />
                 {/* <MovieCarosel images={filteredMovies}/> */}
@@ -111,8 +114,8 @@ const TVSerial = () => {
                     <label>Filter by Genre: </label>
                     <select value={selectGenre} onChange={handleGenreChange}>
                         <option value="">All</option>
-                        {genres.length > 0 ? (
-                            genres.map((genre) => (
+                        {TVGenreData.length > 0 ? (
+                            TVGenreData.map((genre) => (
                                 <option key={genre.id} value={genre.id}>
                                     {genre.name}
                                 </option>

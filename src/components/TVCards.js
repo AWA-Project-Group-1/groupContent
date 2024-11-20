@@ -1,16 +1,35 @@
-import { useNavigate } from 'react-router-dom';
-import React, {useState} from 'react'
+import { useNavigate,useParams, useLocation } from 'react-router-dom';
+import React, {useState,useContext} from 'react'
 import styles from "./MovieCards.module.css"
-
+import { TVGenreContext} from "../context/TVGenreProvider"
 const TVCards = ({ movieCards}) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
-
+  // const { genreName } = useParams();
+  
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search); // To parse query parameters
+  const genreName = queryParams.get('genre');
   // Calculate the index range for the current page
+  const genreList = useContext(TVGenreContext);
+
+  const filteredMovies = genreName
+  ? movieCards.filter((movie) => {
+      // For each movie, map its genre IDs to genre names
+      const movieGenreNames = movie.genre_ids.map(
+        (id) => genreList.find((genre) => genre.id === id)?.name
+      );
+
+      // Filter movies whose genres match the genreName from the URL
+      return movieGenreNames.includes(genreName);
+    })
+  : movieCards;
+
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentMovies = movieCards.slice(startIndex, endIndex);
+  const currentMovies = filteredMovies.slice(startIndex, endIndex);
 
 
   function productClickHandler(movieId){

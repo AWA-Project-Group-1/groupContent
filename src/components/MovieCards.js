@@ -1,16 +1,37 @@
-import { useNavigate } from 'react-router-dom';
-import React, {useState} from 'react'
+// import { useNavigate, useLocation } from 'react-router-dom';
+// import React, {useState,useContext} from 'react'
+import { useNavigate,useParams, useLocation } from 'react-router-dom';
+import React, {useState,useContext} from 'react'
 import styles from "./MovieCards.module.css"
-
+import {MovieGenreContext} from "../context/MovieGenreProvider"
 const MovieCards = ({ movieCards}) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; 
 
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search); // To parse query parameters
+  const genreName = queryParams.get('genre');
+  // Calculate the index range for the current page
+  const genreList = useContext(MovieGenreContext);
+
+  const filteredMovies = genreName
+  ? movieCards.filter((movie) => {
+      // For each movie, map its genre IDs to genre names
+      const movieGenreNames = movie.genre_ids.map(
+        (id) => genreList.find((genre) => genre.id === id)?.name
+      );
+
+      // Filter movies whose genres match the genreName from the URL
+      return movieGenreNames.includes(genreName);
+    })
+  : movieCards;
+
   // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentMovies = movieCards.slice(startIndex, endIndex);
+  const currentMovies = filteredMovies.slice(startIndex, endIndex);
 
 
   function productClickHandler(movieId){
@@ -47,9 +68,9 @@ const MovieCards = ({ movieCards}) => {
           key={item.id}>
           <img className={styles['product-card']} src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.name} />
          
-          <h5>{item.name}</h5>
+          <h5>{item.title}</h5>
           
-          <p>{item.first_air_date}</p>
+          <p>{item.release_date}</p>
           <div className={styles['button-container']}>
             <button className={styles['button-click']} onClick={addButtonClickHandler}>Add to favourite</button>
           </div>
