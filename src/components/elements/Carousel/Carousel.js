@@ -18,7 +18,7 @@ const CarouselSlide = ({ src, title, movieId, release_date }) => {
 
     return (
         <BearSlideCard>
-            <Link to={`/movie/${movieId}`} className="carousel-link">
+            <Link to={`/detail/movie/${movieId}`} className="carousel-link">  {/* Updated path */}
                 <div className="carousel-card">
                     <Photo src={src} alt={title} />
                     <h3 className="carousel-title">{title}</h3>
@@ -28,6 +28,7 @@ const CarouselSlide = ({ src, title, movieId, release_date }) => {
         </BearSlideCard>
     );
 };
+
 
 // CustomCarousel component to render the carousel
 const CustomCarousel = ({ data, gridTheme }) => {

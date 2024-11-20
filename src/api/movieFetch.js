@@ -9,29 +9,11 @@ export const fetchGenres = async () => {
         const response = await axios.get(`${BASE_URL}/genre/movie/list`, {
             params: {
                 api_key: API_KEY,
-                language: 'en-US',
             },
         });
-        return response.data.genres;
+        return response.data.genres; // Returns an array of genres
     } catch (error) {
-        console.error('Error fetching genres:', error);
-        throw error;
-    }
-};
-
-// Fetch top-rated movies
-export const fetchTopMovies = async () => {
-    try {
-        const response = await axios.get(`${BASE_URL}/movie/top_rated`, {
-            params: {
-                api_key: API_KEY,
-                language: 'en-US',
-                page: 1,
-            },
-        });
-        return response.data.results;
-    } catch (error) {
-        console.error("Error fetching top movies:", error);
+        console.error('Failed to fetch genres:', error);
         throw error;
     }
 };
@@ -43,69 +25,40 @@ export const fetchRandomMovie = async (genreId) => {
             params: {
                 api_key: API_KEY,
                 with_genres: genreId,
-                language: 'en-US',
+                sort_by: 'popularity.desc',
             },
         });
-        const randomIndex = Math.floor(Math.random() * response.data.results.length);
-        return response.data.results[randomIndex];
+
+        const movies = response.data.results;
+        if (!movies.length) {
+            throw new Error('No movies found for the selected genre.');
+        }
+
+        // Pick a random movie
+        const randomMovie = movies[Math.floor(Math.random() * movies.length)];
+        return randomMovie;
     } catch (error) {
-        console.error('Error fetching random movie:', error);
+        console.error('Failed to fetch random movie:', error);
         throw error;
     }
 };
 
-// Fetch movie details by movie ID (cast, reviews, trailer, etc.)
-export const fetchMovieDetails = async (id) => {
+// Update the discoverMovies function to include release_date.gte for unreleased movies
+export const discoverMovies = async (params = {}) => {
     try {
-        const response = await axios.get(`${BASE_URL}/movie/${id}`, {
+        console.log("Discover Movies Params:", params); // Debug log
+        const response = await axios.get(`${BASE_URL}/discover/movie`, {
             params: {
                 api_key: API_KEY,
                 language: 'en-US',
-                append_to_response: 'credits,reviews,videos',
+                sort_by: 'popularity.desc', // Sort by popularity or use another sorting method
+                ...params, // Additional params
             },
         });
-        return response.data;
+        console.log("Discover Movies Response:", response.data); // Debug log
+        return response.data.results;
     } catch (error) {
-        console.error(`Error fetching details for movie ID: ${id}`, error);
+        console.error('Error fetching discovered movies:', error);
         throw error;
     }
 };
-
-// Fetch upcoming movies with pagination
-export const fetchUpcomingMovies = async () => {
-    try {
-        const today = new Date();
-        const todayString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-
-        let allMovies = [];
-        let page = 1;
-        let totalPages = 1;  // Initialize totalPages to enter the loop
-
-        while (page <= totalPages) {
-            const response = await axios.get(`${BASE_URL}/movie/upcoming`, {
-                params: {
-                    api_key: API_KEY,
-                    language: 'en-US',
-                    page: page,
-                },
-            });
-
-            // Filter and add unreleased movies
-            const unreleasedMovies = response.data.results.filter(
-                (movie) => movie.release_date > todayString
-            );
-            allMovies = allMovies.concat(unreleasedMovies);
-
-            // Update pagination data
-            totalPages = response.data.total_pages;
-            page++;
-        }
-
-        return allMovies; // Return all the filtered unreleased movies
-    } catch (error) {
-        console.error("Error fetching unreleased movies:", error);
-        throw error;
-    }
-};
-
-
