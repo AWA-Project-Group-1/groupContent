@@ -29,22 +29,21 @@ const App = () => (
       <MovieGenreProvider>
 
         <Router>
-            <Routes>
-              <Route path="/" Component={HomePage} />              
-              <Route path='/tvserial' element={<TVSerial />} />
-              <Route path='/movies' element={<MoviePage/>} />
-              <Route path="/showtime" element={<ShowTime />} /> 
-              <Route path="/detail/movie/:id" element={<MovieDetail />} />
-              <Route path="/detail/tv/:id" element={<TVDetail />} />
-              <Route path="/hero/:tvormovie" element={<HeroSection />} />
-            </Routes>
-          </Router>
-
-
-      </MovieGenreProvider>
-        
-    </TVGenreProvider>         
-</MoiveTVSerialProvider>
+          <Routes>
+            <Route path="/" Component={HomePage} />
+            {/* <Route path="/movie/:id" Component={MovieDetails} /> */}
+            <Route path="/movies/top-rated" element={<AllMovies type="top-rated" />} />
+            <Route path="/movies/upcoming" element={<AllMovies type="upcoming" />} />
+            <Route path='/tvserial' element={<TVSerial />} />
+            <Route path='/movies' element={<MoviePage/>} />
+            {/* <Route path="/detail/:movieId" element={<TVDetail />} />  */}
+            <Route path="/showtime" element={<ShowTime />} /> 
+            <Route path="/detail/movie/:id" element={<MovieDetail />} />
+            <Route path="/detail/tv/:id" element={<TVDetail />} />
+          </Routes>
+        </Router>
+    
+  </MoiveTVSerialProvider>
   
   
 );

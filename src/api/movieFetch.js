@@ -62,3 +62,4 @@ export const discoverMovies = async (params = {}) => {
         throw error;
     }
 };
+
