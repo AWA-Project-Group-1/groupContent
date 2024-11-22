@@ -2,8 +2,9 @@ import React, { useState, useMemo } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Ensure Bootstrap Icons are imported
 
-const ReviewList = ({ reviews }) => {
+const ReviewList = ({ reviews, onDeleteReview }) => {
     const [sortOption, setSortOption] = useState('');
+    const hardcodedUserId = '2'
 
     // Calculate the total reviews and average rating
     const totalReviews = reviews.length;
@@ -43,9 +44,9 @@ const ReviewList = ({ reviews }) => {
 
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
-        return date.toLocaleDateString('en-US', {
+        return date.toLocaleDateString('en-GB', {
             year: 'numeric',
-            month: 'long',
+            month: 'numeric',
             day: 'numeric',
         });
     };
@@ -86,6 +87,14 @@ const ReviewList = ({ reviews }) => {
         const red = [242, 48, 48];   // RGB for red
         const factor = (rating - 1) / 4; // Calculate interpolation factor (0 to 1)
         return interpolateColor(purple, red, factor);
+    };
+
+    // Define state for the dropdown menu visibility
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    // Toggle the dropdown menu visibility
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
     };
 
     return (
@@ -181,8 +190,23 @@ const ReviewList = ({ reviews }) => {
                                 <div className="card-body">
                                     <div className="d-flex justify-content-between mb-3">
                                         <span><b>{review.email}</b></span>
-                                        <span className="text-muted">{formatTimestamp(review.created_at)}</span>
+                                        <div className="d-flex align-items-center ms-auto">
+                                            <span className="text-muted me-3">{formatTimestamp(review.created_at)}</span>
+                                            <button onClick={toggleMenu} className="btn btn-link p-0">
+                                                <i className="bi bi-list"></i> {/* Bootstrap hamburger icon */}
+                                            </button>
+                                        </div>
                                     </div>
+                                    {menuOpen && (
+                                        <div className="dropdown-menu show" style={{ position: 'absolute', right: '10px' }}>
+                                            <button className="dropdown-item">
+                                                Edit
+                                            </button>
+                                            <button onClick={() => onDeleteReview(review.id)} className="dropdown-item text-danger">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    )}
                                     <div className="mb-3">
                                         <div className="d-flex mb-2" style={{ marginLeft: '10px' }}>
                                             {renderStars(review.rating)}

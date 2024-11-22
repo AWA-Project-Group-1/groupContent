@@ -38,3 +38,14 @@ export const submitReview = async (movieId, reviewData) => {
         throw new Error(error.response?.data?.error || 'Failed to submit review');
     }
 };
+
+
+export const deleteReview = async (reviewId) => {
+    try {
+        const response = await axios.delete(`${baseUrl}/${reviewId}`);
+        return response.data; // Axios automatically parses JSON responses
+    } catch (error) {
+        console.error('Error deleting review:', error.response || error.message);
+        throw new Error(error.response?.data?.error || 'Failed to delete review');
+    }
+};

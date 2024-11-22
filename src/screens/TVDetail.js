@@ -7,7 +7,7 @@ import Footer from "../components/Footer"
 // import movieapplogo1 from "../assets/images/movieapplogo1.jpg"
 import movieapplogo from "../assets/images/movieapplogo.jpg"
 
-import { fetchReviews, submitReview } from '../api/reviews.js'
+import { fetchReviews, submitReview, deleteReview } from '../api/reviews.js'
 import SubmitReview from '../components/reviews/SubmitReview'
 import ReviewList from '../components/reviews/ReviewList';
 
@@ -98,6 +98,28 @@ const TVDetail = () => {
             setTimeout(() => setSuccessMessage(""), 5000); // Clear message after 5 seconds
         } catch (error) {
             console.error('Error submitting review:', error);
+        }
+    };
+
+    // Handle review deletion
+    const handleDeleteReview = async (reviewId) => {
+        if (!reviewId) {
+            alert('Invalid review ID');
+            return;
+        }
+
+        try {
+            // Delete review
+            await deleteReview(reviewId); // Call the delete function
+
+            // After deleting, fetch reviews again to include the latest list
+            const reviewsData = await fetchReviews(id); // Assuming 'id' is still the movie id
+            setReviews(reviewsData); // Update the reviews state
+
+            setSuccessMessage("Your review has been deleted successfully!"); // Set success message
+            setTimeout(() => setSuccessMessage(""), 5000); // Clear message after 5 seconds
+        } catch (error) {
+            console.error('Error deleting review:', error);
         }
     };
 
@@ -241,11 +263,8 @@ const TVDetail = () => {
             </div>
 
             <div>
-                <ReviewList reviews={reviews} />
+                <ReviewList reviews={reviews} onDeleteReview={handleDeleteReview} />
             </div>
-
-
-
 
 
 
