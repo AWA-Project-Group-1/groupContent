@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from 'react';
-//import { fetchPopularMovies } from '../../../api/movieFetch';  // Example API function for fetching popular movies
-import CustomCarousel from '../../elements/Carousel/Carousel';  // Assuming CustomCarousel is the carousel component
-import ViewAllButton from '../../elements/Button/ViewAllButton';  // Import ViewAllButton component
-import './CarouselSelection.css';  // Import the CSS file
+import CustomCarousel from '../../elements/Carousel/Carousel';
+import ViewAllButton from '../../elements/Button/ViewAllButton';
+import './CarouselSelection.css';
 
 const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
     const [movies, setMovies] = useState([]);
-    const [showAllMovies, /*setShowAllMovies*/] = useState(false);  // State to toggle between showing first 10 and all movies
+    const [showAllMovies] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const movieData = await fetchMovies();
-                setMovies(movieData); // Store the fetched movies in state
+                setMovies(movieData);
             } catch (error) {
                 console.error('Error fetching movie data:', error);
             }
         };
 
-        fetchData(); // Fetch movies when the component mounts
+        fetchData();
     }, [fetchMovies]);
 
-    // Show first 10 movies for carousel
     const carouselMovies = movies.slice(0, 15).map((movie) => ({
         id: movie.id,
         src: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
@@ -29,7 +27,6 @@ const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
         release_date: movie.release_date,
     }));
 
-    // Show all movies when "View All" button is clicked
     const allMovies = movies.map((movie) => ({
         id: movie.id,
         src: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
@@ -41,10 +38,8 @@ const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
         <div className="carousel-selection">
             <div className="carousel-selection-header">
                 <h2 className="carousel-selection-title">{title}</h2>
-                {/* Using ViewAllButton to toggle the view */}
-                <ViewAllButton link={viewAllLink} />
+                {viewAllLink && <ViewAllButton link={viewAllLink} />}
             </div>
-
             {movies.length > 0 ? (
                 <div className="carousel-selection-carousel">
                     <CustomCarousel data={showAllMovies ? allMovies : carouselMovies} gridTheme={{ md: 768 }} />
