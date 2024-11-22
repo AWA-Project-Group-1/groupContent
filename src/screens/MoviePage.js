@@ -13,10 +13,9 @@ import {MovieGenreContext} from "../context/MovieGenreProvider"
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-
 // import MovieCarosel from "../components/MovieCarosel"
 const MoviePage = () => {
-    
+        
     const MovieGenreData = useContext(MovieGenreContext)   
     const moiveTVSerialData = useContext(MoiveTVSerialContext)   
  
@@ -136,7 +135,8 @@ const MoviePage = () => {
             <div>
                 <MovieCards movieCards={filteredMovies} />
             </div>
-
+          
+               
             <Footer />
         </div>
     );

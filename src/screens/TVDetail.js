@@ -5,7 +5,7 @@ import sytles from "./TVDetail.module.css"
 import HeroSection from '../components/HeroSection';
 import Footer  from "../components/Footer"
 // import movieapplogo1 from "../assets/images/movieapplogo1.jpg"
-import movieapplogo1 from "../assets/images/movieapplogo1.jpg"
+import movieapplogo from "../assets/images/movieapplogo.jpg"
 const TVDetail = () => {
   const { id } = useParams();  // Get the movieId from the URL
   const [movieDetail, setMovieDetail] = useState(null);
@@ -67,7 +67,7 @@ const TVDetail = () => {
 
   return (
     <div>
-        <div className={sytles['nav-hero-container']} >
+        <div className={sytles['nav-herosection']} >
 
             <Navigation />
             <HeroSection />
@@ -76,16 +76,31 @@ const TVDetail = () => {
 
         <div className={sytles['movie_framework']}>
 
-
-            <img 
-                src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`} 
-                alt={movieDetail.name}  />
+           <div className={sytles['image_container']}>
+                <img 
+                        src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`} 
+                        alt={movieDetail.name}   />
+           </div>
+            
             <div className={sytles['information_container']}>
-                <h2>{movieDetail.name}</h2>  {/* Display the movie title */}
-                <p>{movieDetail.overview}</p>  {/* Display movie overview */}
-                <p>Release Date: {movieDetail.first_air_date}</p>  {/* Display release date */}
-                <p>Rating: {movieDetail.vote_average}</p>  {/* Display rating */}
-                <p>Genres: {movieDetail.genres.map(genre => genre.name).join(', ')}</p>  {/* Display genres */}
+                <div className={sytles['name_container']}>
+                    <h2>{movieDetail.name}</h2>  
+                    <p>{movieDetail.overview}</p> 
+                </div>
+                 
+                <div className={sytles['data_container']}>
+                    <h2>Release Date:</h2>
+                    <p>{movieDetail.first_air_date}</p>  
+                </div>
+                <div className={sytles['rating_container']}>
+                    <h2>Rating:</h2>
+                    <p> {movieDetail.vote_average}</p>  
+                </div>
+                <div className={sytles['genre_container']}>
+                    <h2>Genres: </h2>
+                    <p>{movieDetail.genres.map(genre => genre.name).join(', ')}</p> 
+                </div>
+                 
 
             </div>
 
@@ -99,7 +114,9 @@ const TVDetail = () => {
                     {tvSerialCredit && tvSerialCredit.cast && tvSerialCredit.cast.length > 0 ? (
                         tvSerialCredit.cast.map((actor) => (
                             <div key={actor.id} className={sytles['cast-item']}>
-                                <p >{actor.name} as {actor.character}</p>
+                                <p >{actor.name} as </p>
+                                <p> {actor.character} </p>
+                                
                                 {/* Check if profile_path exists */}
                                 {actor.profile_path ? (
                                     <img 
@@ -111,14 +128,14 @@ const TVDetail = () => {
                                     
                                     <img 
                                         className={sytles['poster-container']}
-                                        src={movieapplogo1}
+                                        src={movieapplogo}
                                         alt={`No image available for ${actor.name}`} 
                                     />
                                 )}
                             </div>
                         ))
                     ) : (
-                        <p style={{ color: 'black' }}>No cast information available.</p> 
+                        <p style={{ color: 'black' }}> No cast information available.</p> 
                     )}
                 </div>
             </div>
@@ -162,7 +179,7 @@ const TVDetail = () => {
                                 </div>
                             ))
                         ) : (
-                            <p style={{ color: 'black' }}>No cast information available.</p>   // More specific fallback message
+                            <p style={{ color: 'black' }}>No crew information available.</p>   // More specific fallback message
                         )}
                     </div>
                 </div>

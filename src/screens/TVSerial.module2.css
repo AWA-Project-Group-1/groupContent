@@ -1,0 +1,91 @@
+/* Base styles (for mobile and small screens) */
+.nav-herosection {
+    background-color: white;
+}
+
+.nav-herosection-moviescard {
+    background-color: white;
+    border: 2px solid rgb(220, 220, 230); /* Temporary for debugging */
+}
+
+.allfilter-container {
+    display: flex; /* Enables flexbox */
+    flex-wrap: wrap; /* Allows wrapping if the screen size is too small */
+    gap: 1rem; /* Adds space between items */
+    align-items: center; /* Aligns items vertically */
+    justify-content: space-between; /* Adjust spacing between elements */
+    padding-left: 28px; 
+    padding-right: 28px; 
+    padding-top: 20px; 
+    padding-bottom: 20px; 
+    background: linear-gradient(to right, #f23030, #a0183c, #31003d, #480636);
+}
+
+.allfilter-container label {
+    color: rgb(248, 242, 242);
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.allfilter-container option {
+    height: 30px;
+}
+
+/* Filter containers (stacked on smaller screens) */
+.genre-filter-container,
+.year-filter-container,
+.popularity-filter-container,
+.search-container {
+    display: flex;
+    flex-direction: column; 
+    gap: 0.5rem; 
+}
+
+select, input, .react-datepicker__input-container input {
+    height: 36px; 
+    width: 200px;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+/* Responsive Styles (Tablet and larger screens) */
+@media (min-width: 768px) {
+    .allfilter-container {
+        flex-wrap: nowrap; /* Prevent wrapping */
+        justify-content: flex-start; /* Align items to the start */
+    }
+
+    .genre-filter-container,
+    .year-filter-container,
+    .popularity-filter-container,
+    .search-container {
+        flex-direction: row; /* Puts label and input side by side */
+        align-items: center;
+    }
+
+    select, input, .react-datepicker__input-container input {
+        width: 250px; /* Slightly larger width for tablet and desktop */
+    }
+}
+
+/* Responsive Styles for Larger Screens (Desktop) */
+@media (min-width: 1024px) {
+    .allfilter-container {
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .genre-filter-container,
+    .year-filter-container,
+    .popularity-filter-container,
+    .search-container {
+        gap: 1rem; /* Increase gap for larger screens */
+    }
+
+    select, input, .react-datepicker__input-container input {
+        width: 300px; /* Increase input size for larger screens */
+    }
+}

@@ -111,7 +111,7 @@ const TVSerial = () => {
             <div className={styles['allfilter-container']}>
 
                 <div className={styles['genre-filter-container']}>
-                    <label>Filter by Genre: </label>
+                    <label>Filter by Genre : </label>
                     <select value={selectGenre} onChange={handleGenreChange}>
                         <option value="">All</option>
                         {TVGenreData.length > 0 ? (
@@ -129,7 +129,7 @@ const TVSerial = () => {
 
 
                 <div className={styles['year-filter-container']}>
-                    <label>Filter by Year: </label>
+                    <label>Filter by Year : </label>
                     <DatePicker
                             selected={selectYear}
                             onChange={ yearChangeHandler }
@@ -141,7 +141,7 @@ const TVSerial = () => {
                 </div>
 
                 <div className={styles['popularity-filter-container']}>
-                    <label>Filter by Popularity: </label>
+                    <label>Filter by Popularity : </label>
                     <select value={selectPopularity} onChange={handlePopularityChange}>
                         <option value="">All</option>
                         <option value="1000">Popular (&gt;1000)</option>
@@ -150,7 +150,7 @@ const TVSerial = () => {
                     </select>
                 </div>
                 <div  className={styles['search-contianer']}>
-                    <label htmlFor="">Search: </label>
+                    <label htmlFor="">Search :  </label>
                     <input
                         type="text"
                         value={searchQuery}

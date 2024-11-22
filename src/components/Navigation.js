@@ -45,7 +45,7 @@ const Navitation = () => {
   return (
     <div className={styles["nav-container"]}>
       <div className={styles["nav-link" ]} id={styles["movieapplogo-container"]}> 
-        <img src={movieapplogo} alt="Movie App Logo" /> {/* Added meaningful alt text */}
+        <img src={movieapplogo} alt="Movie App Logo" /> 
       </div>
       {/* <li className={styles["nav-link" ]} id={styles["movieapplogo-container"]}> */}
                 {/* <img src={movieapplog} alt="Movie App Logo" /> Added meaningful alt text */}

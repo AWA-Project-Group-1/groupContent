@@ -16,12 +16,12 @@ const TVCards = ({ movieCards}) => {
 
   const filteredMovies = genreName
   ? movieCards.filter((movie) => {
-      // For each movie, map its genre IDs to genre names
+    
       const movieGenreNames = movie.genre_ids.map(
         (id) => genreList.find((genre) => genre.id === id)?.name
       );
 
-      // Filter movies whose genres match the genreName from the URL
+      
       return movieGenreNames.includes(genreName);
     })
   : movieCards;

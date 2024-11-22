@@ -1,82 +1,68 @@
+/* Container for product cards (responsive grid) */
 .productcards_container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Use 2 columns for larger width */
-  gap: 6px; /* Increase space between cards */
-  padding: 0px;
-  max-width: 1200px; /* Optional: adjust the max width */
-  margin: 0 auto;
-  margin-bottom: 5px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 20px; /* Space between cards */
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto; /* Center container */
 }
 
+/* Individual product card */
 .product-card-framework {
   display: flex;
   background-color: white;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color:white;
-  padding: 12px;
+  padding: 15px;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   transition: transform 0.2s;
-  height: 440px; /* Increase height for larger images */
   overflow: hidden;
-}
-.product-card-framework:hover { 
-  transform: translateY(-2px);  /* Lift card effect */
-  box-shadow: 0 8px 12px rgba(177, 26, 26, 0.7);  /* Stronger shadow on hover */
-  border:solid;
-  border-color: #FF4500;  /* Change the border to a lighter red on hover */
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 440px; /* Adjust height for consistent card size */
 }
 
-.product-card-framework h4 p{
-  color:white;
-
+.product-card-framework:hover {
+  transform: translateY(-5px); /* Lift effect */
+  box-shadow: 0 8px 12px rgba(177, 26, 26, 0.7); /* Stronger shadow */
+  border: 1px solid #480636;
 }
+
 .product-card {
-  width: 100%; /* Image fills the card width */
-  height: 300px; /* Adjust height as needed */
-  object-fit: cover; /* Crops to fill container */
-  border-radius: 4px;
+  width: 100%;
+  height: 300px; 
+  object-fit: cover;
+  border-radius: 8px;
 }
 
-h5{
-  color:black;
+/* Title and text styling */
+h5 {
+  color: black;
   margin-top: 10px;
+  font-size: 1rem;
 }
+
 p {
-  color:black;
+  color: black;
   margin-top: 5px;
   margin-bottom: 5px;
+  font-size: 0.9rem;
 }
 
-
-/* .product-card-framework {
-  position: relative; 
-  width: 200px; 
-  height: 300px; 
-} */
-
-.product-card-framework {
-  position: relative; /* Allow absolute positioning inside */
-  width: 200px; /* Or whatever size you want */
-  height: 440px; /* Or whatever size you want */
-}
-
+/* Button styling */
 .button-container {
-  position: center;
-  margin-bottom: 10px;
-
- 
+  margin-top: 10px;
 }
 
 .button-click {
   padding: 10px 20px;
   font-size: 14px;
   cursor: pointer;
-  background-color: #ff6f61; /* Or your preferred color */
+  background-color: #f23030;
   color: white;
   border: none;
   border-radius: 5px;
@@ -84,30 +70,29 @@ p {
 }
 
 .button-click:hover {
-  background-color: #e55b4e; /* Darker shade on hover */
+  background-color: #a0183c; /* Darker shade on hover */
 }
 
-/* for pagination */
-
+/* Pagination controls */
 .pagination-controls {
   display: flex;
-  justify-content: center; /* Center the pagination buttons */
+  justify-content: center;
   align-items: center;
-  margin-top: 20px; 
-  margin-bottom: 20px; 
+  margin-top: 0px;
+  margin-bottom: 40px;
 }
 
 .pagination-controls button {
   padding: 10px 20px;
-  margin: 0 10px; /* Add spacing between buttons */
-  background-color: #d24747;
+  margin: 0 10px;
+  background-color: #f23030;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
   width: 100px;
-  transition: background-color 0.3s;
+  transition: background-color 0.1s;
 }
 
 .pagination-controls button:disabled {
@@ -116,11 +101,81 @@ p {
 }
 
 .pagination-controls button:hover:not(:disabled) {
-  background-color:#d24747;
+  background-color: #a0183c;
 }
 
 .pagination-controls span {
   font-size: 16px;
   margin: 0 10px;
   font-weight: bold;
+}
+
+/* Responsive Design */
+
+/* For smaller screens (mobile) */
+@media (max-width: 768px) {
+  .product-card-framework {
+    padding: 10px;
+    height: auto; /* Let the height adapt */
+  }
+
+  .product-card {
+    height: 200px; /* Smaller image height */
+  }
+
+  h5 {
+    font-size: 0.9rem;
+  }
+
+  p {
+    font-size: 0.8rem;
+  }
+
+  .button-click {
+    font-size: 12px;
+    padding: 8px 16px;
+  }
+}
+
+/* For tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .productcards_container {
+    gap: 15px; /* Slightly reduce the gap for smaller tablets */
+  }
+
+  .product-card-framework {
+    height: 400px;
+  }
+
+  .product-card {
+    height: 250px;
+  }
+
+  h5 {
+    font-size: 1rem;
+  }
+}
+
+/* For larger screens (desktop) */
+@media (min-width: 1200px) {
+  .productcards_container {
+    gap: 25px;
+    padding: 40px;
+  }
+
+  .product-card-framework {
+    height: 460px;
+  }
+
+  .product-card {
+    height: 320px;
+  }
+
+  h5 {
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
 }
