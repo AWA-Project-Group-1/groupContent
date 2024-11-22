@@ -1,5 +1,7 @@
 import { useNavigate,useParams, useLocation } from 'react-router-dom';
-import React, {useState,useContext} from 'react'
+import { fetchFavorites, removeFromFavorites, addToFavorites } from '../api/favoriteapi';
+
+import React, {useState,useContext, useEffect} from 'react'
 import styles from "./MovieCards.module.css"
 import { TVGenreContext} from "../context/TVGenreProvider"
 const TVCards = ({ movieCards}) => {
@@ -8,11 +10,28 @@ const TVCards = ({ movieCards}) => {
   const itemsPerPage = 10; 
   // const { genreName } = useParams();
   
+  const [favorites, setFavorites] = useState([]);
+
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search); // To parse query parameters
   const genreName = queryParams.get('genre');
   // Calculate the index range for the current page
   const genreList = useContext(TVGenreContext);
+
+
+  // Fetch favorites on component load
+  useEffect(() => {
+    async function loadFavorites() {
+      try {
+        const response = await fetchFavorites();
+        setFavorites(response.data); // Store favorite TV show IDs
+      } catch (error) {
+        console.error('Error fetching favorites:', error);
+      }
+    }
+    loadFavorites();
+  }, []);
+
 
   const filteredMovies = genreName
   ? movieCards.filter((movie) => {
@@ -37,10 +56,23 @@ const TVCards = ({ movieCards}) => {
     navigate(`/detail/tv/${movieId}`);
   }
 
-  function addButtonClickHandler(event){
+  function toggleFavoriteHandler(event, movieId) {
     event.stopPropagation();
-    navigate(`/profile`);
-    
+    if (favorites.includes(movieId)) {
+      removeFromFavorites(movieId)
+        .then(() => {
+          setFavorites(favorites.filter((id) => id !== movieId));
+          alert('TV show removed from favorites!');
+        })
+        .catch((error) => console.error('Error removing TV show from favorites:', error));
+    } else {
+      addToFavorites(movieId, 'tv') // Add the type 'tv'
+        .then(() => {
+          setFavorites([...favorites, movieId]);
+          alert('TV show added to favorites!');
+        })
+        .catch((error) => console.error('Error adding TV show to favorites:', error));
+    }
   }
 // for th navi from page to page
   function nextPage() {
@@ -70,7 +102,12 @@ const TVCards = ({ movieCards}) => {
           
           <p>{item.first_air_date}</p>
           <div className={styles['button-container']}>
-            <button className={styles['button-click']} onClick={addButtonClickHandler}>Add to favourite</button>
+          <button
+                className={styles['button-click']}
+                onClick={(e) => toggleFavoriteHandler(e, item.id)}
+              >
+                {favorites.includes(item.id) ? 'Delete from favorites' : 'Add to favorites'}
+              </button>
           </div>
         </div>
       ))}

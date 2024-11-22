@@ -1,13 +1,17 @@
 // import { useNavigate, useLocation } from 'react-router-dom';
 // import React, {useState,useContext} from 'react'
 import { useNavigate,useParams, useLocation } from 'react-router-dom';
-import React, {useState,useContext} from 'react'
+import React, {useState,useContext, useEffect} from 'react'
 import styles from "./MovieCards.module.css"
 import {MovieGenreContext} from "../context/MovieGenreProvider"
+
+import { addToFavorites, removeFromFavorites, fetchFavorites } from '../api/favoriteapi';
+
 const MovieCards = ({ movieCards}) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
+  const [favorites, setFavorites] = useState([]);
 
 
   const location = useLocation();
@@ -15,6 +19,19 @@ const MovieCards = ({ movieCards}) => {
   const genreName = queryParams.get('genre');
   // Calculate the index range for the current page
   const genreList = useContext(MovieGenreContext);
+
+  // Fetch favorites on component load
+  useEffect(() => {
+    async function loadFavorites() {
+      try {
+        const response = await fetchFavorites();
+        setFavorites(response.data); // Store favorite movie IDs
+      } catch (error) {
+        console.error('Error fetching favorites:', error);
+      }
+    }
+    loadFavorites();
+  }, []);
 
   const filteredMovies = genreName
   ? movieCards.filter((movie) => {
@@ -39,10 +56,23 @@ const MovieCards = ({ movieCards}) => {
     navigate(`/detail/movie/${movieId}`);
   }
 
-  function addButtonClickHandler(event){
+  function toggleFavoriteHandler(event, movieId) {
     event.stopPropagation();
-    navigate(`/profile`);
-    
+    if (favorites.includes(movieId)) {
+      removeFromFavorites(movieId)
+        .then(() => {
+          setFavorites(favorites.filter((id) => id !== movieId));
+          alert('Movie removed from favorites!');
+        })
+        .catch((error) => console.error('Error removing movie from favorites:', error));
+    } else {
+      addToFavorites(movieId, 'movie') // Add the type 'movie'
+        .then(() => {
+          setFavorites([...favorites, movieId]);
+          alert('Movie added to favorites!');
+        })
+        .catch((error) => console.error('Error adding movie to favorites:', error));
+    }
   }
 // for th navi from page to page
   function nextPage() {
@@ -72,7 +102,12 @@ const MovieCards = ({ movieCards}) => {
           
           <p>{item.release_date}</p>
           <div className={styles['button-container']}>
-            <button className={styles['button-click']} onClick={addButtonClickHandler}>Add to favourite</button>
+          <button
+                className={styles['button-click']}
+                onClick={(e) => toggleFavoriteHandler(e, item.id)}
+              >
+                {favorites.includes(item.id) ? 'Delete from favorites' : 'Add to favorites'}
+              </button>
           </div>
         </div>
       ))}

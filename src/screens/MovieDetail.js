@@ -82,9 +82,9 @@ const MovieDetail = () => {
                 src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`} 
                 alt={movieDetail.name}  />
             <div className={sytles['information_container']}>
-                <h2>{movieDetail.name}</h2>  {/* Display the movie title */}
+                <h2>{movieDetail.title}</h2>  {/* Display the movie title */}
                 <p>{movieDetail.overview}</p>  {/* Display movie overview */}
-                <p>Release Date: {movieDetail.first_air_date}</p>  {/* Display release date */}
+                <p>Release Date: {movieDetail.release_date}</p>  {/* Display release date */}
                 <p>Rating: {movieDetail.vote_average}</p>  {/* Display rating */}
                 <p>Genres: {movieDetail.genres.map(genre => genre.name).join(', ')}</p>  {/* Display genres */}
 
