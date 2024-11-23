@@ -57,6 +57,15 @@ const Profile = () => {
     }
   }
 
+  // Generate sharable URL
+  const userId = 945; // Replace with dynamic user ID if needed
+  const shareableLink = `${window.location.origin}/shared-favorites/${userId}`;
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(shareableLink);
+    alert('Sharable link copied to clipboard!');
+  };
+
   return (
     <div>
       <Navigation />
@@ -73,9 +82,21 @@ const Profile = () => {
             <span>john.doe@example.com</span>
           </div>
         </div>
+        <div className={styles.shareableLinkContainer}>
+          <label>Share your favorites:</label>
+          <input
+            type="text"
+            value={shareableLink}
+            readOnly
+            className={styles.shareableLinkInput}
+          />
+          <button onClick={copyToClipboard} className={styles.copyButton}>
+            Copy Link
+          </button>
+        </div>
       </div>
       <div className={styles.favoritesContainer}>
-      <h2 className={styles.favoritesHeading}>Your Favorites</h2>
+        <h2 className={styles.favoritesHeading}>Your Favorites</h2>
         <div className={styles.moviesContainer}>
           {favoriteDetails.length > 0 ? (
             favoriteDetails.map((item) => (

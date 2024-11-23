@@ -45,4 +45,22 @@ router.delete('/remove', async (req, res) => {
   }
 });
 
+// Get favorites for a specific user by userId
+router.get('/shared-favorites/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Fetch the user's favorites from the database
+    const result = await pool.query(
+      'SELECT movie_id AS id, type FROM favorites WHERE users_id = $1',
+      [userId]
+    );
+
+    res.json(result.rows); // Return an array of { id, type }
+  } catch (error) {
+    console.error('Error fetching shared favorites:', error);
+    res.status(500).json({ error: 'Failed to fetch shared favorites' });
+  }
+});
+
 export default router;

@@ -18,6 +18,7 @@ import HeroSection from './components/HeroSection.js';
 import {TVGenreProvider} from "./context/TVGenreProvider.js"
 import { MovieGenreProvider} from "./context/MovieGenreProvider.js"
 import Profile from './screens/ProfilePage.js';
+import SharedFavoritesPage from './screens/SharedFavoritesPage.js';
 // import TVGenreProvider from "./context/TVGenreProvider.js"
 
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -42,6 +43,8 @@ const App = () => (
             <Route path="/detail/movie/:id" element={<MovieDetail />} />
             <Route path="/detail/tv/:id" element={<TVDetail />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/shared-favorites/:userId" element={<SharedFavoritesPage />} />
+
           </Routes>
         </Router>
 
