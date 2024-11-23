@@ -122,7 +122,6 @@
   font-weight: bold;
 }
 
-/* Styling for the sharable link container */
 .shareableLinkContainer {
   display: flex;
   flex-direction: column;
@@ -154,7 +153,7 @@
   background-color: #fff;
 }
 
-/* Styling for the copy button */
+
 .copyButton {
   padding: 10px 15px;
   font-size: 16px;
@@ -172,6 +171,6 @@
 }
 
 .copyButton:active {
-  background-color: #003d7a;
+  background-color: #18bc1e;
   transform: translateY(1px);
 }
