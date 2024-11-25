@@ -70,10 +70,11 @@ const MovieDetail = () => {
     }, []);
 
     // Fetch reviews
+    // Fetch reviews
     useEffect(() => {
         const getReviews = async () => {
             try {
-                const reviewsData = await fetchReviews(id);
+                const reviewsData = await fetchReviews(id, "movie"); // You can adjust this for movie or TV based on state
                 setReviews(reviewsData);
             } catch (error) {
                 console.error('Error fetching reviews:', error);
@@ -83,12 +84,13 @@ const MovieDetail = () => {
     }, [id]);  // Add 'id' as dependency
 
     const handleReviewSubmit = async ({ rating, comment }) => {
+        const type = "movie"
         if (!rating || !comment) {
             alert('Please provide a rating and comment');
             return;
         }
         try {
-            await submitReview(id, { rating, comment });  // Submit review first
+            await submitReview(id, { rating, comment, type });  // Submit review first
 
             // After submitting, fetch reviews again to include the latest review
             const reviewsData = await fetchReviews(id);

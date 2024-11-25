@@ -73,7 +73,7 @@ const TVDetail = () => {
     useEffect(() => {
         const getReviews = async () => {
             try {
-                const reviewsData = await fetchReviews(id);
+                const reviewsData = await fetchReviews(id, "tv");
                 setReviews(reviewsData);
             } catch (error) {
                 console.error('Error fetching reviews:', error);
@@ -83,12 +83,13 @@ const TVDetail = () => {
     }, [id]);  // Add 'id' as dependency
 
     const handleReviewSubmit = async ({ rating, comment }) => {
+        const type = "tv";
         if (!rating || !comment) {
             alert('Please provide a rating and comment');
             return;
         }
         try {
-            await submitReview(id, { rating, comment });  // Submit review first
+            await submitReview(id, { rating, comment, type });
 
             // After submitting, fetch reviews again to include the latest review
             const reviewsData = await fetchReviews(id);

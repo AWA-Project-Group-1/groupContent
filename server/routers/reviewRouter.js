@@ -2,17 +2,23 @@ import express from 'express';
 import { pool } from '../helpers/db.js';
 
 const router = express.Router();
-// GET request for fetching reviews of a specific movie
-router.get('/:movieId', (req, res) => {
-    const movieId = req.params.movieId;
+// GET request for fetching reviews for a specific movie or TV show
+router.get('/:contentType/:movieId', (req, res) => {
+    const { contentType, movieId } = req.params;
+
+    // Ensure that 'contentType' is either 'movie' or 'tv'
+    if (contentType !== 'movie' && contentType !== 'tv') {
+        return res.status(400).json({ error: "Invalid content type. Must be 'movie' or 'tv'" });
+    }
+
     const query = `
-        SELECT reviews.id, reviews.movies_id, reviews.rating, reviews.comment, reviews.created_at, users.email
+        SELECT reviews.id, reviews.movies_id, reviews.rating, reviews.comment, reviews.type, reviews.created_at, users.email
         FROM reviews
         INNER JOIN users ON reviews.users_id = users.id
-        WHERE reviews.movies_id = $1
+        WHERE reviews.movies_id = $1 AND reviews.type = $2
     `;
 
-    pool.query(query, [movieId], (error, result) => {
+    pool.query(query, [movieId, contentType], (error, result) => {
         if (error) {
             console.error('Error executing query', error.stack);
             return res.status(500).json({ error: error.message });
@@ -21,23 +27,31 @@ router.get('/:movieId', (req, res) => {
     });
 });
 
+
+// POST request to add a new review
 // POST request to add a new review
 router.post('/', (req, res) => {
-    const { movieId, rating, comment } = req.body;
+    const { movieId, rating, comment, type } = req.body;
 
     // Validate that all required fields are provided
-    if (!movieId || !rating || !comment) {
+    if (!movieId || !rating || !comment || !type) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const userId = 2; // Hardcoded userId for all posts
+    // Validate that 'type' is either 'movie' or 'tv'
+    if (type !== 'movie' && type !== 'tv') {
+        return res.status(400).json({ error: "Invalid 'type' field. Must be 'movie' or 'tv'" });
+    }
+
+    const userId = 2; // Hardcoded userId for testing purposes, replace with dynamic user ID (e.g., from session or JWT token)
+
     const query = `
-        INSERT INTO reviews (movies_id, users_id, rating, comment)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO reviews (movies_id, users_id, rating, comment, type)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING *;
     `;
 
-    const values = [movieId, userId, rating, comment];
+    const values = [movieId, userId, rating, comment, type];
 
     pool.query(query, values, (error, result) => {
         if (error) {

@@ -8,9 +8,9 @@ const baseUrl = process.env.REACT_APP_BASE_REVIEW_URL;
  * @returns {Promise<Object[]>} - The array of reviews.
  * @throws {Error} - If the fetch fails.
  */
-export const fetchReviews = async (movieId) => {
+export const fetchReviews = async (movieId, contentType) => {
     try {
-        const response = await axios.get(`${baseUrl}/${movieId}`);
+        const response = await axios.get(`${baseUrl}/${contentType}/${movieId}`);
         return response.data; // Axios automatically parses JSON responses
     } catch (error) {
         console.error('Error fetching reviews:', error.response || error.message);

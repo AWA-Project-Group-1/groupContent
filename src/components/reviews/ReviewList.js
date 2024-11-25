@@ -4,7 +4,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css'; // Ensure Bootstrap Icons are
 
 const ReviewList = ({ reviews, onDeleteReview }) => {
     const [sortOption, setSortOption] = useState('');
-    const hardcodedUserId = '2'
+    const [deletedReview, setDeletedReview] = useState(null); // Holds the ID of the deleted review
+    const hardcodedUserId = '2';
 
     // Calculate the total reviews and average rating
     const totalReviews = reviews.length;
@@ -25,22 +26,20 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
         return counts;
     }, [reviews]);
 
-    const renderStars = (rating) => {
-        return (
-            <>
-                {Array.from({ length: 5 }, (_, index) => (
-                    <i
-                        key={index}
-                        className={`bi ${index < rating ? 'bi-star-fill' : 'bi-star'}`}
-                        style={{
-                            color: index < rating ? 'gold' : 'gray',
-                            fontSize: '1.3rem',
-                        }}
-                    ></i>
-                ))}
-            </>
-        );
-    };
+    const renderStars = (rating) => (
+        <>
+            {Array.from({ length: 5 }, (_, index) => (
+                <i
+                    key={index}
+                    className={`bi ${index < rating ? 'bi-star-fill' : 'bi-star'}`}
+                    style={{
+                        color: index < rating ? 'gold' : 'gray',
+                        fontSize: '1.3rem',
+                    }}
+                ></i>
+            ))}
+        </>
+    );
 
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
@@ -73,28 +72,10 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
 
     const sortedReviews = sortReviews(reviews);
 
-    const interpolateColor = (startColor, endColor, factor) => {
-        const [r1, g1, b1] = startColor;
-        const [r2, g2, b2] = endColor;
-        const r = Math.round(r1 + factor * (r2 - r1));
-        const g = Math.round(g1 + factor * (g2 - g1));
-        const b = Math.round(b1 + factor * (b2 - b1));
-        return `rgb(${r}, ${g}, ${b})`;
-    };
-
-    const getColorFromRating = (rating) => {
-        const purple = [48, 3, 54]; // RGB for purple
-        const red = [242, 48, 48];   // RGB for red
-        const factor = (rating - 1) / 4; // Calculate interpolation factor (0 to 1)
-        return interpolateColor(purple, red, factor);
-    };
-
-    // Define state for the dropdown menu visibility
-    const [menuOpen, setMenuOpen] = useState(false);
-
-    // Toggle the dropdown menu visibility
-    const toggleMenu = () => {
-        setMenuOpen(!menuOpen);
+    const handleDeleteReview = (reviewId) => {
+        onDeleteReview(reviewId);
+        setDeletedReview(reviewId); // Set the deleted review ID
+        setTimeout(() => setDeletedReview(null), 3000); // Clear message after 3 seconds
     };
 
     return (
@@ -130,35 +111,6 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
                         </div>
                     </div>
 
-                    {/* Rating Distribution */}
-                    <div className="mb-4">
-                        {ratingCounts.map((count, index) => (
-                            <div key={index} className="mb-3 d-flex align-items-center">
-                                <div className="d-flex align-items-center" style={{ width: '50px' }}>
-                                    <span style={{ marginRight: '10px' }}>{index + 1}</span>
-                                    {/* Only the filled star and the number */}
-                                    <i
-                                        className="bi bi-star-fill"
-                                        style={{
-                                            color: 'gold',
-                                            fontSize: '1.3rem',
-                                        }}
-                                    ></i>
-                                </div>
-                                <div
-                                    style={{
-                                        width: `${(count / totalReviews) * 100}%`,
-                                        height: '10px',
-                                        backgroundColor: getColorFromRating(index + 1),
-                                        borderRadius: '5px',
-                                        marginLeft: '10px',
-                                    }}
-                                ></div>
-                                <span className="ml-2" style={{ marginLeft: '10px' }}>{count} </span>
-                            </div>
-                        ))}
-                    </div>
-
                     {/* Sorting Filter */}
                     <div className="mb-3 text-end">
                         <label className="mr-2">Sort reviews by:</label>
@@ -184,7 +136,7 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
                                 className="card mb-4 shadow-sm"
                                 style={{
                                     borderRadius: '10px',
-                                    border: '1px solid #d3d3d3',  // Gray border
+                                    border: '1px solid #d3d3d3', // Gray border
                                 }}
                             >
                                 <div className="card-body">
@@ -192,21 +144,17 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
                                         <span><b>{review.email}</b></span>
                                         <div className="d-flex align-items-center ms-auto">
                                             <span className="text-muted me-3">{formatTimestamp(review.created_at)}</span>
-                                            <button onClick={toggleMenu} className="btn btn-link p-0">
-                                                <i className="bi bi-list"></i> {/* Bootstrap hamburger icon */}
+
+                                            <button
+                                                onClick={() => handleDeleteReview(review.id)}
+                                                className="btn btn-link p-0 text-danger d-flex align-items-center"
+                                                style={{ textDecoration: 'none' }}
+                                            >
+                                                <i className="bi bi-trash me-1"></i>
                                             </button>
+
                                         </div>
                                     </div>
-                                    {menuOpen && (
-                                        <div className="dropdown-menu show" style={{ position: 'absolute', right: '10px' }}>
-                                            <button className="dropdown-item">
-                                                Edit
-                                            </button>
-                                            <button onClick={() => onDeleteReview(review.id)} className="dropdown-item text-danger">
-                                                Delete
-                                            </button>
-                                        </div>
-                                    )}
                                     <div className="mb-3">
                                         <div className="d-flex mb-2" style={{ marginLeft: '10px' }}>
                                             {renderStars(review.rating)}
@@ -215,6 +163,11 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
                                             {review.comment}
                                         </p>
                                     </div>
+                                    {deletedReview === review.id && (
+                                        <div className="alert alert-success mt-3" role="alert">
+                                            Review deleted successfully!
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
