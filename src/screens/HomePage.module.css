@@ -1,0 +1,40 @@
+.search-contianer {
+    display: flex;
+    justify-content: right;  
+    align-items: center;   
+    /* width: 1200px;    */
+    height: 70px;    
+    width: 100%;        
+  
+    padding: 10px;
+    background: linear-gradient(to right, #f23030, #a0183c, #31003d, #480636);  
+    margin-bottom: 20px;   
+}
+
+.search-contianer input {
+    padding: 8px;
+    height: 40px; 
+    width: 95%;
+    font-size: 16px;
+    border: #31003d;
+      
+}
+
+.search-contianer label {
+    color: white;
+    width: 5%;
+    margin-right: 0px;
+}
+
+
+.carousel-selection-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-left: 30px;
+}
+
+p {
+    margin-left: 60px;
+    margin-bottom: 30px;
+}

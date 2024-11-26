@@ -1,192 +1,211 @@
-/* Container for aligning children items horizontally */
+
 .nav-container {
-    background-color: white;
-    
-    display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    width: 100%;
-    height: 80px;
-    /* padding-top: 200px; */
-    padding-left: 0px,0px; 
-    margin-bottom: 20px;
-  }
+  background-color: white;  
+  display: flex;
+  justify-content: space-between; 
+  align-items: center; 
+  width: 100%;
+  height: 80px; 
+  padding-left: 0px; 
+  margin-bottom: 10px;
+  
+}
 
 
-  
-  /* Navigation links styling */
-  .nav-links {
-    list-style: none; 
-    display: flex;
-    align-items: center; 
-    margin: 0px 280px;
-    line-height:100px;
-    padding: 0px;
-  }
-  
 
-  .nav-link {
-    margin-left: 25px; 
-    position: relative; 
-    margin-right: 20px; 
-    margin-top: 25px;
-    margin-bottom: auto;
-  }
-  
-  #li1 {
-    margin-left: 20px;
-  }
-  
+/* Navigation links styling */
+.nav-links {
+  list-style: none; 
+  display: flex;
+  /* align-items: left;  */
+  /* margin: 0px 280px;
+  line-height:100px; */
+  padding: 0px; 
+}
+
+
+.nav-link {
+  margin-left: 10px; 
+  position: relative; 
+  margin-right: 15px; 
+  margin-top: 20px;
+  margin-bottom: auto;
+}
+
+
+
+
+#li1 {
+  margin-left: 10px;
+}
+
 /* for the dropdown menu */
 /* Dropdown menu styling */
 .dropdown1 {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  position: absolute; 
-  top: 100%; 
-  left: 0;
-  background-color: #36d394; 
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  display: none; 
-  height: auto; 
-  width: auto;
-  z-index: 1; 
-  overflow: hidden; 
+list-style-type: none;
+padding: 0;
+margin: 0;
+position: absolute; 
+top: 100%; 
+left: 0;
+background-color: #36d394; 
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+display: none; 
+height: auto; 
+width: auto;
+z-index: 1; 
+overflow: hidden; 
 }
 .dropdown1 {
-  width: 600px; 
-  column-count: 4; 
-  column-gap: 18px; 
-  /* margin-left: 10px; */
-  /* margin-left: 20px;  */
-  padding: 10px;
+width: 600px; 
+column-count: 4; 
+column-gap: 18px; 
+/* margin-left: 10px; */
+/* margin-left: 20px;  */
+padding: 10px;
 
-  border: 1px solid #ddd;
-  background-color: gray;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+border: 1px solid #ddd;
+background-color: gray;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
 .dropdown1 li {
-  width: 140px; /* Width of each item */
-  /* padding-left: 5px; */
-  height: 60px; 
-  margin-left: 10px;
-  /* margin-right: 20px; */
-  overflow: hidden; 
+width: 140px; /* Width of each item */
+/* padding-left: 5px; */
+height: 60px; 
+margin-left: 10px;
+/* margin-right: 20px; */
+overflow: hidden; 
 }
 
 .dropdown1 li a {
-  color: white;
-  display: block;
-  text-decoration: none;
-  white-space: nowrap; 
-  height: 100%;
-  line-height: 60px; 
-  padding: 0;
+color: white;
+display: block;
+text-decoration: none;
+white-space: nowrap; 
+height: 100%;
+line-height: 60px; 
+padding: 0;
 }
 
 /* Show the dropdown when hovering over the nav-link */
 .nav-link:hover .dropdown1 {
-  display: block; 
-  padding-left: 0px;
+display: block; 
+padding-left: 0px;
 }
 
 /* Optional: Hover effect for dropdown items */
 .dropdown1 li a:hover {
-  background-color: #a0183c; 
-  padding-left: 0px;
+background-color: #a0183c; 
+padding-left: 0px;
 }
 
 
 
 
-  /* Link styling */
-  .nav-link a {
-    /* font-size: large; */
-    font-family: 'Arial', sans-serif;
-    font-size: large;
-    text-decoration: none;
-    color: black ;/* Adjust color for readability */
-    font-weight: bold;
-  }
+/* Link styling */
+.nav-link a {
+  /* font-size: large; */
+  font-family: 'Arial', sans-serif;
+  font-size: medium;
+  text-decoration: none;
+  color: black ;
+  font-weight: bold;
+}
+
+
+#movieapplogo-container {
+  display: flex;
+  width: 70px;
+  height: 80px;
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+
+
+/* for the hamburger menu */
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 25px;
+  height: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.show-menu {
+  display: none;
   
-
-  #movieapplogo-container {
-    display: flex;
-    width: 70px;
-    height: 80px;
-    margin-left: 20px;
-    margin-top: 5px;
- }
-
-
-
- @media (max-width: 768px) {
-  .nav-container {
-    flex-direction: column;
-    align-items: flex-start;
-    height: auto;
-    padding: 10px;
-  }
-
-  .nav-links {
-    flex-direction: column;
-    margin: 0;
-    padding: 10px 0;
-    line-height: 40px;
-    width: 100%;
-  }
-
-  .nav-link {
-    margin-left: 0;
-    margin-right: 0;
-    margin-top: 10px;
-  }
-
-  .nav-link a {
-    font-size: medium;
-    padding: 10px 15px;
-  }
-
-  /* Ensure dropdown menu doesn't overflow */
-  .dropdown1 {
-    width: 100%;
-    column-count: 1;
-  }
-
-  /* Adjust logo size */
-  #movieapplogo-container {
-    width: 50px;
-    height: 50px;
-  }
 }
 
-/* Tablet view: Adjust layout for medium screens */
-@media (max-width: 1024px) {
-  .nav-container {
-    flex-direction: row;
-    justify-content: space-between;
+.hide-menu {
+  display: none;
+}
+
+/* Show the menu when the hamburger button is clicked and screen is smaller than 768px */
+@media (max-width: 830px) {
+
+   .nav-links {
+    display: none; 
+    
   }
 
-  .nav-links {
-    margin: 0;
-    padding: 0;
+  /* .hamburger {
     display: flex;
-    justify-content: space-between;
+    position: relative;
+  } */
+
+  .hamburger {
+    display: flex;
+    position: absolute;
+    top: 40px;
+    right: 20px;
+    z-index: 1000;
+  }
+  .show-menu {
+    display: block;
+    background-color: gray; /* Example background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    position: absolute;
+    top: 70px; /* Adjust as needed */
+    right: 20px;
+    width: 150px; /* Adjust as needed */
+    z-index: 1000;
+    list-style: none;
+    padding: 20px;
   }
 
-  .nav-link {
-    margin-left: 15px;
+  .hamburger span {
+    background-color: black; /* Hamburger lines in white */
   }
 
-  .nav-link a {
-    font-size: medium;
+  .show-menu li {
+    color: white;
+    margin: 10px 0;
   }
 
-  .dropdown1 {
-    width: 400px;
-    column-count: 2;
+  .show-menu a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .show-menu li:hover {
+    background-color: #a0183c;
   }
 }

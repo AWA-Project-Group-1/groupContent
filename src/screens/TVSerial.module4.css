@@ -1,0 +1,123 @@
+
+
+.nav-herosection-moviescard {
+    background-color: white;
+    border: 2px solid rgb(220, 220, 230); /* Temporary for debugging */
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.nav-herosection {
+    background-color: white;
+    flex-wrap: wrap; 
+    align-items: center;
+
+    
+    /* border: 2px solid rgb(223, 200, 200); Temporary for debugging */
+}
+
+
+.allfilter-container {
+    display: flex; 
+    flex-wrap: wrap; /* Allows wrapping if the screen size is too small */
+    gap: 1rem; /* Adds space between items */
+    align-items: center; /* Aligns items vertically */
+    justify-content: space-between; /* Adjust spacing between elements */
+    padding-left: 28px; 
+    padding-right: 28px; 
+    padding-top: 20px; 
+    padding-bottom: 20px; 
+    background: linear-gradient(to right, #f23030, #a0183c, #31003d, #480636);
+}
+
+.allfilter-container label {
+    color: rgb(248, 242, 242);
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.allfilter-container option {
+    height: 30px;
+}
+
+.genre-filter-container,
+.year-filter-container,
+.popularity-filter-container,
+.search-container {
+    display: flex;
+    flex-direction: column; 
+    gap: 0.5rem; 
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+    margin-bottom: 10px;
+}
+
+select, input, .react-datepicker__input-container input {
+    height: 36px; 
+    width: 100%; /* Make inputs take up full width */
+    max-width: 200px; /* Limit max-width to prevent excessive width */
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+/* Tablet and larger devices (≥768px) */
+@media (min-width: 768px) {
+    .allfilter-container {
+        /* Change layout for larger screens */
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4 columns for larger screens */
+        gap: 20px;
+    }
+
+    .genre-filter-container,
+    .year-filter-container,
+    .popularity-filter-container,
+    .search-container {
+        flex-direction: row; /* Puts label and input side by side */
+        align-items: center;
+    }
+
+    /* Inputs and selects should be larger for better usability */
+    select, input, .react-datepicker__input-container input {
+        width: auto; /* Let the inputs size based on their container */
+        max-width: 100%; /* Full width */
+    }
+}
+
+/* Larger screens (≥1024px) */
+@media (min-width: 1024px) {
+    .allfilter-container {
+        grid-template-columns: repeat(5, 1fr); /* 5 columns for large screens */
+    }
+
+    /* Optional: Larger input fields for desktop view */
+    select, input, .react-datepicker__input-container input {
+        width: 250px; /* Wider inputs for desktop */
+    }
+}
+
+/* Mobile devices (≤767px) */
+@media (max-width: 767px) {
+    .allfilter-container {
+        /* Stack filters vertically on mobile screens */
+        flex-direction: column;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .genre-filter-container,
+    .year-filter-container,
+    .popularity-filter-container,
+    .search-container {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    select, input, .react-datepicker__input-container input {
+        width: 100%; /* Full width for better usability */
+    }
+}

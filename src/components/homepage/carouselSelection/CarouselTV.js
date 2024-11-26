@@ -4,11 +4,15 @@ import CustomCarouselTV from '../../elements/Carousel/TvCarousel';  // Assuming 
 import ViewAllButton from '../../elements/Button/ViewAllButton';  // Import ViewAllButton component
 import './CarouselSelection.css';  // Import the CSS file
 
-const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
+const CarouselSelection = ({ title, fetchMovies,searchedTVseries, viewAllLink }) => {
     const [movies, setMovies] = useState([]);
     const [showAllMovies, /*setShowAllMovies*/] = useState(false);  // State to toggle between showing first 10 and all movies
 
     useEffect(() => {
+        if (searchedTVseries) {
+            setMovies(searchedTVseries);
+            return; // Early return to prevent fetching if searchedmovies are available
+        }
         const fetchData = async () => {
             try {
                 const movieData = await topTVSeries();
@@ -20,7 +24,7 @@ const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
         };
 
         fetchData(); // Fetch movies when the component mounts
-    }, [fetchMovies]);
+    }, [fetchMovies,searchedTVseries]);
 
     // Show first 10 movies for carousel
     const carouselMovies = movies.slice(0, 15).map((movie) => ({

@@ -77,18 +77,39 @@ const MovieDetail = () => {
 
         <div className={sytles['movie_framework']}>
 
-
-            <img 
-                src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`} 
-                alt={movieDetail.name}  />
+            <div className={sytles['image_container']}>
+                <img 
+                        src={`https://image.tmdb.org/t/p/w500${movieDetail.poster_path}`} 
+                        alt={movieDetail.name}  />
+            </div>
+            
             <div className={sytles['information_container']}>
+
+            <div className={sytles['name_container']}>
+                
                 <h2>{movieDetail.title}</h2>  {/* Display the movie title */}
                 <p>{movieDetail.overview}</p>  {/* Display movie overview */}
-                <p>Release Date: {movieDetail.release_date}</p>  {/* Display release date */}
-                <p>Rating: {movieDetail.vote_average}</p>  {/* Display rating */}
-                <p>Genres: {movieDetail.genres.map(genre => genre.name).join(', ')}</p>  {/* Display genres */}
+            </div>
+
+            <div className={sytles['data_container']}>
+                <h2>Release Date:</h2>
+                <p>{movieDetail.release_date}</p>  
 
             </div>
+            <div className={sytles['rating_container']}>
+                <h2>Rating:</h2>
+                <p> {movieDetail.vote_average}</p>  
+            </div>
+
+            <div className={sytles['genre_container']}>
+                    <h2>Genres: </h2>
+                    <p>{movieDetail.genres.map(genre => genre.name).join(', ')}</p> 
+            </div>
+                 {/* Display release date */}
+                {/* <p>Rating: {movieDetail.vote_average}</p>  Display rating */}
+                {/* <p>Genres: {movieDetail.genres.map(genre => genre.name).join(', ')}</p>  Display genres */}
+
+        </div>
 
 
         </div>

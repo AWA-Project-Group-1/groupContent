@@ -3,11 +3,17 @@ import CustomCarousel from '../../elements/Carousel/Carousel';
 import ViewAllButton from '../../elements/Button/ViewAllButton';
 import './CarouselSelection.css';
 
-const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
+const CarouselSelection = ({ title, fetchMovies, searchedmovies,viewAllLink }) => {
     const [movies, setMovies] = useState([]);
+    // const [searchedMovies, setSearchedMovies] = useState([]);
     const [showAllMovies] = useState(false);
 
     useEffect(() => {
+        // He has made this change
+        if (searchedmovies) {
+            setMovies(searchedmovies);
+            return; 
+        }
         const fetchData = async () => {
             try {
                 const movieData = await fetchMovies();
@@ -18,7 +24,7 @@ const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
         };
 
         fetchData();
-    }, [fetchMovies]);
+    }, [fetchMovies,searchedmovies]);
 
     const carouselMovies = movies.slice(0, 15).map((movie) => ({
         id: movie.id,
@@ -47,6 +53,15 @@ const CarouselSelection = ({ title, fetchMovies, viewAllLink }) => {
             ) : (
                 <p className="carousel-selection-loading">Loading movies...</p>
             )}
+
+            {/* He has made changes  */}
+            {/* {movies.length > 0 ? (
+                <div className="carousel-selection-carousel">
+                    <CustomCarousel data={showAllMovies ? allMovies : carouselMovies} gridTheme={{ md: 768 }} />
+                </div>
+            ) : 
+                ""
+            } */}
         </div>
     );
 };
