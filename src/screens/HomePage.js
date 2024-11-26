@@ -18,17 +18,6 @@ const HomePage = () => {
     const fetchPopularMovies = () => discoverMovies({ sort_by: 'popularity.desc' });
 
 
-    /* // Fetch upcoming movies function
-     const fetchUpcomingMovies = async () => {
-         try {
-             const movies = await discoverUpcomingMovies();
-             console.log("Filtered Upcoming Movies:", movies);
-             return movies;
-         } catch (error) {
-             console.error("Error fetching movies:", error);
-         }
-     };
-     */
 
 
     // Fetch old movies
@@ -60,7 +49,7 @@ const HomePage = () => {
                 <Navigation />
             </div>
         {/* He made for the search */}
-            <div className={styles['search-contianer']} >
+        <div className={`${styles['search-contianer']} flex flex-row items-center gap-2`}>
                     <label htmlFor="">Search :  </label>
                     <input
                         type="text"

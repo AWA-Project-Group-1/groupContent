@@ -4,14 +4,14 @@
     align-items: center;   
     /* width: 1200px;    */
     height: 70px;    
-    width: 100%;        
-  
+    width: 100%;         
     padding: 10px;
     background: linear-gradient(to right, #f23030, #a0183c, #31003d, #480636);  
-    margin-bottom: 20px;   
+    /* margin-bottom: 20px;    */
 }
 
 .search-contianer input {
+    flex: 1;
     padding: 8px;
     height: 40px; 
     width: 95%;
@@ -22,8 +22,8 @@
 
 .search-contianer label {
     color: white;
-    width: 5%;
-    margin-right: 0px;
+    width: auto;
+    margin-right: 5px;
 }
 
 
