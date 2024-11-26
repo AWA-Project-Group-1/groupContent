@@ -62,14 +62,14 @@ const MovieCards = ({ movieCards}) => {
       removeFromFavorites(movieId)
         .then(() => {
           setFavorites(favorites.filter((id) => id !== movieId));
-          alert('Movie removed from favorites!');
+          
         })
         .catch((error) => console.error('Error removing movie from favorites:', error));
     } else {
       addToFavorites(movieId, 'movie') // Add the type 'movie'
         .then(() => {
           setFavorites([...favorites, movieId]);
-          alert('Movie added to favorites!');
+          
         })
         .catch((error) => console.error('Error adding movie to favorites:', error));
     }
