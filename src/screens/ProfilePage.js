@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import { fetchFavorites, removeFromFavorites } from '../api/favoriteapi';
 import Navigation from '../components/Navigation';
 import styles from './ProfilePage.module.css';
 
+const ITEMS_PER_PAGE = 10; // Number of items to display per page
+
 const Profile = () => {
   const [favorites, setFavorites] = useState([]);
-  const [favoriteDetails, setFavoriteDetails] = useState([]); // Store detailed data for movies/TV shows
-  const navigate = useNavigate(); // Initialize navigate
+  const [favoriteDetails, setFavoriteDetails] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getFavorites() {
       try {
         const response = await fetchFavorites();
-        const favoriteItems = response.data; // [{ movie_id, type }]
+        const favoriteItems = response.data;
 
-        // Fetch detailed data for each favorite item
         const details = await Promise.all(
           favoriteItems.map(async ({ movie_id, type }) => {
             const endpoint =
@@ -25,12 +27,12 @@ const Profile = () => {
 
             const response = await fetch(endpoint);
             const data = await response.json();
-            return { ...data, type }; // Attach the type to the data
+            return { ...data, type };
           })
         );
 
-        setFavorites(favoriteItems); // Store raw favorite items
-        setFavoriteDetails(details); // Store detailed data
+        setFavorites(favoriteItems);
+        setFavoriteDetails(details);
       } catch (error) {
         console.error('Error fetching favorites:', error);
       }
@@ -38,27 +40,38 @@ const Profile = () => {
     getFavorites();
   }, []);
 
+  // Handle removal of favorite item
   async function removeButtonClickHandler(movieId) {
     try {
       await removeFromFavorites(movieId);
       setFavorites(favorites.filter((item) => item.movie_id !== movieId));
       setFavoriteDetails(favoriteDetails.filter((item) => item.id !== movieId));
-      alert('Item removed from favorites!');
+      
     } catch (error) {
       console.error('Error removing item from favorites:', error);
     }
   }
 
+  // Navigate to detail pages
   function handleCardClick(item) {
     if (item.type === 'movie') {
-      navigate(`/detail/movie/${item.id}`); // Navigate to MovieDetail page
+      navigate(`/detail/movie/${item.id}`);
     } else if (item.type === 'tv') {
-      navigate(`/detail/tv/${item.id}`); // Navigate to TVDetail page
+      navigate(`/detail/tv/${item.id}`);
     }
   }
 
+  // Paging logic
+  const totalPages = Math.ceil(favoriteDetails.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const visibleFavorites = favoriteDetails.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   // Generate sharable URL
-  const userId = 945; // Replace with dynamic user ID if needed
+  const userId = 945;
   const shareableLink = `${window.location.origin}/shared-favorites/${userId}`;
 
   const copyToClipboard = () => {
@@ -75,35 +88,29 @@ const Profile = () => {
         <div className={styles.profileDetails}>
           <div>
             <label>Name:</label>
-            <span>John Doe</span>
+            <span>Placeholder</span>
           </div>
           <div>
             <label>Email:</label>
-            <span>john.doe@example.com</span>
+            <span>Placeholder@example.com</span>
           </div>
         </div>
         <div className={styles.shareableLinkContainer}>
-          <label>Share your favorites:</label>
-          <input
-            type="text"
-            value={shareableLink}
-            readOnly
-            className={styles.shareableLinkInput}
-          />
+          
           <button onClick={copyToClipboard} className={styles.copyButton}>
-            Copy Link
+            Copy Link to share favorites
           </button>
         </div>
       </div>
       <div className={styles.favoritesContainer}>
         <h2 className={styles.favoritesHeading}>Your Favorites</h2>
         <div className={styles.moviesContainer}>
-          {favoriteDetails.length > 0 ? (
-            favoriteDetails.map((item) => (
+          {visibleFavorites.length > 0 ? (
+            visibleFavorites.map((item) => (
               <div
                 key={item.id}
                 className={styles.movieCard}
-                onClick={() => handleCardClick(item)} // Add click handler
+                onClick={() => handleCardClick(item)}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
@@ -115,7 +122,7 @@ const Profile = () => {
                 <button
                   className={styles.removeButton}
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent card click event
+                    e.stopPropagation();
                     removeButtonClickHandler(item.id);
                   }}
                 >
@@ -127,6 +134,20 @@ const Profile = () => {
             <p>No favorites added yet.</p>
           )}
         </div>
+        
+        {favoriteDetails.length > ITEMS_PER_PAGE && (
+          <div className={styles.pagination}>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handlePageChange(i + 1)}
+                className={`${styles.pageButton} ${currentPage === i + 1 ? styles.activePage : ''}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
