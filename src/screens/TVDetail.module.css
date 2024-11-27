@@ -1,6 +1,8 @@
 .nav-herosection {
     background-color:white;
-    /* border: 2px solid rgb(223, 200, 200); Temporary for debugging */
+    margin: 0;
+    padding: 0;
+    
 }
 .movie_framework {
     display: flex;
@@ -90,122 +92,73 @@
     margin-top: 10px;
     color: #ff8c00;
 }
-
-
-
-
-/* for the actor display */
-.cast-list {
-    display: flex;          /* Use Flexbox to display items in a row */
-    flex-wrap: wrap;        /* Allow wrapping to the next line if there are too many items */
-    gap: 16px;              /* Space between each item */
-    list-style: none;       /* Remove bullet points from list items */
-    padding: 0;
-    margin: 0;
-}
-
-.cast-item {
-    display: flex;
-    flex-direction: column; /* Stack the name and image vertically */
-    align-items: center;    /* Center-align content within each item */
-    text-align: center;
-    width: 120px;           /* Set a width for each cast item */
-   
-}
-
-
-.poster-container {
-    width: 100px;           
-    height: 200px;          
-    border-radius: 8px;    
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-    object-fit: cover;
-}
-
-
-
-/* for the crew and cast container */
-/* Container for the cast section */
+/* for the cast  */
 .cast-container {
     margin-bottom: 1rem;
     margin-left: 30px;
-
-}
-.cast-container h2{
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-/* Navigation container for left/right buttons and scrollable content */
-.cast-nav-container {
+  }
+  
+  .cast-list {
     display: flex;
+    flex-wrap: nowrap; /* Allow items to wrap to the next line */
+    gap: 16px; /* Spacing between cast items */
+    list-style: none; /* Remove list styling */
+    padding: 0;
+    margin: 0;
+  }
+  
+  .cast-item {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-}
-
-/* Button styles for arrows */
-.arrow-btn {
-    background-color: transparent;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    transition: opacity 0.3s ease;
-}
-
-.arrow-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-/* Scrollable container for the cast */
-.cast-scroll-container {
-    display: flex;
-    overflow-x: auto;
-    width: 80%; /* Adjust this width based on your layout */
-    padding: 1rem;
-    margin: 0 1rem;
-    justify-content: flex-start;
-}
-
-/* List of cast items (horizontal layout) */
-.cast-list {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: nowrap;
-}
-
-
-/* Actor's name and character style */
-.actor-name {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-
-.cast-list {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-}
-
-.cast-item {
-    flex-shrink: 0;
-    width: 150px; /* Adjust this as needed */
+    justify-content: space-between;
     text-align: center;
-    /* border: solid; */
-}
-.cast-item p {
-    color:white;
-    
-}
-.poster-container {
-    width: 100%;
-    height: auto;
+    width: 180px; /* Fixed width for uniformity */
+    padding: 10px;
+    background: linear-gradient(to right, #f23030, #a0183c, #31003d, #480636);
     border-radius: 8px;
-    /* Add other styles for your image as necessary */
-}
+  }
+  
+  .actor-container img {
+    width: 150px; /* Fixed width for images */
+    height: 200px; /* Fixed height for images */
+    border-radius: 8px;
+    object-fit: cover; /* Ensures the image scales proportionally */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* border: solid; */
+    margin: 0;
+    padding: 0;
+    gap: 4px; 
+  }
+  
+  .text-container p {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%; /* Ensures fixed width for consistent spacing */
+  }
+  
+
+
+
+
+
+
+
+
+
 
 
 /* Scrollable container for the cast */
@@ -217,22 +170,7 @@
     margin: 0 1rem;   /* Optional: margin on the sides */
 }
 
-/* List of cast items (horizontal layout) */
-.cast-list {
-    display: flex;
-    gap: 16px;           /* Space between each cast item */
-    flex-wrap: nowrap;    /* Prevent items from wrapping onto the next row */
-    
-}
 
-/* Individual cast items */
-.cast-item {
-    flex-shrink: 0;      
-    width: 150px;  
-    /* height: 900px;       */
-    text-align: center; 
-    background: linear-gradient(to right, #f23030, #a0183c, #31003d, #480636);
-}
 
 /* Actor's profile image styling */
 .poster-container {
@@ -240,6 +178,10 @@
     height: auto;        
     border-radius: 8px;   
 }
+
+
+
+
 
 .crew-container {
     margin-bottom: 2rem;
@@ -268,6 +210,8 @@
 
 .crew-item p {
     display: flex;
+    padding: 0;
+    margin: 0;
     justify-content: center;
     align-items: flex-start;
     /* /* margin-left: 20px; */
@@ -305,3 +249,51 @@
 .crew-item:hover {
     border: solid;
     border-color: #dc1515;}
+
+
+
+@media (max-width: 768px) {
+    .movie_framework {
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        
+    }
+
+
+    .information_container {
+        padding-left: 20px;
+        justify-content: flex-start;
+        /* border: solid; */
+    }
+
+       /* Add horizontal scrolling for the cast list on small screens */
+    .cast-scroll-container {
+        overflow-x: auto; /* Enable horizontal scrolling */
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+
+    .cast-list {
+        flex-direction: row; /* Ensure items are in a row */
+        gap: 8px; /* Adjust spacing for smaller screens */
+    }
+
+    /* Optionally, limit the number of cast items to show with a maximum width */
+    .cast-list > .cast-item {
+        max-width: 150px; /* Limit the width of each cast item */
+    }
+
+    /* Hide the scrollbar on the bottom, if desired */
+    .cast-scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .cast-scroll-container {
+        -ms-overflow-style: none;  /* For IE and Edge */
+        scrollbar-width: none;     /* For Firefox */
+    }
+      
+    
+        
+}
+    

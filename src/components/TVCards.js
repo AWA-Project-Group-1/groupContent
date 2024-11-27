@@ -90,25 +90,43 @@ const TVCards = ({ movieCards}) => {
 
   return (
     <div>
-      <div className={styles['productcards_container']} > {/* Apply the class here */}
+      <div className={styles['productcards_container']} > 
       { currentMovies.map(item => (
         <div 
           className={styles['product-card-framework']} 
           onClick={() => productClickHandler(item.id)}  
           key={item.id}>
-          <img className={styles['product-card']} src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.name} />
-         
-          <h5>{item.name}</h5>
+            <div className={styles['image-container']}>
+              <img className={styles['product-card']} src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.name} />
+            </div>
+
+            <div className={styles['text-container']}>
+              {/* <h5>{item.name}</h5>   */}
+              <h5>{item.name.length > 17? `${item.name.slice(0, 17)}...` : item.name}</h5>     
+              <p>{item.first_air_date}</p>
+              <div className={styles['button-container']}>
+                {/* Review Button */}
+                <div className={styles['review-button-container']}>
+                    <button className={styles['button-click']}>
+                      ✍️ Give <br></br> Review
+                    </button>
+                </div>
+                
+                <div className={styles['addfavourites-button-container']}>
+                  <button
+                        className={styles['button-click']}
+                        onClick={(e) => toggleFavoriteHandler(e, item.id)}
+                      >
+                      {favorites.includes(item.id) ? '🖤Delete from favorites' : '❤️Add to favorites'}
+                  </button>
+                </div>
+                
+                        
+
           
-          <p>{item.first_air_date}</p>
-          <div className={styles['button-container']}>
-          <button
-                className={styles['button-click']}
-                onClick={(e) => toggleFavoriteHandler(e, item.id)}
-              >
-                {favorites.includes(item.id) ? 'Delete from favorites' : 'Add to favorites'}
-              </button>
-          </div>
+              </div>              
+            </div>
+          
         </div>
       ))}
       
@@ -118,7 +136,7 @@ const TVCards = ({ movieCards}) => {
           <span>Page {currentPage}</span>
           <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
         </div>
-    </div>
+      </div>
     
     
   );
