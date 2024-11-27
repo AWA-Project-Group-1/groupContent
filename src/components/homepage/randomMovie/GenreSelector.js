@@ -1,9 +1,9 @@
 import React from 'react';
-import './styles.css';
+import styles from './MoviePicker.module.css';
 
 const GenreSelector = ({ genres, selectedGenre, onGenreChange }) => {
     return (
-        <div className="select-container">
+        <div className={styles.selectContainer}>
             <select onChange={(e) => onGenreChange(e.target.value)} value={selectedGenre}>
                 <option value="" disabled>
                     Select Genre

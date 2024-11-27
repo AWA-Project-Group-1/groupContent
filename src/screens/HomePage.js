@@ -1,9 +1,8 @@
-// HomePage.js
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import CarouselSelection from '../components/homepage/carouselSelection/CarouselSelection';
 import CarouselSelectionTV from '../components/homepage/carouselSelection/CarouselTV';
 import MoviePicker from '../components/homepage/randomMovie/MoviePicker';
-import { discoverMovies, discoverOldMovies } from '../api/movieFetch';
+import { discoverMovies, discoverOldMovies, fetchTopMovies, fetchUpcomingMovies } from '../api/movieFetch';
 import { topTVSeries } from '../api/tvFetch';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import styles from "../screens/TVSerial.module.css"
@@ -17,7 +16,7 @@ const HomePage = () => {
     // Fetch popular movies
     const fetchPopularMovies = () => discoverMovies({ sort_by: 'popularity.desc' });
 
-   // Fetch old movies
+    // Fetch old movies
     const fetchOldMovies = () => discoverOldMovies({
         sort_by: 'release_date.asc',
         'release_date.gte': new Date().toISOString().split('T')[0],  // Ensures only upcoming movies
@@ -26,7 +25,7 @@ const HomePage = () => {
 
     // heyanwen
     const [searchQuery, setSearchQuery] = useState('');
-    const moiveTVSerialData = useContext(MoiveTVSerialContext) 
+    const moiveTVSerialData = useContext(MoiveTVSerialContext)
 
     const handleSearchQueryChange = (event) => {
         setSearchQuery(event.target.value);
@@ -35,29 +34,29 @@ const HomePage = () => {
     const filteredMovies = moiveTVSerialData.movies?.filter(movie =>
         movie.title.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
-    
-    const filteredTVSerials = moiveTVSerialData.tvSeries?.filter(serial => 
+
+    const filteredTVSerials = moiveTVSerialData.tvSeries?.filter(serial =>
         serial.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  
+
     return (
         <div >
             <div >
                 <Navigation />
             </div>
-        {/* He made for the search */}
-        <div className={`${styles['search-contianer']} flex flex-row items-center gap-2`}>
-                    <label htmlFor="">Search :  </label>
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={handleSearchQueryChange}
-                        placeholder="   Search by Movie or TV Serial title"
-                    />
-        </div>
+            {/* He made for the search */}
+            <div className={`${styles['search-contianer']} flex flex-row items-center gap-2`}>
+                <label htmlFor="">Search :  </label>
+                <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchQueryChange}
+                    placeholder="   Search by Movie or TV Serial title"
+                />
+            </div>
 
-            
-        {/* He made changes */}
+
+            {/* He made changes */}
 
             {searchQuery.length > 0 && filteredMovies.length > 0 && (
                 <CarouselSelection
@@ -65,13 +64,13 @@ const HomePage = () => {
                     searchedmovies={filteredMovies}
                 />
             )}
-            
-            {searchQuery.length > 0 && ( filteredMovies.length === 0 ) && (
+
+            {searchQuery.length > 0 && (filteredMovies.length === 0) && (
                 <>
                     <h2 className={styles["carousel-selection-title"]}>Searched Movies</h2>
                     <p>No Movie found</p>
                 </>
-                
+
             )}
 
             {searchQuery.length > 0 && filteredTVSerials.length > 0 && (
@@ -81,43 +80,54 @@ const HomePage = () => {
                 />
             )}
 
-            
-            {searchQuery.length > 0 && filteredTVSerials.length === 0 && (
-                    <>
-                        <h2 className={styles["carousel-selection-title"]}>Searched TV Series</h2>
-                        <p>No TV Series found</p>
-                    </>
-                        
-                        )}         
-           
 
-         <CarouselSelection
-                title="Popular Movies"
+            {searchQuery.length > 0 && filteredTVSerials.length === 0 && (
+                <>
+                    <h2 className={styles["carousel-selection-title"]}>Searched TV Series</h2>
+                    <p>No TV Series found</p>
+                </>
+
+            )}
+
+
+            <CarouselSelection
+                title="Trending Movies"
                 fetchMovies={fetchPopularMovies} // Use the discover endpoint
                 viewAllLink="/movies"
-            />                
+            />
 
+            <CarouselSelection
+                title="Top Movies"
+                fetchMovies={fetchTopMovies}
+            />
 
 
             <div style={{ marginBottom: '30px', marginTop: '30px' }}>
-                <MoviePicker />  {/* Render MoviePicker here */}
+                <MoviePicker />
             </div>
+
+            <br></br>
+
 
             <CarouselSelection
                 title="Timeless Movies (1900s)"
                 fetchMovies={fetchOldMovies}
             />
 
-       
+
+            <CarouselSelection
+                title="Coming Soon"
+                fetchMovies={fetchUpcomingMovies}
+            />
 
 
             <CarouselSelectionTV
-                            title="Popular TV Series"
-                            fetchMovies={topTVSeries} // Use the discover endpoint
-                            viewAllLink="/tvserial"
-                        />
+                title="Popular TV Series"
+                fetchMovies={topTVSeries} // Use the discover endpoint
+                viewAllLink="/tvserial"
+            />
 
-           
+
         </div>
 
     )

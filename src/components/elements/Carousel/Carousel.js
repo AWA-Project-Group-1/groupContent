@@ -14,7 +14,10 @@ const Photo = ({ src, alt }) => (
 );
 
 const CarouselSlide = ({ src, title, movieId, release_date }) => {
-    const releaseYear = new Date(release_date).getFullYear(); // Extract year from release_date
+    const releaseDate = new Date(release_date);
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    const formattedReleaseDate = `${months[releaseDate.getMonth()]} ${releaseDate.getDate()}, ${releaseDate.getFullYear()}`;
 
     return (
         <BearSlideCard>
@@ -22,7 +25,7 @@ const CarouselSlide = ({ src, title, movieId, release_date }) => {
                 <div className="carousel-card">
                     <Photo src={src} alt={title} />
                     <h3 className="carousel-title">{title}</h3>
-                    <p className="carousel-release-date">{releaseYear}</p>
+                    <p className="carousel-release-date">{formattedReleaseDate}</p>
                 </div>
             </Link>
         </BearSlideCard>
