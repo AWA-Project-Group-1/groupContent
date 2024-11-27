@@ -1,6 +1,6 @@
 
-import React, { useContext } from 'react';
-import { useParams } from "react-router-dom";
+import React, { useContext} from 'react';
+import { Link  } from "react-router-dom";
 import styles from "./HeroSection.module.css";
 // import { TVSeriesContext } from '../context/TVSeriesProvider';
 import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider"
@@ -64,8 +64,9 @@ const HeroSection = ({type}) => {
   >
       <div className={styles['hero-content']}>
         <h1>Discover Your {type}</h1>
-        <p>Explore the top-rated and latest {type} shows!</p>
-        <a href="/movies" className="btn btn-primary mx-2">See More</a>
+        <h4>Explore the top-rated and latest {type} shows!</h4>
+        <Link className="btn btn-primary mx-2">See More</Link>
+        
       </div>
     </div>
   );

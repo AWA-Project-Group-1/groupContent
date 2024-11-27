@@ -9,6 +9,7 @@ import './App.css';
 
 // heyanwen
 import TVSerial from "./screens/TVSerial.js"
+import MovieShowtimes from "./screens/MovieShowtimes.js"
 // import TVDetail from "./screens/TVDetail.js"
 import {MoiveTVSerialProvider} from "./context/MoiveTVSerialProvider"
 import MoviePage from "./screens/MoviePage.js"
@@ -39,7 +40,8 @@ const App = () => (
             <Route path='/tvserial' element={<TVSerial />} />
             <Route path='/movies' element={<MoviePage/>} />
             {/* <Route path="/detail/:movieId" element={<TVDetail />} />  */}
-            <Route path="/showtime" element={<ShowTime />} /> 
+            {/* <Route path="/showtime" element={<MovieShowtimes />} /> */}
+            <Route path="/showtime" element={<ShowTime />} />  
             <Route path="/detail/movie/:id" element={<MovieDetail />} />
             <Route path="/detail/tv/:id" element={<TVDetail />} />
             <Route path="/profile" element={<Profile />} />

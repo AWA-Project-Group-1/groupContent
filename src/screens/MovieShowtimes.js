@@ -1,59 +1,7 @@
-import {useState, useEffect}from 'react'
-import Navigation from '../components/Navigation'
-import HeroSection from '../components/HeroSection'
-import Footer from "../components/Footer"
-import styles from "./ShowTime.module.css"
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-const ShowTime = () => {
-    const [showTime, setShowTime] = useState([])
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; 
 
-    const url = `https://www.finnkino.fi/xml/Schedule/`
-    useEffect(() => {    
-    
-        fetch(url)
-          .then((res) => res.text()) // Parse the JSON response
-          .then((data) => {
-            const parser = new DOMParser();
-            const dataDocument= parser.parseFromString(data, "application/xml");
-            
-            const showstime = Array.from(dataDocument.getElementsByTagName("Show")).map(show => ({
-                title: show.getElementsByTagName("Title")[0].textContent,
-                showStart: show.getElementsByTagName("dttmShowStart")[0].textContent,
-                showEnd: show.getElementsByTagName("dttmShowEnd")[0].textContent,
-                theatreID: show.getElementsByTagName("TheatreID")[0].textContent,
-                showUrl:show.getElementsByTagName("ShowURL")[0].textContent,
-                image:show.getElementsByTagName("EventMediumImagePortrait")[0].textContent
-            }));
-           
-            setShowTime(showstime); // Set movie details to state
-            console.log(`This is the detail: ${showstime}`)
-           
-          })
-          .catch((err) => {
-            console.error('Error fetching movie details:', err); // Handle errors
-          });
-      }, []);
-      
-   
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentMovies = showTime.slice(startIndex, endIndex);
-      
-    function nextPage() {
-        if (currentMovies.length === itemsPerPage) {
-        setCurrentPage(currentPage + 1);
-        }
-    }
-
-    function prevPage() {
-        if (currentPage > 1) {
-        setCurrentPage(currentPage - 1);
-        }
-    }
+const MovieShowtimes = () => {
     const [area, setArea] = useState('1029');  // Default area: 'Valitse alue/teatteri'
     const [movie, setMovie] = useState('');  // Default empty movie selection
     const [showtimes, setShowtimes] = useState([]);
@@ -199,19 +147,11 @@ const ShowTime = () => {
         }
     };
 
-
-
     return (
-        <div className={styles["all-container"]}>
-            <div className={styles["navigation-hero-container"]} >
-                <Navigation />
-                <HeroSection  type="movie"/>
-            </div>
-            
+        <div>
+            <h1>Movie Showtimes</h1>
 
-            <>
-
-                {/* Theatre area selection */}
+            {/* Theatre area selection */}
             <label htmlFor="area">Select a Theatre Area: </label>
             <select id="area" value={area} onChange={(e) => setArea(e.target.value)}>
                 {theatreAreas.map((areaOption) => (
@@ -262,70 +202,8 @@ const ShowTime = () => {
                     ))}
                 </ul>
             </div>
-       
-            
-        </>
-            {/* <div>
-                { showTime.map(
-                    (item)  => (
-                        <div>
-                            <img src={item.image} alt="" />
-                            <h2>{item.title}</h2>
-                            <p>ShowTime: {item.showStart}-{item.showEnd} </p>
-                            <p>Bye Ticket: {item.showUrl}</p>
-                            
-
-                        </div>
-                        
-                    )                    
-                )}
-            </div> */}
-            <div className={styles["container"]}>
-                {currentMovies.map((item, index) => (
-                <div key={index} className={styles["show-time-container"]}>
-                    
-                    <div className="show-left">
-                        {/* <span className={styles["status-badge"]} >{new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}</span>
-                        
-                        <img src={item.image} alt={item.title} className={styles["show-image"]} /> */}
-                       <div className={styles["image-container"]}>
-                            <span  className={styles["status-badge"]} >
-                                {new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}
-                            </span>
-                            <img src={item.image} alt={item.title} className={styles["show-image"]}/>
-                        </div>
-                    </div>
-                    <div className={styles["show-right"]}  >
-                        <h3>Movie Title:</h3>
-                        <h5>{item.title}</h5>
-                        <h3> Show Time: </h3>
-                        <h5> {item.showStart} - {item.showEnd} </h5>
-                        <h5>
-                        
-
-                            <Link to={item.showUrl} className={styles["buy-ticket-button"]}>Buy Ticket</Link>
-
-                            {/* <a href={item.showUrl} target="_blank" rel="noopener noreferrer" className="buy-ticket-button">
-                                Buy Ticket
-                            </a> */}
-                        </h5>
-                    </div>
-
-                    <div className={styles["show-rightmost"]}>
-
-                    </div>
-                </div>
-                ))}
-            </div>
-
-            <div className={styles['pagination-controls']}>
-                <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
-                <span>Page {currentPage}</span>
-                <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
-            </div>
-        <Footer />
         </div>
-    )
-}
+    );
+};
 
-export default ShowTime
+export default MovieShowtimes;
