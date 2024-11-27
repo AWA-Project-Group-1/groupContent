@@ -38,4 +38,3 @@ const SubmitReview = ({ onSubmitReview }) => {
 };
 
 export default SubmitReview;
-

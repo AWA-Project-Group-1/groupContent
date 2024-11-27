@@ -70,7 +70,23 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
         return reviews;
     };
 
+
     const sortedReviews = sortReviews(reviews);
+    const interpolateColor = (startColor, endColor, factor) => {
+        const [r1, g1, b1] = startColor;
+        const [r2, g2, b2] = endColor;
+        const r = Math.round(r1 + factor * (r2 - r1));
+        const g = Math.round(g1 + factor * (g2 - g1));
+        const b = Math.round(b1 + factor * (b2 - b1));
+        return `rgb(${r}, ${g}, ${b})`;
+    };
+
+    const getColorFromRating = (rating) => {
+        const purple = [48, 3, 54]; // RGB for purple
+        const red = [242, 48, 48];   // RGB for red
+        const factor = (rating - 1) / 4; // Calculate interpolation factor (0 to 1)
+        return interpolateColor(purple, red, factor);
+    };
 
     const handleDeleteReview = (reviewId) => {
         onDeleteReview(reviewId);
@@ -109,6 +125,35 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
                                 <span>from {totalReviews} reviews</span>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Rating Distribution */}
+                    <div className="mb-4">
+                        {ratingCounts.map((count, index) => (
+                            <div key={index} className="mb-3 d-flex align-items-center">
+                                <div className="d-flex align-items-center" style={{ width: '50px' }}>
+                                    <span style={{ marginRight: '10px' }}>{index + 1}</span>
+                                    {/* Only the filled star and the number */}
+                                    <i
+                                        className="bi bi-star-fill"
+                                        style={{
+                                            color: 'gold',
+                                            fontSize: '1.3rem',
+                                        }}
+                                    ></i>
+                                </div>
+                                <div
+                                    style={{
+                                        width: `${(count / totalReviews) * 100}%`,
+                                        height: '10px',
+                                        backgroundColor: getColorFromRating(index + 1),
+                                        borderRadius: '5px',
+                                        marginLeft: '10px',
+                                    }}
+                                ></div>
+                                <span className="ml-2" style={{ marginLeft: '10px' }}>{count} </span>
+                            </div>
+                        ))}
                     </div>
 
                     {/* Sorting Filter */}

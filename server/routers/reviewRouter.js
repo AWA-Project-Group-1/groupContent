@@ -6,11 +6,6 @@ const router = express.Router();
 router.get('/:contentType/:movieId', (req, res) => {
     const { contentType, movieId } = req.params;
 
-    // Ensure that 'contentType' is either 'movie' or 'tv'
-    if (contentType !== 'movie' && contentType !== 'tv') {
-        return res.status(400).json({ error: "Invalid content type. Must be 'movie' or 'tv'" });
-    }
-
     const query = `
         SELECT reviews.id, reviews.movies_id, reviews.rating, reviews.comment, reviews.type, reviews.created_at, users.email
         FROM reviews
@@ -28,7 +23,6 @@ router.get('/:contentType/:movieId', (req, res) => {
 });
 
 
-// POST request to add a new review
 // POST request to add a new review
 router.post('/', (req, res) => {
     const { movieId, rating, comment, type } = req.body;

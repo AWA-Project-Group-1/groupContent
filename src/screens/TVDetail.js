@@ -79,50 +79,57 @@ const TVDetail = () => {
                 console.error('Error fetching reviews:', error);
             }
         };
-        getReviews();  // Always call the hook to fetch reviews
-    }, [id]);  // Add 'id' as dependency
+        getReviews();
+    }, [id, reviews]);
 
     const handleReviewSubmit = async ({ rating, comment }) => {
-        const type = "tv";
         if (!rating || !comment) {
             alert('Please provide a rating and comment');
             return;
         }
         try {
-            await submitReview(id, { rating, comment, type });
-
-            // After submitting, fetch reviews again to include the latest review
-            const reviewsData = await fetchReviews(id);
-            setReviews(reviewsData);  // Update reviews state
-
-            setSuccessMessage("Your review has been submitted successfully!"); // Set success message
-            setTimeout(() => setSuccessMessage(""), 5000); // Clear message after 5 seconds
+            await submitReview(id, { rating, comment, type: "tv" });
+            const updatedReviews = await fetchReviews(id); // Fetch updated reviews
+            setReviews(updatedReviews); // Update the state with new reviews
+            setSuccessMessage("Your review has been submitted successfully!");
+            setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
         } catch (error) {
             console.error('Error submitting review:', error);
+            setSuccessMessage("Failed to submit review, please try again.");
+            setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
         }
     };
 
     // Handle review deletion
-    const handleDeleteReview = async (reviewId) => {
-        if (!reviewId) {
-            alert('Invalid review ID');
-            return;
-        }
+    const [deletedId, setDeletedId] = useState(null);
 
-        try {
-            // Delete review
-            await deleteReview(reviewId); // Call the delete function
+    const handleDeleteReview = (reviewId) => {
+        setReviews((prev) => prev.filter((review) => review.id !== reviewId));
+        setDeletedId(reviewId); // Track the ID of the deleted review
 
-            // After deleting, fetch reviews again to include the latest list
-            const reviewsData = await fetchReviews(id); // Assuming 'id' is still the movie id
-            setReviews(reviewsData); // Update the reviews state
-
-            setSuccessMessage("Your review has been deleted successfully!"); // Set success message
-            setTimeout(() => setSuccessMessage(""), 5000); // Clear message after 5 seconds
-        } catch (error) {
-            console.error('Error deleting review:', error);
-        }
+        // Optionally, delete the review from the backend as well:
+        deleteReview(reviewId).then(() => {
+            setSuccessMessage("Review deleted successfully!");
+        }).catch(err => {
+            console.error("Error deleting review:", err);
+        });
     };
+
+    useEffect(() => {
+        if (deletedId !== null) {
+            const deletedReview = reviews.find((review) => review.id === deletedId);
+
+            // Restore the review after 5 seconds
+            const timer = setTimeout(() => {
+                if (deletedReview) {
+                    setReviews((prev) => [...prev, deletedReview]);
+                }
+                setDeletedId(null);
+            }, 5000);
+            // Cleanup timer
+            return () => clearTimeout(timer);
+        }
+    }, [deletedId, reviews]);
 
 
     if (!movieDetail) {
