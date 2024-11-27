@@ -44,6 +44,9 @@ const App = () => (
             <Route path="/detail/tv/:id" element={<TVDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/shared-favorites/:userId" element={<SharedFavoritesPage />} />
+           
+            <Route path="/:tvormovie" element={<HeroSection />} />
+
 
           </Routes>
         </Router>

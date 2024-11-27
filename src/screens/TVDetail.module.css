@@ -185,17 +185,21 @@
 
 .crew-container {
     margin-bottom: 2rem;
-    margin-left: 30px;
+    margin-left: 40px;
     
 }
+
+
 .crew-list {
     display: flex;          /* Use Flexbox to display items in a row */
-    flex-wrap: wrap;        /* Allow wrapping to the next line if there are too many items */
+    flex-wrap: nowrap;        /* Allow wrapping to the next line if there are too many items */
     gap: 16px;              /* Space between each item */
     list-style: none;       /* Remove bullet points from list items */
     padding: 0;
     margin: 0;
 }
+
+
 
 .crew-item {
     flex-shrink: 0;      
@@ -283,15 +287,7 @@
         max-width: 150px; /* Limit the width of each cast item */
     }
 
-    /* Hide the scrollbar on the bottom, if desired */
-    .cast-scroll-container::-webkit-scrollbar {
-        display: none;
-    }
-
-    .cast-scroll-container {
-        -ms-overflow-style: none;  /* For IE and Edge */
-        scrollbar-width: none;     /* For Firefox */
-    }
+   
       
     
         

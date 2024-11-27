@@ -70,7 +70,7 @@ const TVDetail = () => {
         <div className={sytles['nav-herosection']} >
 
             <Navigation />
-            <HeroSection />
+            <HeroSection type="tvserial" />
 
         </div>
 

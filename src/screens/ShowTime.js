@@ -38,7 +38,7 @@ const ShowTime = () => {
         <div>
             <div className={styles["navigation-hero-container"]} >
                 <Navigation />
-                <HeroSection />
+                <HeroSection  type="movie"/>
             </div>
             
             {/* <div>

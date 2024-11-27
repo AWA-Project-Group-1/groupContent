@@ -71,7 +71,7 @@ const MovieDetail = () => {
         <div className={sytles['nav-hero-container']} >
 
             <Navigation />
-            <HeroSection />
+            <HeroSection type="movie"/>
 
         </div>
 
@@ -121,22 +121,29 @@ const MovieDetail = () => {
                     {tvSerialCredit && tvSerialCredit.cast && tvSerialCredit.cast.length > 0 ? (
                         tvSerialCredit.cast.map((actor) => (
                             <div key={actor.id} className={sytles['cast-item']}>
-                                <p >{actor.name} as {actor.character}</p>
+                                 <div className={sytles['text-container']}>
+                                    <p>{actor.name.split(' ').slice(0, 2).join(' ')} as</p>
+                                    <p>{actor.character.split(' ').slice(0, 2).join(' ')}</p>
+                                 </div>
+                                {/* <p >{actor.name} as {actor.character}</p> */}
                                 {/* Check if profile_path exists */}
-                                {actor.profile_path ? (
-                                    <img 
-                                        className={sytles['poster-container']}
-                                        src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`} 
-                                        alt={`Actor ${actor.name}`} 
-                                    />
-                                ) : (
-                                    
-                                    <img 
-                                        className={sytles['poster-container']}
-                                        src={movieapplogo1}
-                                        alt={`No image available for ${actor.name}`} 
-                                    />
-                                )}
+                                <div className={sytles['actor-container']}> 
+                                    {actor.profile_path ? (
+                                        <img 
+                                            className={sytles['poster-container']}
+                                            src={`https://image.tmdb.org/t/p/w500${actor.profile_path}`} 
+                                            alt={`Actor ${actor.name}`} 
+                                        />
+                                    ) : (
+                                        
+                                        <img 
+                                            className={sytles['poster-container']}
+                                            src={movieapplogo1}
+                                            alt={`No image available for ${actor.name}`} 
+                                        />
+                                    )}
+                                </div>
+                               
                             </div>
                         ))
                     ) : (
@@ -179,6 +186,7 @@ const MovieDetail = () => {
                             tvSerialCredit.crew.map((crew) => (
                                 <div key={crew.id} className={sytles['crew-item']}>
                                     <div><p>{crew.name}</p></div>
+                                    <div><p>work as </p></div>
                                     <div> <p>{crew.job}</p></div>
                                     
                                 </div>

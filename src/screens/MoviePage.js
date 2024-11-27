@@ -74,15 +74,16 @@ const MoviePage = () => {
     return (
         <div className={styles['nav-herosection-moviescard']}>
             <div className={styles['nav-herosection']}>
+                
                 <Navigation />
                 {/* <hr /> */}
-                <HeroSection />
+                <HeroSection  type="movie"/>
                 {/* <MovieCarosel images={filteredMovies}/> */}
             </div>
             <div className={styles['allfilter-container']}>
 
                 <div className={styles['genre-filter-container']}>
-                    <label>Filter by Genre: </label>
+                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Filter by Genre: </label>
                     <select value={selectGenre} onChange={handleGenreChange}>
                         <option value="">All</option>
                         {MovieGenreData.length > 0 ? (
