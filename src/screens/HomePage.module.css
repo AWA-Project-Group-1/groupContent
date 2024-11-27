@@ -6,7 +6,8 @@
     height: 70px;    
     width: 100%;         
     padding: 10px;
-    background: linear-gradient(to right, #f23030, #a0183c, #31003d, #480636);  
+    background: linear-gradient(to right, #f23030, #a0183c, #31003d, #480636); 
+    margin-bottom: 20px; 
     /* margin-bottom: 20px;    */
 }
 

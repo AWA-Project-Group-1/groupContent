@@ -17,10 +17,7 @@ const HomePage = () => {
     // Fetch popular movies
     const fetchPopularMovies = () => discoverMovies({ sort_by: 'popularity.desc' });
 
-
-
-
-    // Fetch old movies
+   // Fetch old movies
     const fetchOldMovies = () => discoverOldMovies({
         sort_by: 'release_date.asc',
         'release_date.gte': new Date().toISOString().split('T')[0],  // Ensures only upcoming movies
@@ -42,7 +39,7 @@ const HomePage = () => {
     const filteredTVSerials = moiveTVSerialData.tvSeries?.filter(serial => 
         serial.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    // const searchedmovies=[...filteredMovies, ...filteredTVSerials]
+  
     return (
         <div >
             <div >
@@ -57,7 +54,7 @@ const HomePage = () => {
                         onChange={handleSearchQueryChange}
                         placeholder="   Search by Movie or TV Serial title"
                     />
-            </div>
+        </div>
 
             
         {/* He made changes */}
@@ -91,23 +88,14 @@ const HomePage = () => {
                         <p>No TV Series found</p>
                     </>
                         
-                        )}
-
-
-          
+                        )}         
            
 
-
-
-
-            <CarouselSelection
+         <CarouselSelection
                 title="Popular Movies"
                 fetchMovies={fetchPopularMovies} // Use the discover endpoint
                 viewAllLink="/movies"
-            />          
-
-
-           
+            />                
 
 
 
