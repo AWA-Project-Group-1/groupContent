@@ -7,7 +7,7 @@ import Footer from "../components/Footer"
 // import movieapplogo1 from "../assets/images/movieapplogo1.jpg"
 import movieapplogo1 from "../assets/images/movieapplogo1.jpg"
 
-import { fetchReviews, submitReview, deleteReview } from '../api/reviews.js'
+import { fetchReviews, submitReview, deleteReview, fetchUserReview } from '../api/reviews.js'
 import SubmitReview from '../components/reviews/SubmitReview'
 import ReviewList from '../components/reviews/ReviewList';
 
@@ -16,6 +16,8 @@ const MovieDetail = () => {
     const [movieDetail, setMovieDetail] = useState(null);
     const [tvSerialCredit, setTvSerialCredit] = useState(null);
     const [reviews, setReviews] = useState([]);
+    const [userReview, setUserReview] = useState(null);
+    const [previousReviews, setPreviousReviews] = useState([]); // State to track previous reviews data
     const [successMessage, setSuccessMessage] = useState(""); // state for success message
 
     const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29';  // API key
@@ -69,19 +71,29 @@ const MovieDetail = () => {
             });
     }, []);
 
-    // Fetch reviews
-    useEffect(() => {
-        const getReviews = async () => {
-            try {
-                const reviewsData = await fetchReviews(id, "movie");
-                setReviews(reviewsData);
-            } catch (error) {
-                console.error('Error fetching reviews:', error);
+    // Fetch reviews when the `id` changes
+    const getReviews = async () => {
+        try {
+            const reviewsData = await fetchReviews(id, "movie");
+            // Compare the current reviews with previous ones
+            if (reviewsData.length !== previousReviews.length ||
+                !reviewsData.every((r, idx) => r.id === previousReviews[idx]?.id)) {
+                setReviews(reviewsData); // Update reviews if they have changed
+                setPreviousReviews(reviewsData); // Save the new reviews as the previous ones
             }
-        };
-        getReviews();
-    }, [id, reviews]);
+        } catch (error) {
+            console.error('Error fetching reviews:', error);
+        }
+    };
 
+    useEffect(() => {
+        getReviews(); // Fetch reviews when component mounts or `id` changes
+    }, [id, previousReviews]); // Trigger when `id` or `previousReviews` change
+
+    const [deletedId, setDeletedId] = useState(null);
+    const userId = 2;
+
+    // Handle review submission
     const handleReviewSubmit = async ({ rating, comment }) => {
         if (!rating || !comment) {
             alert('Please provide a rating and comment');
@@ -89,8 +101,11 @@ const MovieDetail = () => {
         }
         try {
             await submitReview(id, { rating, comment, type: "movie" });
-            const updatedReviews = await fetchReviews(id); // Fetch updated reviews
-            setReviews(updatedReviews); // Update the state with new reviews
+
+            // After submitting, fetch the reviews again
+            await getReviews();
+            await getUserReview(); // Fetch the user's review again
+
             setSuccessMessage("Your review has been submitted successfully!");
             setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
         } catch (error) {
@@ -100,38 +115,39 @@ const MovieDetail = () => {
         }
     };
 
-
     // Handle review deletion
-    const [deletedId, setDeletedId] = useState(null);
+    const handleReviewDeletion = async (reviewId) => {
+        try {
+            await deleteReview(reviewId);
 
-    const handleReviewDeletion = (reviewId) => {
-        // Call the deleteReview API here and update the state accordingly
-        deleteReview(reviewId) // This is your API function
-            .then(() => {
-                // After successful deletion, remove it from the state or update UI
-                setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
-                setSuccessMessage("Review deleted successfully!");
-                setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
-            })
-            .catch((err) => console.error("Error deleting review:", err));
+            // If the deleted review is the current userReview, clear userReview
+            if (userReview && userReview.id === reviewId) {
+                setUserReview(null); // Clear the userReview if the user deletes their own review
+            }
+
+            // Fetch reviews again after deletion
+            await getReviews();
+
+        } catch (err) {
+            console.error("Error deleting review:", err);
+            setSuccessMessage("Failed to delete review, please try again.");
+            setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
+        }
+    };
+
+    // Fetch the logged-in user's review for the movie/show
+    const getUserReview = async () => {
+        try {
+            const reviewData = await fetchUserReview(userId, "movie", id);
+            setUserReview(reviewData); // Set the logged-in user's review
+        } catch (error) {
+            console.error('Error fetching user review:', error);
+        }
     };
 
     useEffect(() => {
-        if (deletedId !== null) {
-            const deletedReview = reviews.find((review) => review.id === deletedId);
-
-            // Restore the review after 5 seconds
-            const timer = setTimeout(() => {
-                if (deletedReview) {
-                    setReviews((prev) => [...prev, deletedReview]);
-                }
-                setDeletedId(null);
-            }, 5000);
-            // Cleanup timer
-            return () => clearTimeout(timer);
-        }
-    }, [deletedId, reviews]);
-
+        getUserReview(); // Fetch the user's review when the component loads
+    }, [id]); // Trigger when the movie ID changes
 
     if (!movieDetail) {
         return <div>Loading...</div>;  // Show a loading message until data is fetched
@@ -255,7 +271,7 @@ const MovieDetail = () => {
             </div>
 
             <div>
-                <ReviewList reviews={reviews} onDeleteReview={handleReviewDeletion} />
+                <ReviewList reviews={reviews} onDeleteReview={handleReviewDeletion} userReview={userReview} />
             </div>
 
 
