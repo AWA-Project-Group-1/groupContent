@@ -1,16 +1,11 @@
 import axios from 'axios';
 
-const baseUrl = process.env.REACT_APP_BASE_REVIEW_URL;
+const baseUrl = process.env.REACT_APP_BACKEND_URL;
+const baseUrlforReviews = `${baseUrl}/reviews`;
 
-/**
- * Fetch reviews for a specific movie.
- * @param {string} movieId - The ID of the movie to fetch reviews for.
- * @returns {Promise<Object[]>} - The array of reviews.
- * @throws {Error} - If the fetch fails.
- */
 export const fetchReviews = async (movieId, contentType) => {
     try {
-        const response = await axios.get(`${baseUrl}/${contentType}/${movieId}`);
+        const response = await axios.get(`${baseUrlforReviews}/${contentType}/${movieId}`);
         return response.data; // Axios automatically parses JSON responses
     } catch (error) {
         console.error('Error fetching reviews:', error.response || error.message);
@@ -18,16 +13,9 @@ export const fetchReviews = async (movieId, contentType) => {
     }
 };
 
-/**
- * Submit a new review for a movie.
- * @param {string} movieId - The ID of the movie to review.
- * @param {Object} reviewData - The review data (e.g., rating, comment).
- * @returns {Promise<Object>} - The newly created review.
- * @throws {Error} - If the submission fails.
- */
 export const submitReview = async (movieId, reviewData) => {
     try {
-        const response = await axios.post(baseUrl, { movieId, ...reviewData }, {
+        const response = await axios.post(baseUrlforReviews, { movieId, ...reviewData }, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -42,7 +30,7 @@ export const submitReview = async (movieId, reviewData) => {
 
 export const deleteReview = async (reviewId) => {
     try {
-        const response = await axios.delete(`${baseUrl}/${reviewId}`);
+        const response = await axios.delete(`${baseUrlforReviews}/${reviewId}`);
         return response.data; // Axios automatically parses JSON responses
     } catch (error) {
         console.error('Error deleting review:', error.response || error.message);

@@ -3,7 +3,7 @@ import { pool } from '../helpers/db.js';
 
 const router = express.Router();
 // GET request for fetching reviews for a specific movie or TV show
-router.get('/:contentType/:movieId', (req, res) => {
+router.get('/reviews/:contentType/:movieId', (req, res) => {
     const { contentType, movieId } = req.params;
 
     const query = `
@@ -24,7 +24,7 @@ router.get('/:contentType/:movieId', (req, res) => {
 
 
 // POST request to add a new review
-router.post('/', (req, res) => {
+router.post('/reviews', (req, res) => {
     const { movieId, rating, comment, type } = req.body;
 
     // Validate that all required fields are provided
@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
         return res.status(400).json({ error: "Invalid 'type' field. Must be 'movie' or 'tv'" });
     }
 
-    const userId = 2; // Hardcoded userId for testing purposes, replace with dynamic user ID (e.g., from session or JWT token)
+    const userId = 1; // Hardcoded userId for testing purposes, replace with dynamic user ID (e.g., from session or JWT token)
 
     const query = `
         INSERT INTO reviews (movies_id, users_id, rating, comment, type)
@@ -57,9 +57,9 @@ router.post('/', (req, res) => {
 });
 
 // DELETE request to delete a review by ID (only if the user is authorized)
-router.delete('/:reviewId', (req, res) => {
+router.delete('/reviews/:reviewId', (req, res) => {
     const reviewId = req.params.reviewId;
-    const hardcodedUserId = 2; // Hardcoded user ID
+    const hardcodedUserId = 1; // Hardcoded user ID
 
     // Log the user ID and review ID before deleting
     console.log(`Attempting to delete review ID: ${reviewId} by user ID: ${hardcodedUserId}`);
