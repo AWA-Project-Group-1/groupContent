@@ -103,16 +103,16 @@ const TVDetail = () => {
     // Handle review deletion
     const [deletedId, setDeletedId] = useState(null);
 
-    const handleDeleteReview = (reviewId) => {
-        setReviews((prev) => prev.filter((review) => review.id !== reviewId));
-        setDeletedId(reviewId); // Track the ID of the deleted review
-
-        // Optionally, delete the review from the backend as well:
-        deleteReview(reviewId).then(() => {
-            setSuccessMessage("Review deleted successfully!");
-        }).catch(err => {
-            console.error("Error deleting review:", err);
-        });
+    const handleReviewDeletion = (reviewId) => {
+        // Call the deleteReview API here and update the state accordingly
+        deleteReview(reviewId) // This is your API function
+            .then(() => {
+                // After successful deletion, remove it from the state or update UI
+                setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+                setSuccessMessage("Review deleted successfully!");
+                setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
+            })
+            .catch((err) => console.error("Error deleting review:", err));
     };
 
     useEffect(() => {
@@ -271,7 +271,7 @@ const TVDetail = () => {
             </div>
 
             <div>
-                <ReviewList reviews={reviews} onDeleteReview={handleDeleteReview} />
+                <ReviewList reviews={reviews} onDeleteReview={handleReviewDeletion} />
             </div>
 
 

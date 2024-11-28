@@ -89,9 +89,12 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
     };
 
     const handleDeleteReview = (reviewId) => {
-        onDeleteReview(reviewId);
-        setDeletedReview(reviewId); // Set the deleted review ID
-        setTimeout(() => setDeletedReview(null), 3000); // Clear message after 3 seconds
+        const confirmed = window.confirm("Are you sure you want to delete this review?");
+        if (confirmed) {
+            onDeleteReview(reviewId); // This calls the function passed from MovieDetail
+            setDeletedReview(reviewId);
+            setTimeout(() => setDeletedReview(null), 3000);
+        }
     };
 
     return (
@@ -208,11 +211,6 @@ const ReviewList = ({ reviews, onDeleteReview }) => {
                                             {review.comment}
                                         </p>
                                     </div>
-                                    {deletedReview === review.id && (
-                                        <div className="alert alert-success mt-3" role="alert">
-                                            Review deleted successfully!
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         ))}
