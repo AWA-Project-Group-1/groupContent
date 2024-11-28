@@ -6,8 +6,8 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
     const [sortOption, setSortOption] = useState('');
     const [deletedReview, setDeletedReview] = useState(null); // Holds the ID of the deleted review
     const [currentUserReview, setCurrentUserReview] = useState(userReview); // State for user review
+    const [visibleReviews, setVisibleReviews] = useState(5); // Initial number of visible reviews
     const hardcodedUserId = 2;
-
 
     // Calculate the total reviews and average rating
     const totalReviews = reviews.length;
@@ -74,8 +74,10 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
 
     const sortedReviews = sortReviews(reviews);
 
-    // Debug log to check sorted reviews
-    console.log('Sorted Reviews:', sortedReviews);
+    // Handle "Get More Reviews" button click
+    const handleLoadMore = () => {
+        setVisibleReviews(prev => prev + 5); // Load 5 more reviews each time
+    };
 
     const interpolateColor = (startColor, endColor, factor) => {
         const [r1, g1, b1] = startColor;
@@ -106,29 +108,23 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
     return (
         <div className="container py-5">
             <h3 className="d-flex mb-4">Reviews</h3>
-            {/* New section with different background color */}
             <div style={{ backgroundColor: '#f4f4f9', padding: '20px', borderRadius: '8px', marginBottom: '30px' }}>
-
                 <div className="d-flex justify-content-start mb-4">
-                    {/* Left Column: Average Rating */}
                     <div className="left-column">
                         <span style={{ fontSize: '2.8rem', fontWeight: 'bold' }}>{averageRating}</span>
                     </div>
 
-                    {/* Right Column: Stars and Review Count */}
                     <div className="right-column" style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                        {/* First Line: Stars */}
                         <div>
                             {renderStars(Math.round(averageRating))}
                         </div>
 
-                        {/* Second Line: Reviews Text */}
                         <div>
                             <span>from {totalReviews} reviews</span>
                         </div>
                     </div>
                 </div>
-                {/* Rating Distribution */}
+
                 <div className="mb-4">
                     {ratingCounts.map((count, index) => (
                         <div key={index} className="mb-3 d-flex align-items-center">
@@ -151,7 +147,6 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
                 </div>
             </div>
 
-            {/* Display user's review at the top if available */}
             {userReview && (
                 <div className="card mb-4 shadow-sm" style={{ border: '2px solid #d24747' }}>
                     <div className="card-body">
@@ -180,7 +175,6 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
                 </div>
             )}
 
-            {/* If no reviews are available */}
             {totalReviews === 0 ? (
                 <div className="text-center text-muted py-5">
                     <i className="bi bi-star" style={{ fontSize: '2rem', color: 'gray' }}></i>
@@ -189,7 +183,6 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
                 </div>
             ) : (
                 <>
-                    {/* Sorting Filter */}
                     <div className="mb-3 text-end">
                         <label className="mr-2">Sort reviews by:</label>
                         <select
@@ -206,50 +199,46 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
                         </select>
                     </div>
 
-                    {/* Reviews */}
-                    <div>
-                        {sortedReviews.map((review, index) => (
-                            <div
-                                key={review.email || index}
-                                className="card mb-4 shadow-sm"
-                                style={{
-                                    border: review.users_id === hardcodedUserId
-                                        ? '2px solid #d24747' // Highlight current user's review
-                                        : 'none',
-                                }}
-                            >
-                                <div className="card-body">
-                                    <div className="d-flex justify-content-between mb-3">
-                                        <span>
-                                            <b>{review.email}</b>
-                                        </span>
-                                        <div className="d-flex align-items-center ms-auto">
-                                            <span className="text-muted me-3">
-                                                {formatTimestamp(review.created_at)}
-                                            </span>
-                                            {review.users_id === hardcodedUserId && (
-                                                <button
-                                                    onClick={() => handleDeleteReview(review.id)}
-                                                    className="btn btn-link p-0 text-danger d-flex align-items-center"
-                                                    style={{ textDecoration: 'none' }}
-                                                >
-                                                    <i className="bi bi-trash me-1"></i>
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="mb-3">
-                                        <div className="d-flex mb-2" style={{ marginLeft: '10px' }}>
-                                            {renderStars(review.rating)}
-                                        </div>
-                                        <p className="d-flex mb-2" style={{ marginLeft: '10px' }}>
-                                            {review.comment}
-                                        </p>
+                    {sortedReviews.slice(0, visibleReviews).map((review) => (
+                        <div key={review.id} className="card mb-4 shadow-sm">
+                            <div className="card-body">
+                                <div className="d-flex justify-content-between mb-3">
+                                    <span><b>{review.email}</b></span>
+                                    <div className="d-flex align-items-center ms-auto">
+                                        <span className="text-muted me-3">{formatTimestamp(review.created_at)}</span>
                                     </div>
                                 </div>
+                                <div className="mb-3">
+                                    <div className="d-flex mb-2" style={{ marginLeft: '10px' }}>
+                                        {renderStars(review.rating)}
+                                    </div>
+                                    <p className="d-flex mb-2" style={{ marginLeft: '10px' }}>
+                                        {review.comment}
+                                    </p>
+                                </div>
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    ))}
+
+                    {visibleReviews < totalReviews && (
+                        <button
+                            onClick={handleLoadMore}
+                            className="btn btn-sm"
+                            style={{
+                                backgroundColor: '#d24747',
+                                color: 'white',
+                                marginTop: '20px',
+                                marginLeft: 'auto',
+                                marginRight: '0',
+                                display: 'inline-block',
+                                padding: '5px 10px', // Smaller padding for a smaller button
+                                fontSize: '0.875rem'  // Smaller font size
+                            }}
+                        >
+                            Get More Reviews
+                        </button>
+                    )}
+
                 </>
             )}
         </div>
