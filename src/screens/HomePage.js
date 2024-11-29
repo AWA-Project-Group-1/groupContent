@@ -121,7 +121,10 @@ const HomePage = () => {
             )}
 
             {searchQuery.length > 0 && filteredMovies.length === 0 && (
-                <h2 className={styles["carousel-selection-title"]}>Searched Movies</h2>
+                <div>
+                    <h2 className={styles["carousel-selection-title"]}>Searched Movies</h2>
+                    <p>Sorry, no movies found matching your search. Please try again with different keywords.</p>
+                </div>
             )}
 
             {searchQuery.length > 0 && filteredTVSerials.length > 0 && (
@@ -132,8 +135,12 @@ const HomePage = () => {
             )}
 
             {searchQuery.length > 0 && filteredTVSerials.length === 0 && (
-                <h2 className={styles["carousel-selection-title"]}>Searched TV Series</h2>
+                <div>
+                    <h2 className={styles["carousel-selection-title"]}>Searched TV Series</h2>
+                    <p>Sorry, no TV series found matching your search. Please try again with different keywords.</p>
+                </div>
             )}
+
 
             <CarouselSelection
                 title="Trending Movies"
