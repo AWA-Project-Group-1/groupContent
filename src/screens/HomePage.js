@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import CarouselSelection from '../components/homepage/carouselSelection/CarouselSelection';
 import CarouselSelectionTV from '../components/homepage/carouselSelection/CarouselTV';
 import MoviePicker from '../components/homepage/randomMovie/MoviePicker';
@@ -10,36 +10,30 @@ import poster from "../assets/images/poster.png";
 import poster2 from "../assets/images/poster2.jpg";
 import poster3 from "../assets/images/poster3 (2).jpg";
 
-// heyanwen
-import styles from "./HomePage.module.css";
 import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider";
 
 const HomePage = () => {
     const [currentImage, setCurrentImage] = useState(0);
 
     const images = [
-        { src: poster, position: '30% 75%' },
-        { src: poster2, position: '30% 20%' },
-        { src: poster3, position: '30% 60%' },
+        { src: poster, position: '50% 75%' },
+        { src: poster2, position: '50% 20%' },
+        { src: poster3, position: '50% 60%' },
     ];
 
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCurrentImage((prevImage) => {
                 const nextImage = (prevImage + 1) % images.length;
-                console.log('Switching to image', nextImage); // Debug log to track the current image
                 return nextImage;
             });
         }, 5000);
 
-        // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
     }, [images.length]);
 
-    // Fetch popular movies
     const fetchPopularMovies = () => discoverMovies({ sort_by: 'popularity.desc' });
 
-    // Fetch old movies
     const fetchOldMovies = () => discoverOldMovies({
         sort_by: 'release_date.asc',
         'release_date.gte': new Date().toISOString().split('T')[0],  // Ensures only upcoming movies
@@ -60,10 +54,8 @@ const HomePage = () => {
         serial.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Create a ref for the search result section
     const searchResultRef = useRef(null);
 
-    // Scroll to the search result section whenever searchQuery changes
     useEffect(() => {
         if (searchQuery.length > 0 && searchResultRef.current) {
             searchResultRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -76,43 +68,62 @@ const HomePage = () => {
                 <Navigation />
             </div>
 
-            <div style={{ position: 'relative', overflow: 'hidden', width: '100%', height: '600px' }}>
+            {/* Slideshow Section */}
+            <div
+                className="position-relative overflow-hidden w-100"
+                style={{ height: '85vh' }}  // Adjust the height of the slideshow based on viewport height (60% of screen height)
+            >
                 {images.map((image, index) => (
                     <img
                         key={index}
                         src={image.src}
                         alt={`Slideshow Image ${index + 1}`}
+                        className="w-100 h-100 position-absolute"
                         style={{
-                            width: '100%',
-                            height: '100%',
                             objectFit: 'cover',
                             objectPosition: image.position,
-                            position: 'absolute',
                             top: 0,
                             left: 0,
-                            zIndex: index === currentImage ? 0 : -1,  // Lower z-index for images
+                            zIndex: index === currentImage ? 0 : -1,
                         }}
                     />
                 ))}
-                {/* Search Bar Overlay */}
-                <div className={`${styles['search-container']} d-flex flex-column align-items-center justify-content-center`} style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 0, color: 'white' }}>
-                    <h1>Welcome to NordFlix!</h1>
-                    <p>Discover Movies and TV Shows. Your Next Favorite is Just a Click Away!</p>
-                    <label htmlFor="search" style={{ fontSize: '20px', marginBottom: '10px' }}></label>
+
+                {/* Search Overlay */}
+                <div
+                    className="d-flex flex-column align-items-center justify-content-center position-absolute w-100 h-100"
+                    style={{
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 0,
+                        color: 'white',
+                        textAlign: 'center',
+                    }}
+                >
+                    <h1 className="display-4" style={{ fontWeight: 'bold', fontSize: '3rem', color: 'white' }}>Welcome to NordFlix!</h1>
+                    <p className="lead" style={{ fontSize: '1.25rem', color: 'white' }}>Discover Movies and TV Shows. Your Next Favorite is Just a Click Away!</p>
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchQueryChange}
-                        placeholder="   Search by Movie or TV Serial title"
-                        style={{ width: '700px', height: '45px', padding: '10px', fontSize: '16px', border: 'none', borderRadius: '15px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}
+                        placeholder="Search by Movie or TV Serial title"
+                        className="form-control w-75 w-md-50"
+                        style={{
+                            borderRadius: '15px',
+                            boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                            maxWidth: '750px',
+                            height: '45px',
+                            marginTop: '30px'
+                        }}
                     />
                 </div>
             </div>
 
             {/* Search Results Section */}
-            <div ref={searchResultRef} style={{ marginTop: '50px' }} />
+            <div ref={searchResultRef} className="mt-5" />
 
-            {/* Display filtered movies and TV Series */}
+            {/* Filtered Movies */}
             {searchQuery.length > 0 && filteredMovies.length > 0 && (
                 <CarouselSelection
                     title="Searched Movies"
@@ -122,11 +133,12 @@ const HomePage = () => {
 
             {searchQuery.length > 0 && filteredMovies.length === 0 && (
                 <div>
-                    <h2 className={styles["carousel-selection-title"]}>Searched Movies</h2>
+                    <h2 className="carousel-selection-title ms-3">Searched Movies</h2>
                     <p>Sorry, no movies found matching your search. Please try again with different keywords.</p>
                 </div>
             )}
 
+            {/* Filtered TV Series */}
             {searchQuery.length > 0 && filteredTVSerials.length > 0 && (
                 <CarouselSelectionTV
                     title="Searched TV Series"
@@ -136,15 +148,14 @@ const HomePage = () => {
 
             {searchQuery.length > 0 && filteredTVSerials.length === 0 && (
                 <div>
-                    <h2 className={styles["carousel-selection-title"]}>Searched TV Series</h2>
+                    <h2 className="carousel-selection-title ms-3 mt-3">Searched TV Series</h2>
                     <p>Sorry, no TV series found matching your search. Please try again with different keywords.</p>
                 </div>
             )}
 
-
             <CarouselSelection
                 title="Trending Movies"
-                fetchMovies={fetchPopularMovies} // Use the discover endpoint
+                fetchMovies={fetchPopularMovies}
                 viewAllLink="/movies"
             />
 
@@ -153,7 +164,7 @@ const HomePage = () => {
                 fetchMovies={fetchTopMovies}
             />
 
-            <div style={{ marginBottom: '30px', marginTop: '30px' }}>
+            <div className="my-4">
                 <MoviePicker />
             </div>
 
@@ -169,7 +180,7 @@ const HomePage = () => {
 
             <CarouselSelectionTV
                 title="Popular TV Series"
-                fetchMovies={topTVSeries} // Use the discover endpoint
+                fetchMovies={topTVSeries}
                 viewAllLink="/tvserial"
             />
         </div>

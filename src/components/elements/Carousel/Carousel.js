@@ -52,7 +52,6 @@ const CustomCarousel = ({ data, gridTheme }) => {
             height="auto"
             slidesPerView={1}
             isEnableNavButton
-            isEnablePagination
             isEnableLoop={false}  // Disable looping after the last slide
             breakpoints={{
                 [gridTheme.md]: {
