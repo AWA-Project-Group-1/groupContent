@@ -164,7 +164,7 @@ const HomePage = () => {
                 fetchMovies={fetchTopMovies}
             />
 
-            <div className="my-4">
+            <div className="my-4" style={{ margin: '40px' }}>
                 <MoviePicker />
             </div>
 
