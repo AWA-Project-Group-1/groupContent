@@ -132,9 +132,9 @@ const HomePage = () => {
             )}
 
             {searchQuery.length > 0 && filteredMovies.length === 0 && (
-                <div>
-                    <h2 className="carousel-selection-title ms-3">Searched Movies</h2>
-                    <p>Sorry, no movies found matching your search. Please try again with different keywords.</p>
+                <div style={{ marginLeft: '25px' }}>
+                    <h2 className="carousel-selection-title ms-3" >Searched Movies</h2>
+                    <p style={{ marginLeft: '25px', marginTop: '20px' }}>Sorry, no movies found matching your search. Please try again with different keywords.</p>
                 </div>
             )}
 
@@ -147,9 +147,9 @@ const HomePage = () => {
             )}
 
             {searchQuery.length > 0 && filteredTVSerials.length === 0 && (
-                <div>
+                <div style={{ marginLeft: '25px', marginTop: '30px' }}>
                     <h2 className="carousel-selection-title ms-3 mt-3">Searched TV Series</h2>
-                    <p>Sorry, no TV series found matching your search. Please try again with different keywords.</p>
+                    <p style={{ marginLeft: '25px', marginTop: '20px' }}>Sorry, no TV series found matching your search. Please try again with different keywords.</p>
                 </div>
             )}
 
