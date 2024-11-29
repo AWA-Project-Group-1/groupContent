@@ -287,24 +287,26 @@ const TVDetail = () => {
                 </div>
             </div>
 
-            <div >
-                <h3>Submit a Review</h3>
-                <div className="my-3 p-3 border rounded">
+            <div className="container center mt-4">
+                <h2 style={{ marginLeft: "20px" }}>Submit a Review</h2>
+                <div className="my-3 p-3 border rounded mx-auto" style={{ maxWidth: '1440px' }}>
                     <SubmitReview onSubmitReview={handleReviewSubmit} movieId={id} />
                 </div>
 
                 {successMessage && (
-                    <div className="alert alert-success mt-3">
+                    <div className="alert alert-success mt-3 mx-auto" style={{ maxWidth: '500px' }}>
                         {successMessage}
                     </div>
                 )}
-
             </div>
 
-            <div>
-                <ReviewList reviews={reviews} onDeleteReview={handleReviewDeletion} userReview={userReview} />
+            <div className="container text-center mt-4">
+                <ReviewList
+                    reviews={reviews}
+                    onDeleteReview={handleReviewDeletion}
+                    userReview={userReview}
+                />
             </div>
-
 
 
 
