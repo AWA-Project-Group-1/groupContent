@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from "../components/Footer"
 import styles from "../screens/TVSerial.module.css"
@@ -116,7 +116,7 @@ const TVSerial = () => {
 
                 </div>
 
-                <div className={styles['popularity-filter-container']}>
+                {/* <div className={styles['popularity-filter-container']}>
                     <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Filter by Popularity : </label>
                     <select value={selectPopularity} onChange={handlePopularityChange}>
                         <option value="">All</option>
@@ -124,7 +124,7 @@ const TVSerial = () => {
                         <option value="5000">Very Popular (&gt;5000)</option>
                         <option value="10000">Most Popular (&gt;10000)</option>
                     </select>
-                </div>
+                </div> */}
                 <div  className={styles['search-container']}>
                     <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Search :  </label>
                     <input
