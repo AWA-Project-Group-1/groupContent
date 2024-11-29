@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import favoriteRouter from './routers/favoriteRouter.js';
+import reviewsRouter from './routers/reviewRouter.js'
 import { pool } from './helpers/db.js'; // Optional: test database connection on startup
 
 dotenv.config();
@@ -25,6 +26,9 @@ pool.query('SELECT NOW()', (err, res) => {
 
 // Routes
 app.use('/api/favorites', favoriteRouter);
+
+// Use the reviews router for /reviews endpoint
+app.use('/reviews', reviewsRouter);
 
 // Fallback route for 404 errors
 app.use((req, res) => {
