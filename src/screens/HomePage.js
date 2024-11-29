@@ -1,17 +1,40 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import CarouselSelection from '../components/homepage/carouselSelection/CarouselSelection';
 import CarouselSelectionTV from '../components/homepage/carouselSelection/CarouselTV';
 import MoviePicker from '../components/homepage/randomMovie/MoviePicker';
 import { discoverMovies, discoverOldMovies, fetchTopMovies, fetchUpcomingMovies } from '../api/movieFetch';
 import { topTVSeries } from '../api/tvFetch';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import styles from "../screens/TVSerial.module.css"
-import Navigation from "../components/Navigation"
+import Navigation from "../components/Navigation";
+import poster from "../assets/images/poster.png";
+import poster2 from "../assets/images/poster2.jpg";
+import poster3 from "../assets/images/poster3 (2).jpg";
 
 // heyanwen
-import styles from "./HomePage.module.css"
-import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider"
+import styles from "./HomePage.module.css";
+import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider";
+
 const HomePage = () => {
+    const [currentImage, setCurrentImage] = useState(0);
+
+    const images = [
+        { src: poster, position: '30% 75%' },
+        { src: poster2, position: '30% 20%' },
+        { src: poster3, position: '30% 60%' },
+    ];
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentImage((prevImage) => {
+                const nextImage = (prevImage + 1) % images.length;
+                console.log('Switching to image', nextImage); // Debug log to track the current image
+                return nextImage;
+            });
+        }, 5000);
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+    }, [images.length]);
 
     // Fetch popular movies
     const fetchPopularMovies = () => discoverMovies({ sort_by: 'popularity.desc' });
@@ -22,10 +45,8 @@ const HomePage = () => {
         'release_date.gte': new Date().toISOString().split('T')[0],  // Ensures only upcoming movies
     });
 
-
-    // heyanwen
     const [searchQuery, setSearchQuery] = useState('');
-    const moiveTVSerialData = useContext(MoiveTVSerialContext)
+    const moiveTVSerialData = useContext(MoiveTVSerialContext);
 
     const handleSearchQueryChange = (event) => {
         setSearchQuery(event.target.value);
@@ -39,25 +60,59 @@ const HomePage = () => {
         serial.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    // Create a ref for the search result section
+    const searchResultRef = useRef(null);
+
+    // Scroll to the search result section whenever searchQuery changes
+    useEffect(() => {
+        if (searchQuery.length > 0 && searchResultRef.current) {
+            searchResultRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, [searchQuery]);
+
     return (
-        <div >
-            <div >
+        <div>
+            <div>
                 <Navigation />
             </div>
-            {/* He made for the search */}
-            <div className={`${styles['search-contianer']} flex flex-row items-center gap-2`}>
-                <label htmlFor="">Search :  </label>
-                <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={handleSearchQueryChange}
-                    placeholder="   Search by Movie or TV Serial title"
-                />
+
+            <div style={{ position: 'relative', overflow: 'hidden', width: '100%', height: '600px' }}>
+                {images.map((image, index) => (
+                    <img
+                        key={index}
+                        src={image.src}
+                        alt={`Slideshow Image ${index + 1}`}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: image.position,
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            zIndex: index === currentImage ? 0 : -1,  // Lower z-index for images
+                        }}
+                    />
+                ))}
+                {/* Search Bar Overlay */}
+                <div className={`${styles['search-container']} d-flex flex-column align-items-center justify-content-center`} style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', zIndex: 0, color: 'white' }}>
+                    <h1>Welcome to NordFlix!</h1>
+                    <p>Discover Movies and TV Shows. Your Next Favorite is Just a Click Away!</p>
+                    <label htmlFor="search" style={{ fontSize: '20px', marginBottom: '10px' }}></label>
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={handleSearchQueryChange}
+                        placeholder="   Search by Movie or TV Serial title"
+                        style={{ width: '700px', height: '45px', padding: '10px', fontSize: '16px', border: 'none', borderRadius: '15px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}
+                    />
+                </div>
             </div>
 
+            {/* Search Results Section */}
+            <div ref={searchResultRef} style={{ marginTop: '50px' }} />
 
-            {/* He made changes */}
-
+            {/* Display filtered movies and TV Series */}
             {searchQuery.length > 0 && filteredMovies.length > 0 && (
                 <CarouselSelection
                     title="Searched Movies"
@@ -65,12 +120,8 @@ const HomePage = () => {
                 />
             )}
 
-            {searchQuery.length > 0 && (filteredMovies.length === 0) && (
-                <>
-                    <h2 className={styles["carousel-selection-title"]}>Searched Movies</h2>
-                    <p>No Movie found</p>
-                </>
-
+            {searchQuery.length > 0 && filteredMovies.length === 0 && (
+                <h2 className={styles["carousel-selection-title"]}>Searched Movies</h2>
             )}
 
             {searchQuery.length > 0 && filteredTVSerials.length > 0 && (
@@ -80,15 +131,9 @@ const HomePage = () => {
                 />
             )}
 
-
             {searchQuery.length > 0 && filteredTVSerials.length === 0 && (
-                <>
-                    <h2 className={styles["carousel-selection-title"]}>Searched TV Series</h2>
-                    <p>No TV Series found</p>
-                </>
-
+                <h2 className={styles["carousel-selection-title"]}>Searched TV Series</h2>
             )}
-
 
             <CarouselSelection
                 title="Trending Movies"
@@ -101,37 +146,27 @@ const HomePage = () => {
                 fetchMovies={fetchTopMovies}
             />
 
-
             <div style={{ marginBottom: '30px', marginTop: '30px' }}>
                 <MoviePicker />
             </div>
-
-            <br></br>
-
 
             <CarouselSelection
                 title="Timeless Movies (1900s)"
                 fetchMovies={fetchOldMovies}
             />
 
-
             <CarouselSelection
                 title="Coming Soon"
                 fetchMovies={fetchUpcomingMovies}
             />
-
 
             <CarouselSelectionTV
                 title="Popular TV Series"
                 fetchMovies={topTVSeries} // Use the discover endpoint
                 viewAllLink="/tvserial"
             />
-
-
         </div>
-
-    )
+    );
 }
-
 
 export default HomePage;
