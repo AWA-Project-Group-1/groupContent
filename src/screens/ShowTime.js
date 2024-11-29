@@ -41,7 +41,8 @@ const ShowTime = () => {
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentMovies = showTime.slice(startIndex, endIndex);
+    const currentMovies1 = showTime.filter(item => item.theatreID === "1038")
+    const currentMovies = currentMovies1.slice(startIndex, endIndex);
       
     function nextPage() {
         if (currentMovies.length === itemsPerPage) {
@@ -166,9 +167,11 @@ const ShowTime = () => {
                 .map(show => {
                     const time = show.getElementsByTagName('dttmShowStart')[0]?.textContent;
                     const showtime = time ? time.split('T')[1] : 'N/A';  // Extract showtime part
+                    // const imageUrl = show.getElementsByTagName('ImageURL')?.textContent || '';
                     return {
                         title: show.getElementsByTagName('Title')[0]?.textContent,
                         time: showtime,
+                        image: show.getElementsByTagName("EventMediumImagePortrait")[0].textContent,
                         date: time ? time.split('T')[0] : 'N/A',  // Extract date
                     };
                 });
@@ -255,12 +258,28 @@ const ShowTime = () => {
             {error && <p>{error}</p>}
 
             <div>
-                <h2>Showtimes:</h2>
-                <ul>
-                    {showtimes.map((showtime, index) => (
-                        <li key={index}>{showtime.title} - {showtime.time}</li>
-                    ))}
-                </ul>
+                <h2>Searched Results:</h2>
+               
+                    {<div>
+                            <div>
+
+                            <img src={showtimes[0]?.image} alt={showtimes[0]?.title} />
+
+                            </div>
+                            <div>
+
+                            {showtimes.map((showtime, index) => (                                
+
+                                    <li key={index}>{showtime.title} - {showtime.time}</li>
+
+                                    ))}
+                               
+                            </div>                            
+                           
+                        </div>
+                        
+                   }
+                
             </div>
        
             
@@ -280,49 +299,57 @@ const ShowTime = () => {
                     )                    
                 )}
             </div> */}
-            <div className={styles["container"]}>
-                {currentMovies.map((item, index) => (
-                <div key={index} className={styles["show-time-container"]}>
-                    
-                    <div className="show-left">
-                        {/* <span className={styles["status-badge"]} >{new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}</span>
+
+            <div className={styles["OuluMovie-container"]}>
+                <div className={styles["OuluMovie-text"]}><h2>Today's Show In Oulu</h2></div>
+
+                <div className={styles["show-container"]}>
+                    {currentMovies.map((item, index) => (
+                    <div key={index} className={styles["show-time-container"]}>
                         
-                        <img src={item.image} alt={item.title} className={styles["show-image"]} /> */}
-                       <div className={styles["image-container"]}>
-                            <span  className={styles["status-badge"]} >
-                                {new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}
-                            </span>
-                            <img src={item.image} alt={item.title} className={styles["show-image"]}/>
+                        <div className="show-left">
+                            {/* <span className={styles["status-badge"]} >{new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}</span>
+                            
+                            <img src={item.image} alt={item.title} className={styles["show-image"]} /> */}
+                        <div className={styles["image-container"]}>
+                                <span  className={styles["status-badge"]} >
+                                    {new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}
+                                </span>
+                                <img src={item.image} alt={item.title} className={styles["show-image"]}/>
+                            </div>
+                        </div>
+                        <div className={styles["show-right"]}  >
+                            <h3>Movie Title:</h3>
+                            <h5>{item.title}</h5>
+                            <h3> Show Time: </h3>
+                            <h5> {item.showStart} - {item.showEnd} </h5>
+                            <h5>
+                            
+
+                                <Link to={item.showUrl} className={styles["buy-ticket-button"]}>Buy Ticket</Link>
+
+                                {/* <a href={item.showUrl} target="_blank" rel="noopener noreferrer" className="buy-ticket-button">
+                                    Buy Ticket
+                                </a> */}
+                            </h5>
+                        </div>
+
+                        <div className={styles["show-rightmost"]}>
+
                         </div>
                     </div>
-                    <div className={styles["show-right"]}  >
-                        <h3>Movie Title:</h3>
-                        <h5>{item.title}</h5>
-                        <h3> Show Time: </h3>
-                        <h5> {item.showStart} - {item.showEnd} </h5>
-                        <h5>
-                        
-
-                            <Link to={item.showUrl} className={styles["buy-ticket-button"]}>Buy Ticket</Link>
-
-                            {/* <a href={item.showUrl} target="_blank" rel="noopener noreferrer" className="buy-ticket-button">
-                                Buy Ticket
-                            </a> */}
-                        </h5>
-                    </div>
-
-                    <div className={styles["show-rightmost"]}>
-
-                    </div>
+                    ))}
                 </div>
-                ))}
-            </div>
 
-            <div className={styles['pagination-controls']}>
-                <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
-                <span>Page {currentPage}</span>
-                <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
+                <div className={styles['pagination-controls']}>
+                    <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
+                    <span>Page {currentPage}</span>
+                    <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
+                </div>
+
+
             </div>
+            
         <Footer />
         </div>
     )

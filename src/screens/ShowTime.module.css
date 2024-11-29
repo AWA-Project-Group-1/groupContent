@@ -10,7 +10,7 @@
 }
 
 
-.container {
+.show-container{
     display: grid; /* Only if needed for container alignment */
     grid-template-columns: repeat(2, 1fr);
     margin: 20px;
@@ -18,6 +18,19 @@
     padding: 50px;
 
   }
+
+.OuluMovie-text {
+  margin-left: 40px;
+}
+
+
+.OuluMovie-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
 
 .show-time-container {
     display: flex;
