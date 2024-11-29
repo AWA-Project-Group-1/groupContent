@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchGenres, fetchRandomMovie } from '../../../api/movieFetch';
 import GenreSelector from './GenreSelector';
 import RandomMovieButton from '../../elements/Button/RandomMovieButton';
-import './styles.css';
+import styles from './MoviePicker.module.css';
 
 const MoviePicker = () => {
     const [genres, setGenres] = useState([]);
@@ -28,7 +28,7 @@ const MoviePicker = () => {
         setLoading(true);
         try {
             const movie = await fetchRandomMovie(selectedGenre);
-            navigate(`/detail/movie/${movie.id}`); // Redirect to the movie details page
+            navigate(`/detail/movie/${movie.id}`);
         } catch (error) {
             console.error('Error fetching random movie:', error);
         } finally {
@@ -37,9 +37,9 @@ const MoviePicker = () => {
     };
 
     return (
-        <div className="movie-picker-container">
-            <h1>Need a Movie? We've Got You Covered!</h1>
-            <p>
+        <div className={styles.moviePickerContainer}>
+            <h2 className={styles.randomTitle}>Need a Movie? We've Got You Covered!</h2>
+            <p className={styles.description}>
                 Feeling overwhelmed by the endless options? Let us help you pick
                 a movie! Select a category below and discover a random movie to watch.
             </p>
@@ -53,7 +53,7 @@ const MoviePicker = () => {
                 loading={loading}
                 disabled={!selectedGenre || loading}
             />
-        </div>
+        </div >
     );
 };
 

@@ -63,37 +63,21 @@ export const discoverMovies = async (params = {}) => {
     }
 };
 
-/*
-//export const discoverUpcomingMovies = async (params = {}, pages = [1]) => {
+export const fetchTopMovies = async () => {
     try {
-        console.log("Discover Movies Params:", params); // Debug log
-
-        // Initialize an empty array to store results
-        let allMovies = [];
-
-        // Fetch movies from specified pages
-        for (let page of pages) {
-            const response = await axios.get(`${BASE_URL}/discover/movie`, {
-                params: {
-                    api_key: API_KEY,
-                    language: 'en-US',
-                    sort_by: 'release_date.desc', // Sort by release date: latest first
-                    page: page, // Fetch the current page
-                    ...params, // Additional params
-                },
-            });
-
-            console.log(`Discover Movies - Page ${page} Response:`, response.data); // Debug log
-            allMovies = [...allMovies, ...response.data.results]; // Aggregate the results
-        }
-
-        return allMovies; // Return all the aggregated results from all pages
+        const response = await axios.get(`${BASE_URL}/movie/top_rated`, {
+            params: {
+                api_key: API_KEY,
+                language: 'en-US',
+                page: 1,
+            },
+        });
+        return response.data.results;
     } catch (error) {
-        console.error('Error fetching discovered movies:', error);
+        console.error("Error fetching top movies:", error);
         throw error;
     }
 };
-*/
 
 // Fetch old movies
 export const discoverOldMovies = async (params) => {
@@ -111,6 +95,37 @@ export const discoverOldMovies = async (params) => {
         return response.data.results; // Returns an array of upcoming movies
     } catch (error) {
         console.error('Error fetching old movies:', error);
+        throw error;
+    }
+};
+
+export const fetchUpcomingMovies = async () => {
+    try {
+        const today = new Date();
+        const todayString = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+        let allMovies = [];
+        let page = 1;
+        let totalPages = 1;  // Initialize totalPages to enter the loop
+        while (page <= totalPages) {
+            const response = await axios.get(`${BASE_URL}/movie/upcoming`, {
+                params: {
+                    api_key: API_KEY,
+                    language: 'en-US',
+                    page: page,
+                },
+            });
+            // Filter and add unreleased movies
+            const unreleasedMovies = response.data.results.filter(
+                (movie) => movie.release_date > todayString
+            );
+            allMovies = allMovies.concat(unreleasedMovies);
+            // Update pagination data
+            totalPages = response.data.total_pages;
+            page++;
+        }
+        return allMovies; // Return all the filtered unreleased movies
+    } catch (error) {
+        console.error("Error fetching upcoming movies:", error);
         throw error;
     }
 };

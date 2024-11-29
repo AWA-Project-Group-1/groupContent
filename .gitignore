@@ -25,5 +25,6 @@ yarn-error.log*
 #client side
 .env
 
-##server side
+#serverside
+/backend/node_modules
 /server/node_modules

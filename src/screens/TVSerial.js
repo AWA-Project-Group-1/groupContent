@@ -25,34 +25,7 @@ const TVSerial = () => {
     const [selectYear, setSelectYear] = useState('');
     const [selectPopularity, setSelectPopularity] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
-
-    // const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29'; // API key
-    // const url = `https://api.themoviedb.org/3/trending/tv/day?api_key=${apiKey}`;
-    // const url1 = `https://api.themoviedb.org/3/discover/tv?api_key=${apiKey}&language=en-US&page=1&sort_by=popularity.desc`
-    // const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMTQwMTUxNC4zNzIzMjk1LCJzdWIiOiI2NzMzMTViNjI5YWE4ZmYyNDRjMGUzODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.0qof6UxtmX1ZydXb7hPBwnROQT3zdyKAbEXhXQ0OO4A';
-    // const urlforTVgenra = `https://api.themoviedb.org/3/genre/tv/list?api_key=${apiKey}&language=en-US`;
-   
-    // useEffect(() => {
-    //     const options = {
-    //         method: 'GET',
-    //         headers: {
-    //             accept: 'application/json',
-    //             Authorization: authorization,
-    //         },
-    //     };
-
-    //     fetch(urlforTVgenra, options)
-    //         .then((req) => req.json()) // Parse the JSON data
-    //         .then((res) => {
-    //             setGenres(res.genres); // Use res.results for movie 
-    //             console.log(`This is genres: ${JSON.stringify(res.genres)}`);
-    //         })
-    //         .catch((err) => {
-    //             console.error('Error fetching data:', err); // Handle errors
-    //         });
-    // }, []);
-
-   
+ 
 
     const handleGenreChange = (event) => {
         setSelectGenre(event.target.value);
@@ -102,16 +75,19 @@ const TVSerial = () => {
 
     return (
         <div className={styles['nav-herosection-moviescard']}>
-            <div className={styles['nav-herosection']}>
+            {/* <div className={styles['nav-herosection']}> */}
+            <div className={`${styles['nav-herosection']} flex flex-col md:flex-row`}>
                 <Navigation />
                 {/* <hr /> */}
-                <HeroSection />
+                <HeroSection type="tvserial"  />
                 {/* <MovieCarosel images={filteredMovies}/> */}
             </div>
-            <div className={styles['allfilter-container']}>
+            {/* <div className={styles['allfilter-container']}> */}
+            {/* <div className={`${styles['allfilter-container']} flex flex-col md:flex-row justify-between gap-4`}> */}
+            <div className={`${styles['allfilter-container']} flex flex-col md:flex-row justify-between gap-1 items-left md:items-start`}>
 
                 <div className={styles['genre-filter-container']}>
-                    <label>Filter by Genre : </label>
+                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Filter by Genre : </label>
                     <select value={selectGenre} onChange={handleGenreChange}>
                         <option value="">All</option>
                         {TVGenreData.length > 0 ? (
@@ -129,7 +105,7 @@ const TVSerial = () => {
 
 
                 <div className={styles['year-filter-container']}>
-                    <label>Filter by Year : </label>
+                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Filter by Year : </label>
                     <DatePicker
                             selected={selectYear}
                             onChange={ yearChangeHandler }
@@ -141,7 +117,7 @@ const TVSerial = () => {
                 </div>
 
                 <div className={styles['popularity-filter-container']}>
-                    <label>Filter by Popularity : </label>
+                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Filter by Popularity : </label>
                     <select value={selectPopularity} onChange={handlePopularityChange}>
                         <option value="">All</option>
                         <option value="1000">Popular (&gt;1000)</option>
@@ -149,8 +125,8 @@ const TVSerial = () => {
                         <option value="10000">Most Popular (&gt;10000)</option>
                     </select>
                 </div>
-                <div  className={styles['search-contianer']}>
-                    <label htmlFor="">Search :  </label>
+                <div  className={styles['search-container']}>
+                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Search :  </label>
                     <input
                         type="text"
                         value={searchQuery}
@@ -161,7 +137,7 @@ const TVSerial = () => {
 
             </div>
 
-            <div>
+            <div className={styles['tvcards-contianer']}>
                 <TVCards movieCards={filteredMovies} />
             </div>
 

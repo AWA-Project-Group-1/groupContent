@@ -60,9 +60,7 @@
 
 /* Styling for the title in the carousel */
 .carousel-title {
-    margin: 15px 0;
-    /* Reduced margin */
-    font-size: 1rem;
+    font-size: 1.2rem;
     /* Smaller font size */
     font-weight: 600;
     /* Make the title bold */
@@ -72,4 +70,12 @@
     /* Add spacing between letters */
     transition: color 0.3s ease;
     /* Smooth color transition for hover */
+}
+
+.carousel-release-date {
+    text-align: center;
+    margin: 0;
+    /* Ensures no unwanted spacing */
+    font-size: 14px;
+    /* Adjust font size as needed */
 }

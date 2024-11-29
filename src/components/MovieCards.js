@@ -1,13 +1,17 @@
 // import { useNavigate, useLocation } from 'react-router-dom';
 // import React, {useState,useContext} from 'react'
 import { useNavigate,useParams, useLocation } from 'react-router-dom';
-import React, {useState,useContext} from 'react'
+import React, {useState,useContext, useEffect} from 'react'
 import styles from "./MovieCards.module.css"
 import {MovieGenreContext} from "../context/MovieGenreProvider"
+
+import { addToFavorites, removeFromFavorites, fetchFavorites } from '../api/favoriteapi';
+
 const MovieCards = ({ movieCards}) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; 
+  const itemsPerPage = 10;
+  const [favorites, setFavorites] = useState([]);
 
 
   const location = useLocation();
@@ -15,6 +19,19 @@ const MovieCards = ({ movieCards}) => {
   const genreName = queryParams.get('genre');
   // Calculate the index range for the current page
   const genreList = useContext(MovieGenreContext);
+
+  // Fetch favorites on component load
+  useEffect(() => {
+    async function loadFavorites() {
+      try {
+        const response = await fetchFavorites();
+        setFavorites(response.data); // Store favorite movie IDs
+      } catch (error) {
+        console.error('Error fetching favorites:', error);
+      }
+    }
+    loadFavorites();
+  }, []);
 
   const filteredMovies = genreName
   ? movieCards.filter((movie) => {
@@ -39,10 +56,23 @@ const MovieCards = ({ movieCards}) => {
     navigate(`/detail/movie/${movieId}`);
   }
 
-  function addButtonClickHandler(event){
+  function toggleFavoriteHandler(event, movieId) {
     event.stopPropagation();
-    navigate(`/profile`);
-    
+    if (favorites.includes(movieId)) {
+      removeFromFavorites(movieId)
+        .then(() => {
+          setFavorites(favorites.filter((id) => id !== movieId));
+          
+        })
+        .catch((error) => console.error('Error removing movie from favorites:', error));
+    } else {
+      addToFavorites(movieId, 'movie') // Add the type 'movie'
+        .then(() => {
+          setFavorites([...favorites, movieId]);
+          
+        })
+        .catch((error) => console.error('Error adding movie to favorites:', error));
+    }
   }
 // for th navi from page to page
   function nextPage() {
@@ -66,14 +96,43 @@ const MovieCards = ({ movieCards}) => {
           className={styles['product-card-framework']} 
           onClick={() => productClickHandler(item.id)}  
           key={item.id}>
-          <img className={styles['product-card']} src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.name} />
-         
-          <h5>{item.title}</h5>
-          
-          <p>{item.release_date}</p>
-          <div className={styles['button-container']}>
-            <button className={styles['button-click']} onClick={addButtonClickHandler}>Add to favourite</button>
+
+          <div className={styles['image-container']}> 
+              <img className={styles['product-card']} src={`https://image.tmdb.org/t/p/w500${item.poster_path}`} alt={item.name} />
           </div>
+          
+          <div className={styles['text-container']}>
+            {/* <h5>{item.title}</h5> */}
+            
+            <h5>{item.title.length > 17? `${item.title.slice(0, 17)}...` : item.title}</h5>   
+            
+            <p>{item.release_date}</p>
+            <div className={styles['button-container']}>
+              {/* <button
+                  className={styles['button-click']}
+                  onClick={(e) => toggleFavoriteHandler(e, item.id)}
+                >
+                  {favorites.includes(item.id) ? 'Delete from favorites' : 'Add to favorites'}
+                </button> */}
+
+              <div className={styles['review-button-container']}>
+                    <button className={styles['button-click']}>
+                      ✍️ Give <br></br> Review
+                    </button>
+                </div>
+                  
+                  <div className={styles['addfavourites-button-container']}>
+                    <button
+                          className={styles['button-click']}
+                          onClick={(e) => toggleFavoriteHandler(e, item.id)}
+                        >
+                        {favorites.includes(item.id) ? '🖤Delete from favorites' : '❤️Add to favorites'}
+                    </button>
+                  </div>
+            </div>
+            
+          </div>
+          
         </div>
       ))}
       
