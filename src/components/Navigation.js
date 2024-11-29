@@ -5,13 +5,14 @@ import movieapplogo from "../assets/images/movieapplogo.jpg";
 import { useNavigate } from "react-router-dom"
 import {TVGenreContext} from "../context/TVGenreProvider"
 import {MovieGenreContext} from "../context/MovieGenreProvider"
+import UserContext from "../context/UserContext"
 // import TVGenreContext from "./context/TVGenreProvider.js"
 const Navitation = () => {
   const navigate = useNavigate();
   // const [genreSelectedForTV, setGenreSelectedForTV] = useState("")
   // const [genreSelectedorMovie, setGenreSelectedForMovie] = useState("")
   const [hamburgerMenu, setHamburgerMenuMenu] = useState(false)
- 
+  const { user, setUser } = useContext(UserContext);
 
   function hamburgerMenuClickedHandler() {
     setHamburgerMenuMenu((prevState) => !prevState);
@@ -59,6 +60,11 @@ const Navitation = () => {
     navigate("/profile")
   }
 
+  function logoutHandler() {
+    setUser(null);
+    localStorage.removeItem("token");
+    navigate("/");
+  }
   
   return (
     <div className={styles["nav-container"]}>
@@ -147,18 +153,22 @@ const Navitation = () => {
       
         <li className={styles["nav-link" ]}><Link onClick={homeclickedHandler} to="/group">Group Page</Link></li>
 
-        <li className={styles["nav-link" ]}><Link onClick={homeclickedHandler} to="/sign-in">Profile</Link></li>
-        <li className={styles["nav-link" ]}><Link onClick={homeclickedHandler} to="/sign-in">SignIn/SignUp</Link></li>
-    </ul>
-    <hr style={{ border: '1px solid balck', margin: '10px 0' }} />
-
-                        
-
+        <li className={styles["nav-link"]}>
+  {user ? (
+    <div className={styles["logout-container"]}>
+      <span>Welcome, {user.username || "User"}!</span>
+      <button onClick={logoutHandler} className={styles["logout-button"]}>Logout</button>
     </div>
-        
-             
-    
-  )
-}
+  ) : (
+    <div>
+      <Link to="/sign-in">Sign In</Link> | <Link to="/sign-up">Sign Up</Link>
+    </div>
+  )}
+</li>
+      </ul>
+      <hr style={{ border: '1px solid black', margin: '10px 0' }} />
+    </div>
+  );
+};
 
 export default Navitation

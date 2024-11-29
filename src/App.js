@@ -25,39 +25,44 @@ import SharedFavoritesPage from './screens/SharedFavoritesPage.js';
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ShowTime from "./screens/ShowTime.js"
 // import { TVSeriesProvider } from './context/TVSeriesProvider';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+import { UserProvider } from './context/UserContext';
 
 const App = () => (
-  <MoiveTVSerialProvider>
-    <TVGenreProvider>
-      <MovieGenreProvider>
+  <UserProvider>
+    <MoiveTVSerialProvider>
+      <TVGenreProvider>
+        <MovieGenreProvider>
 
-      <Router>
-          <Routes>
-            <Route path="/" Component={HomePage} />
-            {/* <Route path="/movie/:id" Component={MovieDetails} /> */}
-            {/* <Route path="/movies/top-rated" element={<AllMovies type="top-rated" />} />
-            <Route path="/movies/upcoming" element={<AllMovies type="upcoming" />} /> */}
-            <Route path='/tvserial' element={<TVSerial />} />
-            <Route path='/movies' element={<MoviePage/>} />
-            {/* <Route path="/detail/:movieId" element={<TVDetail />} />  */}
-            {/* <Route path="/showtime" element={<MovieShowtimes />} /> */}
-            <Route path="/showtime" element={<ShowTime />} />  
-            <Route path="/detail/movie/:id" element={<MovieDetail />} />
-            <Route path="/detail/tv/:id" element={<TVDetail />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/shared-favorites/:userId" element={<SharedFavoritesPage />} />
-           
-            <Route path="/:tvormovie" element={<HeroSection />} />
+          <Router>
+              <Routes>
+                <Route path="/" Component={HomePage} />
+                {/* <Route path="/movie/:id" Component={MovieDetails} /> */}
+                {/* <Route path="/movies/top-rated" element={<AllMovies type="top-rated" />} />
+                <Route path="/movies/upcoming" element={<AllMovies type="upcoming" />} /> */}
+                <Route path='/tvserial' element={<TVSerial />} />
+                <Route path='/movies' element={<MoviePage/>} />
+                {/* <Route path="/detail/:movieId" element={<TVDetail />} />  */}
+                {/* <Route path="/showtime" element={<MovieShowtimes />} /> */}
+                <Route path="/showtime" element={<ShowTime />} />  
+                <Route path="/detail/movie/:id" element={<MovieDetail />} />
+                <Route path="/detail/tv/:id" element={<TVDetail />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/shared-favorites/:userId" element={<SharedFavoritesPage />} />
+              
+                <Route path="/:tvormovie" element={<HeroSection />} />
+                <Route path="/sign-in" element={<SignIn />} />
+                <Route path="/sign-up" element={<SignUp />} />
 
-
-          </Routes>
-        </Router>
+              </Routes>
+            </Router>
 
         </MovieGenreProvider>         
       </TVGenreProvider>
         
-  </MoiveTVSerialProvider>
-  
+    </MoiveTVSerialProvider>
+  </UserProvider>
   
 );
       

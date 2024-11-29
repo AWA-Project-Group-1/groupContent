@@ -114,6 +114,38 @@ padding-left: 0px;
   font-weight: bold;
 }
 
+.logout-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* gap: 10px; */
+  border:solid;
+
+}
+
+.logout-container span {
+  display: flex;
+  flex-direction: row;
+  /* align-items: center; */
+}
+
+
+.logout-button {
+  font-size: 12px;
+  padding: 4px 1px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #d32f2f;
+}
+
+
 
 #movieapplogo-container {
   display: flex;

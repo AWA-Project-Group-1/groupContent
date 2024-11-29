@@ -3,10 +3,15 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import favoriteRouter from './routers/favoriteRouter.js';
-import reviewsRouter from './routers/reviewRouter.js'
+import authRouter from './routers/authRouter.js';
 import { pool } from './helpers/db.js'; // Optional: test database connection on startup
 
 dotenv.config();
+console.log('DDB_USER:', process.env.DDB_USER);
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_NAME:', process.env.DB_NAME);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_PORT:', process.env.DB_PORT);
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -26,9 +31,7 @@ pool.query('SELECT NOW()', (err, res) => {
 
 // Routes
 app.use('/api/favorites', favoriteRouter);
-
-// Use the reviews router for /reviews endpoint
-app.use('/reviews', reviewsRouter);
+app.use("/api/auth", authRouter);
 
 // Fallback route for 404 errors
 app.use((req, res) => {
