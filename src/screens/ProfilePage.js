@@ -1,67 +1,61 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchFavorites, removeFromFavorites } from '../api/favoriteapi';
 import Navigation from '../components/Navigation';
 import styles from './ProfilePage.module.css';
+import UserContext from '../context/UserContext';
 
-const ITEMS_PER_PAGE = 10; // Number of items to display per page
+const ITEMS_PER_PAGE = 10;
 
 const Profile = () => {
   const [favorites, setFavorites] = useState([]);
   const [favoriteDetails, setFavoriteDetails] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const [currentPage, setCurrentPage] = useState(1);
+  const { user } = useContext(UserContext); // Access the logged-in user's token and email
   const navigate = useNavigate();
 
   useEffect(() => {
     async function getFavorites() {
       try {
-        const response = await fetchFavorites();
-        const favoriteItems = response.data;
+        if (user?.token) {
+          const response = await fetchFavorites(user.token);
+          const favoriteItems = response.data;
 
-        const details = await Promise.all(
-          favoriteItems.map(async ({ movie_id, type }) => {
-            const endpoint =
-              type === 'movie'
-                ? `https://api.themoviedb.org/3/movie/${movie_id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`
-                : `https://api.themoviedb.org/3/tv/${movie_id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`;
+          const details = await Promise.all(
+            favoriteItems.map(async ({ movie_id, type }) => {
+              const endpoint =
+                type === 'movie'
+                  ? `https://api.themoviedb.org/3/movie/${movie_id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`
+                  : `https://api.themoviedb.org/3/tv/${movie_id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`;
 
-            const response = await fetch(endpoint);
-            const data = await response.json();
-            return { ...data, type };
-          })
-        );
+              const response = await fetch(endpoint);
+              return await response.json();
+            })
+          );
 
-        setFavorites(favoriteItems);
-        setFavoriteDetails(details);
+          setFavorites(favoriteItems);
+          setFavoriteDetails(details);
+        }
       } catch (error) {
         console.error('Error fetching favorites:', error);
       }
     }
     getFavorites();
-  }, []);
+  }, [user]);
+  
 
-  // Handle removal of favorite item
   async function removeButtonClickHandler(movieId) {
+    if (!user?.token) return;
+
     try {
-      await removeFromFavorites(movieId);
+      await removeFromFavorites(movieId, user.token);
       setFavorites(favorites.filter((item) => item.movie_id !== movieId));
       setFavoriteDetails(favoriteDetails.filter((item) => item.id !== movieId));
-      
     } catch (error) {
       console.error('Error removing item from favorites:', error);
     }
   }
 
-  // Navigate to detail pages
-  function handleCardClick(item) {
-    if (item.type === 'movie') {
-      navigate(`/detail/movie/${item.id}`);
-    } else if (item.type === 'tv') {
-      navigate(`/detail/tv/${item.id}`);
-    }
-  }
-
-  // Paging logic
   const totalPages = Math.ceil(favoriteDetails.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const visibleFavorites = favoriteDetails.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -70,9 +64,7 @@ const Profile = () => {
     setCurrentPage(pageNumber);
   };
 
-  // Generate sharable URL
-  const userId = 945;
-  const shareableLink = `${window.location.origin}/shared-favorites/${userId}`;
+  const shareableLink = `${window.location.origin}/shared-favorites/${user.userId}`; // Use the logged-in user's ID
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareableLink);
@@ -87,16 +79,11 @@ const Profile = () => {
         <p>Welcome to your profile site</p>
         <div className={styles.profileDetails}>
           <div>
-            <label>Name:</label>
-            <span>Placeholder</span>
-          </div>
-          <div>
             <label>Email:</label>
-            <span>Placeholder@example.com</span>
+            <span>{user?.email || 'No email available'}</span>
           </div>
         </div>
         <div className={styles.shareableLinkContainer}>
-          
           <button onClick={copyToClipboard} className={styles.copyButton}>
             Copy Link to share favorites
           </button>
@@ -110,7 +97,7 @@ const Profile = () => {
               <div
                 key={item.id}
                 className={styles.movieCard}
-                onClick={() => handleCardClick(item)}
+                onClick={() => navigate(`/detail/${item.type}/${item.id}`)}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
@@ -134,14 +121,15 @@ const Profile = () => {
             <p>No favorites added yet.</p>
           )}
         </div>
-        
         {favoriteDetails.length > ITEMS_PER_PAGE && (
           <div className={styles.pagination}>
             {Array.from({ length: totalPages }, (_, i) => (
               <button
                 key={i + 1}
                 onClick={() => handlePageChange(i + 1)}
-                className={`${styles.pageButton} ${currentPage === i + 1 ? styles.activePage : ''}`}
+                className={`${styles.pageButton} ${
+                  currentPage === i + 1 ? styles.activePage : ''
+                }`}
               >
                 {i + 1}
               </button>

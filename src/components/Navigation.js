@@ -153,12 +153,17 @@ const Navitation = () => {
       
         <li className={styles["nav-link" ]}><Link onClick={homeclickedHandler} to="/group">Group Page</Link></li>
 
+        <li className={styles["nav-link" ]} id="li1">
+          <Link onClick={homeclickedHandler} to="/profile">Profile</Link>
+        </li >
+
         <li className={styles["nav-link"]}>
   {user ? (
     <div className={styles["logout-container"]}>
       <span>Welcome, {user.username || "User"}!</span>
       <button onClick={logoutHandler} className={styles["logout-button"]}>Logout</button>
     </div>
+    
   ) : (
     <div>
       <Link to="/sign-in">Sign In</Link> | <Link to="/sign-up">Sign Up</Link>

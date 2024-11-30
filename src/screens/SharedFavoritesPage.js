@@ -4,8 +4,10 @@ import styles from './SharedFavoritesPage.module.css';
 
 const ITEMS_PER_PAGE = 10; // Number of items per page
 
+
+
 const SharedFavoritesPage = () => {
-  const { userId } = useParams();
+  const { userId } = useParams(); // Get userId from the URL params
   const [favorites, setFavorites] = useState([]);
   const [currentPage, setCurrentPage] = useState(1); // State for current page
   const navigate = useNavigate();
@@ -13,7 +15,9 @@ const SharedFavoritesPage = () => {
   useEffect(() => {
     async function fetchSharedFavorites() {
       try {
-        const response = await fetch(`http://localhost:3001/api/favorites/shared-favorites/${userId}`);
+        const response = await fetch(
+          `http://localhost:3001/api/favorites/shared-favorites/${userId}` // Use userId from the URL to fetch favorites
+        );
         const data = await response.json();
 
         const itemDetails = await Promise.all(
@@ -29,7 +33,7 @@ const SharedFavoritesPage = () => {
           })
         );
 
-        setFavorites(itemDetails);
+        setFavorites(itemDetails); // Update state with the details
       } catch (error) {
         console.error('Error fetching shared favorites:', error);
       }
@@ -38,31 +42,27 @@ const SharedFavoritesPage = () => {
     fetchSharedFavorites();
   }, [userId]);
 
-  // Calculate the range of items to display
+  // Pagination logic remains unchanged
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const visibleFavorites = favorites.slice(startIndex, endIndex); // Items for the current page
-
-  // Calculate total pages
+  const visibleFavorites = favorites.slice(startIndex, endIndex);
   const totalPages = Math.ceil(favorites.length / ITEMS_PER_PAGE);
 
-  // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Handle card click
-  function handleCardClick(item) {
+  const handleCardClick = (item) => {
     if (item.type === 'movie') {
       navigate(`/detail/movie/${item.id}`);
     } else if (item.type === 'tv') {
       navigate(`/detail/tv/${item.id}`);
     }
-  }
+  };
 
   return (
     <div className={styles.sharedFavoritesContainer}>
-      <h1 className={styles.title}>Shared Favorites of user {userId}</h1>
+      <h1 className={styles.title}>Shared Favorites of User {userId}</h1>
       {visibleFavorites.length > 0 ? (
         <div className={styles.favoritesGrid}>
           {visibleFavorites.map((item) => (
@@ -84,8 +84,6 @@ const SharedFavoritesPage = () => {
       ) : (
         <p>No favorites available.</p>
       )}
-
-      {/* Pagination Controls */}
       {favorites.length > ITEMS_PER_PAGE && (
         <div className={styles.pagination}>
           {Array.from({ length: totalPages }, (_, i) => (

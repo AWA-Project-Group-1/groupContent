@@ -2,13 +2,13 @@ import axios from 'axios';
 
 const serverUrl = 'http://localhost:3001/api/favorites';
 const tmdbBaseUrl = 'https://api.themoviedb.org/3';
-const tmdbApiKey = '8e00f8de49614d9ebf140af3901aa5b5'; // Replace with your TMDB API key
+const tmdbApiKey = '8e00f8de49614d9ebf140af3901aa5b5'; 
 
 // Fetch title from TMDB API
 async function fetchTitle(movieId, type) {
   try {
     const response = await axios.get(`${tmdbBaseUrl}/${type}/${movieId}`, {
-      params: { api_key: tmdbApiKey }
+      params: { api_key: tmdbApiKey },
     });
     return response.data.title || response.data.name; // Return title for movies, name for TV shows
   } catch (error) {
@@ -18,10 +18,14 @@ async function fetchTitle(movieId, type) {
 }
 
 // Add an item to favorites (movie or TV show)
-export async function addToFavorites(movieId, type) {
+export async function addToFavorites(movieId, type, token) {
   try {
     const title = await fetchTitle(movieId, type); // Fetch title from TMDB API
-    return axios.post(`${serverUrl}/add`, { movieId, title, type });
+    return axios.post(
+      `${serverUrl}/add`,
+      { movieId, title, type },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
   } catch (error) {
     console.error('Error adding to favorites:', error);
     throw error;
@@ -29,11 +33,14 @@ export async function addToFavorites(movieId, type) {
 }
 
 // Remove an item from favorites
-export async function removeFromFavorites(movieId) {
-  return axios.delete(`${serverUrl}/remove`, { data: { movieId } });
+export async function removeFromFavorites(movieId, token) {
+  return axios.delete(`${serverUrl}/remove`, {
+    data: { movieId },
+    headers: { Authorization: `Bearer ${token}` },
+  });
 }
 
-// Fetch all favorites for the hardcoded user
-export async function fetchFavorites() {
-  return axios.get(`${serverUrl}/user/945`);
+// Fetch all favorites for the logged-in user
+export async function fetchFavorites(token) {
+  return axios.get(`${serverUrl}/user`, { headers: { Authorization: `Bearer ${token}` } });
 }

@@ -1,15 +1,31 @@
 import express from 'express';
 import { pool } from '../helpers/db.js';
-import fetch from 'node-fetch'
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
-const hardcodedUserId = 945; // Hardcoded user ID for simplicity
+const tmdbApiKey = process.env.API_KEY; // Ensure this is set in your .env file
 
-const tmdbApiKey = '8e00f8de49614d9ebf140af3901aa5b5'; // Ensure this is set in your .env file
+// Middleware to authenticate user and extract user ID
+const authenticate = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ error: "Authorization token required" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decoded.userId; // Attach user ID to the request object
+    next();
+  } catch (error) {
+    return res.status(403).json({ error: "Invalid or expired token" });
+  }
+};
 
 // Add a movie or TV show to favorites
-router.post('/add', async (req, res) => {
+router.post('/add', authenticate, async (req, res) => {
   const { movieId, type } = req.body;
+  const userId = req.userId;
+
   try {
     // Fetch the title from TMDB API
     const tmdbUrl = `https://api.themoviedb.org/3/${type}/${movieId}?api_key=${tmdbApiKey}`;
@@ -18,11 +34,9 @@ router.post('/add', async (req, res) => {
 
     const title = data.title || data.name; // Movies use 'title', TV shows use 'name'
 
-    console.log('Received data:', req.body, 'Fetched title:', title);
-
     await pool.query(
       'INSERT INTO favorites (users_id, movie_id, title, type) VALUES ($1, $2, $3, $4)',
-      [hardcodedUserId, movieId, title, type]
+      [userId, movieId, title, type]
     );
 
     res.status(201).json({ message: `${type} "${title}" added to favorites` });
@@ -32,9 +46,10 @@ router.post('/add', async (req, res) => {
   }
 });
 
-// Fetch all favorite movies or TV shows for the user
-router.get('/user/:userId', async (req, res) => {
-  const { userId } = req.params;
+// Fetch all favorite movies or TV shows for the logged-in user
+router.get('/user', authenticate, async (req, res) => {
+  const userId = req.userId;
+
   try {
     const result = await pool.query(
       'SELECT movie_id, title, type FROM favorites WHERE users_id = $1',
@@ -48,12 +63,14 @@ router.get('/user/:userId', async (req, res) => {
 });
 
 // Remove a movie or TV show from favorites
-router.delete('/remove', async (req, res) => {
+router.delete('/remove', authenticate, async (req, res) => {
   const { movieId } = req.body;
+  const userId = req.userId;
+
   try {
     await pool.query(
       'DELETE FROM favorites WHERE users_id = $1 AND movie_id = $2',
-      [hardcodedUserId, movieId]
+      [userId, movieId]
     );
     res.status(200).json({ message: 'Item removed from favorites' });
   } catch (error) {
@@ -66,17 +83,20 @@ router.delete('/remove', async (req, res) => {
 router.get('/shared-favorites/:userId', async (req, res) => {
   const { userId } = req.params;
 
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+
   try {
     // Fetch the user's favorites from the database
     const result = await pool.query(
       'SELECT movie_id AS id, title, type FROM favorites WHERE users_id = $1',
       [userId]
     );
-
-    res.json(result.rows); // Return an array of { id, title, type }
+    res.json(result.rows); // Return rows including id, title, and type
   } catch (error) {
-    console.error('Error fetching shared favorites:', error);
-    res.status(500).json({ error: 'Failed to fetch shared favorites' });
+    console.error('Error fetching shared favorite items:', error);
+    res.status(500).json({ error: 'Failed to fetch shared favorite items' });
   }
 });
 
