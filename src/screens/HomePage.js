@@ -158,25 +158,34 @@ const HomePage = () => {
                 fetchMovies={fetchPopularMovies}
                 viewAllLink="/movies"
             />
+            <hr></hr>
 
             <CarouselSelection
                 title="Top Movies"
                 fetchMovies={fetchTopMovies}
             />
 
+            <hr></hr>
+
             <div className="my-4" style={{ margin: '40px' }}>
                 <MoviePicker />
             </div>
+
+            <hr></hr>
 
             <CarouselSelection
                 title="Timeless Movies (1900s)"
                 fetchMovies={fetchOldMovies}
             />
 
+            <hr></hr>
+
             <CarouselSelection
                 title="Coming Soon"
                 fetchMovies={fetchUpcomingMovies}
             />
+
+            <hr></hr>
 
             <CarouselSelectionTV
                 title="Popular TV Series"
