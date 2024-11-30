@@ -13,11 +13,24 @@ const Photo = ({ src, alt }) => (
     />
 );
 
-const CarouselSlide = ({ src, name, tvId, release_date }) => {
+const CarouselSlide = ({ src, name, tvId, release_date, averageRating, reviewCount }) => {
     const releaseDate = new Date(release_date);
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
     const formattedReleaseDate = `${months[releaseDate.getMonth()]} ${releaseDate.getDate()}, ${releaseDate.getFullYear()}`;
+
+    const renderStars = (average) => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            if (average >= i) {
+                stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>); // Filled star
+            } else if (average >= i - 0.5) {
+                stars.push(<i key={i} className="bi bi-star-half text-warning"></i>); // Half-filled star
+            } else {
+                stars.push(<i key={i} className="bi bi-star text-warning"></i>); // Empty star
+            }
+        }
+        return stars;
+    };
 
     return (
         <BearSlideCard>
@@ -26,6 +39,10 @@ const CarouselSlide = ({ src, name, tvId, release_date }) => {
                     <Photo src={src} alt={name} />
                     <h3 className="carousel-title">{name}</h3>
                     <p className="carousel-release-date">{formattedReleaseDate}</p>
+                    <div className="carousel-rating">
+                        {renderStars(averageRating)} {/* Display stars here */}
+                        <span className="carousel-review-count">({reviewCount})</span> {/* Display review count inside parentheses */}
+                    </div>
                 </div>
             </Link>
         </BearSlideCard>
@@ -42,6 +59,8 @@ const CustomCarouselTV = ({ data, gridTheme }) => {
             name={row.name}
             tvId={row.id}
             release_date={row.release_date}
+            averageRating={row.averageRating}  // Passing the average rating
+            reviewCount={row.reviewCount}  // Passing the review count
 
         />
     ));

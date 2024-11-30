@@ -6,6 +6,9 @@ import styles from './MovieCards.module.css';
 import { TVGenreContext } from '../context/TVGenreProvider';
 import UserContext from '../context/UserContext';
 
+import { fetchReviews } from "../api/reviews";
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 const TVCards = ({ movieCards }) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,6 +20,9 @@ const TVCards = ({ movieCards }) => {
   const queryParams = new URLSearchParams(location.search); // To parse query parameters
   const genreName = queryParams.get('genre');
   const genreList = useContext(TVGenreContext);
+
+  const [averageRatings, setAverageRatings] = useState({}); // Store average ratings
+  const [reviewCounts, setReviewCounts] = useState({}); // Store number of reviews
 
   useEffect(() => {
     async function loadFavorites() {
@@ -32,13 +38,37 @@ const TVCards = ({ movieCards }) => {
     loadFavorites();
   }, [user]);
 
+  useEffect(() => {
+    async function loadRatings() {
+      const ratings = {};
+      const counts = {};
+      for (const movie of movieCards) {
+        try {
+          const reviews = await fetchReviews(movie.id, 'tv');
+          const average =
+            reviews.length > 0
+              ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+              : 0;
+          ratings[movie.id] = average;
+          counts[movie.id] = reviews.length; // Store the number of reviews
+        } catch (error) {
+          console.error('Error fetching reviews for movie ID:', movie.id, error);
+        }
+      }
+      setAverageRatings(ratings);
+      setReviewCounts(counts);
+    }
+    loadRatings();
+  }, [movieCards]);
+
+
   const filteredMovies = genreName
     ? movieCards.filter((movie) => {
-        const movieGenreNames = movie.genre_ids.map(
-          (id) => genreList.find((genre) => genre.id === id)?.name
-        );
-        return movieGenreNames.includes(genreName);
-      })
+      const movieGenreNames = movie.genre_ids.map(
+        (id) => genreList.find((genre) => genre.id === id)?.name
+      );
+      return movieGenreNames.includes(genreName);
+    })
     : movieCards;
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -59,6 +89,20 @@ const TVCards = ({ movieCards }) => {
     }
   }
 
+  const renderStars = (average) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (average >= i) {
+        stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>); // Filled star
+      } else if (average >= i - 0.5) {
+        stars.push(<i key={i} className="bi bi-star-half text-warning"></i>); // Half-filled star
+      } else {
+        stars.push(<i key={i} className="bi bi-star text-warning"></i>); // Empty star
+      }
+    }
+    return stars;
+  };
+
   return (
     <div>
       <div className={styles['productcards_container']}>
@@ -78,6 +122,13 @@ const TVCards = ({ movieCards }) => {
             <div className={styles['text-container']}>
               <h5>{item.name.length > 17 ? `${item.name.slice(0, 17)}...` : item.name}</h5>
               <p>{item.first_air_date}</p>
+              {/* Render average rating as stars and review count */}
+              <div className={styles['rating-container']}>
+                {renderStars(averageRatings[item.id] || 0)}
+                <span className={styles['review-count']}>
+                  ({reviewCounts[item.id] || 0}){/* Display number of reviews */}
+                </span>
+              </div>
               <div className={styles['button-container']}>
                 {/* Review Button */}
                 <div className={styles['review-button-container']}>
