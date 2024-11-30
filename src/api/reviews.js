@@ -14,37 +14,74 @@ export const fetchReviews = async (movieId, contentType) => {
 };
 
 // Fetch review for the logged-in user for a specific movie or TV show
-export const fetchUserReview = async (userId, contentType, movieId) => {
+export async function fetchUserReview(contentType, movieId) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.error('User is not logged in. No token found.');
+        throw new Error('User not logged in.');
+    }
+
     try {
-        const response = await axios.get(`${baseUrlforReviews}/user/${userId}/${contentType}/${movieId}`);
-        return response.data; // Axios automatically parses JSON responses
+        const response = await axios.get(
+            `${baseUrlforReviews}/user/${contentType}/${movieId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            }
+        );
+        return response.data; // Return the review data
     } catch (error) {
-        console.error('Error fetching user review:', error.response || error.message);
-        throw new Error(error.response?.data?.error || 'Failed to fetch user review');
+        // Detailed error handling
+        console.error('Error fetching user review:', error);
+
+        if (error.response) {
+            // Server responded with an error (4xx/5xx)
+            console.error('Server responded with:', error.response.data);
+            throw new Error(error.response.data.error || 'Failed to fetch user review');
+        } else if (error.request) {
+            // No response from server (network issues, timeout, etc.)
+            console.error('No response from server:', error.request);
+            throw new Error('No response from server');
+        } else {
+            // General errors (configuration, etc.)
+            console.error('Error:', error.message);
+            throw new Error(error.message || 'Error fetching user review');
+        }
+    }
+}
+
+
+export const submitReview = async (movieId, { rating, comment, type }) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        throw new Error("User not logged in.");
+    }
+
+    try {
+        const response = await axios.post(
+            'http://localhost:3001/api/reviews',
+            { movieId, rating, comment, type },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error submitting review:', error);
+        throw new Error(error.response?.data?.error || "Error submitting review");
     }
 };
 
-export const submitReview = async (movieId, reviewData) => {
-    try {
-        const response = await axios.post(baseUrlforReviews, { movieId, ...reviewData }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        return response.data; // Axios automatically parses JSON responses
-    } catch (error) {
-        console.error('Error submitting review:', error.response || error.message);
-        throw new Error(error.response?.data?.error || 'Failed to submit review');
-    }
-};
 
-
-export const deleteReview = async (reviewId) => {
+// Delete a specific review by reviewId
+export async function deleteReview(reviewId, token) {
     try {
-        const response = await axios.delete(`${baseUrlforReviews}/${reviewId}`);
-        return response.data; // Axios automatically parses JSON responses
+        const response = await axios.delete(
+            `${baseUrlforReviews}/${reviewId}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        return response.data;  // Axios automatically parses JSON responses
     } catch (error) {
-        console.error('Error deleting review:', error.response || error.message);
+        console.error('Error deleting review:', error);
         throw new Error(error.response?.data?.error || 'Failed to delete review');
     }
-};
+}

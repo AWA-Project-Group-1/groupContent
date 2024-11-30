@@ -24,9 +24,11 @@ function SignIn() {
         }
       );
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("email", email);
+      localStorage.setItem("id", response.data.id);
 
       // Set global user information
-      setUser({ token: response.data.token });
+      setUser({ token: response.data.token, email, id: response.data.id });
 
       setMessage("Sign in successful");
       setEmail("");

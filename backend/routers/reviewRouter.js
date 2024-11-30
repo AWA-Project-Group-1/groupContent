@@ -1,8 +1,27 @@
 import express from 'express';
 import { pool } from '../helpers/db.js';
+// authMiddleware.js
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
-// GET request for fetching reviews for a specific movie or TV show
+
+export const authenticate = (req, res, next) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: 'No token provided' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify JWT and decode it
+        req.userId = decoded.userId; // Attach the user ID from the token to the request
+        next(); // Proceed to the next middleware or route handler
+    } catch (error) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+};
+
+// GET request for fetching reviews for a specific movie or TV show (no authentication needed)
 router.get('/:contentType/:movieId', (req, res) => {
     const { contentType, movieId } = req.params;
 
@@ -22,11 +41,11 @@ router.get('/:contentType/:movieId', (req, res) => {
     });
 });
 
-// GET request for fetching reviews for a specific movie or TV show of the logged-in user (hardcoded)
-router.get('/user/:userId/:contentType/:movieId', (req, res) => {
-    const { userId, contentType, movieId } = req.params;
+// GET request for fetching reviews for a specific movie or TV show of the logged-in user
+router.get('/user/:contentType/:movieId', authenticate, (req, res) => {
+    const { contentType, movieId } = req.params;
+    const userId = req.userId; // Use the user ID from the token
 
-    // Query to get the logged-in user's review for the specific movie or TV show
     const query = `
         SELECT reviews.id, reviews.movies_id, reviews.rating, reviews.comment, reviews.type, reviews.created_at, users.email
         FROM reviews
@@ -48,63 +67,77 @@ router.get('/user/:userId/:contentType/:movieId', (req, res) => {
     });
 });
 
-
 // POST request to add a new review
-router.post('/', (req, res) => {
+router.post('/', authenticate, (req, res) => {
     const { movieId, rating, comment, type } = req.body;
 
-    // Validate that all required fields are provided
     if (!movieId || !rating || !comment || !type) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    // Validate that 'type' is either 'movie' or 'tv'
     if (type !== 'movie' && type !== 'tv') {
         return res.status(400).json({ error: "Invalid 'type' field. Must be 'movie' or 'tv'" });
     }
 
-    const userId = 2; // Hardcoded userId for testing purposes, replace with dynamic user ID (e.g., from session or JWT token)
+    const userId = req.userId;
 
-    const query = `
-        INSERT INTO reviews (movies_id, users_id, rating, comment, type)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *;
+    // Step 1: Check if the user already submitted a review for this movie/type
+    const checkQuery = `
+        SELECT * FROM reviews
+        WHERE movies_id = $1 AND users_id = $2 AND type = $3;
     `;
 
-    const values = [movieId, userId, rating, comment, type];
-
-    pool.query(query, values, (error, result) => {
-        if (error) {
-            console.error('Error executing query', error.stack);
-            return res.status(500).json({ error: error.message });
+    pool.query(checkQuery, [movieId, userId, type], (checkError, checkResult) => {
+        if (checkError) {
+            console.error('Error executing check query', checkError.stack);
+            return res.status(500).json({ error: checkError.message });
         }
-        return res.status(201).json(result.rows[0]);
+
+        if (checkResult.rowCount > 0) {
+            // User already submitted a review
+            return res.status(409).json({
+                message: 'You have already submitted a review. Please delete it first if you want to make changes.'
+            });
+        }
+
+        // Step 2: Proceed to add the review
+        const insertQuery = `
+            INSERT INTO reviews (movies_id, users_id, rating, comment, type)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *;
+        `;
+
+        const values = [movieId, userId, rating, comment, type];
+        pool.query(insertQuery, values, (insertError, insertResult) => {
+            if (insertError) {
+                console.error('Error executing insert query', insertError.stack);
+                return res.status(500).json({ error: insertError.message });
+            }
+            return res.status(201).json(insertResult.rows[0]);
+        });
     });
 });
 
 // DELETE request to delete a review by ID (only if the user is authorized)
-router.delete('/:reviewId', (req, res) => {
+router.delete('/:reviewId', authenticate, (req, res) => {
     const reviewId = req.params.reviewId;
-    const hardcodedUserId = 2; // Hardcoded user ID
+    const userId = req.userId; // Get the user ID from the authenticated user
 
-    // Log the user ID and review ID before deleting
-    console.log(`Attempting to delete review ID: ${reviewId} by user ID: ${hardcodedUserId}`);
-
-    // Step 1: Check if the review belongs to the hardcoded user
+    // Step 1: Check if the review belongs to the logged-in user
     const checkOwnershipQuery = `
         SELECT * FROM reviews
         WHERE id = $1 AND users_id = $2;
     `;
 
-    pool.query(checkOwnershipQuery, [reviewId, hardcodedUserId], (ownershipError, ownershipResult) => {
+    pool.query(checkOwnershipQuery, [reviewId, userId], (ownershipError, ownershipResult) => {
         if (ownershipError) {
             console.error('Error executing ownership check query', ownershipError.stack);
             return res.status(500).json({ error: ownershipError.message });
         }
 
         if (ownershipResult.rowCount === 0) {
-            // Log the message if the user is not authorized
-            console.log(`User ${hardcodedUserId} is not authorized to delete review ID: ${reviewId}`);
+            // If the user is not authorized to delete this review
+            console.log(`User ${userId} is not authorized to delete review ID: ${reviewId}`);
             return res.status(403).json({ error: 'You are not authorized to delete this review' });
         }
 
@@ -121,8 +154,7 @@ router.delete('/:reviewId', (req, res) => {
                 return res.status(500).json({ error: deleteError.message });
             }
 
-            // Log success if the review was deleted
-            console.log(`Review ID: ${reviewId} deleted successfully by user ID: ${hardcodedUserId}`);
+            console.log(`Review ID: ${reviewId} deleted successfully by user ID: ${userId}`);
             return res.status(200).json({
                 message: 'Review deleted successfully',
                 review: deleteResult.rows[0],
@@ -130,6 +162,5 @@ router.delete('/:reviewId', (req, res) => {
         });
     });
 });
-
 
 export default router;

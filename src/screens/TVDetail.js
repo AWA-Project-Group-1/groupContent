@@ -11,6 +11,8 @@ import { fetchReviews, submitReview, deleteReview, fetchUserReview } from '../ap
 import SubmitReview from '../components/reviews/SubmitReview'
 import ReviewList from '../components/reviews/ReviewList';
 
+import { Link } from 'react-router-dom';
+
 const TVDetail = () => {
     const { id } = useParams();  // Get the movieId from the URL
     const [movieDetail, setMovieDetail] = useState(null);
@@ -90,9 +92,6 @@ const TVDetail = () => {
         getReviews(); // Fetch reviews when component mounts or `id` changes
     }, [id, previousReviews]); // Trigger when `id` or `previousReviews` change
 
-    const [deletedId, setDeletedId] = useState(null);
-    const userId = 2;
-
     // Handle review submission
     const handleReviewSubmit = async ({ rating, comment }) => {
         if (!rating || !comment) {
@@ -110,15 +109,21 @@ const TVDetail = () => {
             setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
         } catch (error) {
             console.error('Error submitting review:', error);
-            setSuccessMessage("Failed to submit review, please try again.");
-            setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
         }
     };
 
     // Handle review deletion
     const handleReviewDeletion = async (reviewId) => {
+        const token = localStorage.getItem('token'); // Get token from localStorage
+
+        if (!token) {
+            console.error('User is not logged in.');
+            return;  // Or show a message indicating the user isn't logged in
+        }
+
         try {
-            await deleteReview(reviewId);
+            await deleteReview(reviewId, token);
+            console.log('Review deleted');
 
             // If the deleted review is the current userReview, clear userReview
             if (userReview && userReview.id === reviewId) {
@@ -130,15 +135,13 @@ const TVDetail = () => {
 
         } catch (err) {
             console.error("Error deleting review:", err);
-            setSuccessMessage("Failed to delete review, please try again.");
-            setTimeout(() => setSuccessMessage(""), 5000); // Auto-clear message
         }
     };
 
     // Fetch the logged-in user's review for the movie/show
     const getUserReview = async () => {
         try {
-            const reviewData = await fetchUserReview(userId, "tv", id);
+            const reviewData = await fetchUserReview("tv", id);
             setUserReview(reviewData); // Set the logged-in user's review
         } catch (error) {
             console.error('Error fetching user review:', error);
@@ -146,12 +149,16 @@ const TVDetail = () => {
     };
 
     useEffect(() => {
-        getUserReview(); // Fetch the user's review when the component loads
-    }, [id]); // Trigger when the movie ID changes
+        if (id) {
+            getUserReview(); // Fetch the user's review when the component loads or when id changes
+        }
+    }, [id]); // Trigger when the movie/show ID changes
 
     if (!movieDetail) {
         return <div>Loading...</div>;  // Show a loading message until data is fetched
     }
+
+    const token = localStorage.getItem('token');
 
     return (
         <div>
@@ -287,14 +294,30 @@ const TVDetail = () => {
                 </div>
             </div>
 
-            <div className="container center mt-4">
-                <h2 style={{ marginLeft: "20px" }}>Submit a Review</h2>
+            {/* Review Submission Form (conditionally rendered if logged in) */}
+            <div className="container center mt-4" >
+
+                <h2 style={{ marginLeft: "20px", marginTop: '60px' }}>Leave a Review</h2>
                 <div className="my-3 p-3 border rounded mx-auto" style={{ maxWidth: '1440px' }}>
-                    <SubmitReview onSubmitReview={handleReviewSubmit} movieId={id} />
+                    {token ? (
+                        userReview ? (
+                            <div style={{ marginTop: '10px' }} className="text-center my-4">
+                                <p><b>Thank you for your review!</b></p>
+                                <p>If you'd like to make changes, feel free to delete your review and submit a new one.</p>
+
+                            </div>
+                        ) : (
+                            <SubmitReview onSubmitReview={handleReviewSubmit} movieId={id} />
+                        )
+                    ) : (
+                        <div className="text-center my-4">
+                            <p><b>Please <Link to="/sign-in" style={{ color: '#d24747' }}>log in</Link> to submit a review.</b></p>
+                        </div>
+                    )}
                 </div>
 
                 {successMessage && (
-                    <div className="alert alert-success mt-3 mx-auto" style={{ maxWidth: '500px' }}>
+                    <div className="alert alert-success mt-3 mx-auto" style={{ maxWidth: '1440px' }}>
                         {successMessage}
                     </div>
                 )}

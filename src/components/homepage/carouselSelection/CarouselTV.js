@@ -3,10 +3,14 @@ import { topTVSeries } from '../../../api/tvFetch'; // Example API function for 
 import CustomCarouselTV from '../../elements/Carousel/TvCarousel';  // Assuming CustomCarousel is the carousel component
 import ViewAllButton from '../../elements/Button/ViewAllButton';  // Import ViewAllButton component
 import './CarouselSelection.css';  // Import the CSS file
+import { fetchReviews } from "../../../api/reviews";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const CarouselSelection = ({ title, fetchMovies,searchedTVseries, viewAllLink }) => {
+const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }) => {
     const [movies, setMovies] = useState([]);
     const [showAllMovies, /*setShowAllMovies*/] = useState(false);  // State to toggle between showing first 10 and all movies
+    const [averageRatings, setAverageRatings] = useState({});
+    const [reviewCounts, setReviewCounts] = useState({});
 
     useEffect(() => {
         if (searchedTVseries) {
@@ -24,7 +28,34 @@ const CarouselSelection = ({ title, fetchMovies,searchedTVseries, viewAllLink })
         };
 
         fetchData(); // Fetch movies when the component mounts
-    }, [fetchMovies,searchedTVseries]);
+    }, [fetchMovies, searchedTVseries]);
+
+    useEffect(() => {
+        async function loadRatings() {
+            const ratings = {};
+            const counts = {};
+
+            for (const movie of movies) {
+                try {
+                    const reviews = await fetchReviews(movie.id, 'movie');
+                    const average =
+                        reviews.length > 0
+                            ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+                            : 0;
+                    ratings[movie.id] = average;
+                    counts[movie.id] = reviews.length;
+                } catch (error) {
+                    console.error('Error fetching reviews for movie ID:', movie.id, error);
+                }
+            }
+
+            setAverageRatings(ratings);
+            setReviewCounts(counts);
+        }
+        if (movies.length > 0) {
+            loadRatings();
+        }
+    }, [movies]);
 
     // Show first 10 movies for carousel
     const carouselMovies = movies.slice(0, 15).map((movie) => ({
@@ -32,6 +63,8 @@ const CarouselSelection = ({ title, fetchMovies,searchedTVseries, viewAllLink })
         src: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
         name: movie.name,
         release_date: movie.first_air_date,
+        averageRating: averageRatings[movie.id] || 0,
+        reviewCount: reviewCounts[movie.id] || 0,
     }));
 
     // Show all movies when "View All" button is clicked
