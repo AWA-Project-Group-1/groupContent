@@ -5,7 +5,6 @@ import Navigation from '../components/Navigation';
 import axios from 'axios';
 import styles from './ProfilePage.module.css';
 import UserContext from '../context/UserContext';
-import { id } from "../components/SignIn";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -46,32 +45,32 @@ const Profile = () => {
   }, [user]);
 
   const handleDeleteAccount = async () => {
-    if (!user?.token) return; // Only check for the token
-  
+    if (!user?.token) return;
+
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone."
+      'Are you sure you want to delete your account? This action cannot be undone.'
     );
     if (!confirmDelete) return;
-  
+
     try {
-      await axios.delete("http://localhost:3001/api/auth/delete-account", {
-        headers: { Authorization: `Bearer ${user.token}` }, // Pass only the token
+      await axios.delete('http://localhost:3001/api/auth/delete-account', {
+        headers: { Authorization: `Bearer ${user.token}` },
       });
-  
-      alert("Your account has been deleted.");
-  
+
+      alert('Your account has been deleted.');
+
       // Clear user data from context and localStorage
       setUser(null);
       localStorage.clear();
-  
+
       // Redirect to the sign-up page
-      navigate("/sign-up");
+      navigate('/sign-up');
     } catch (error) {
-      console.error("Error deleting account:", error);
-      alert("Failed to delete account. Please try again later.");
+      console.error('Error deleting account:', error);
+      alert('Failed to delete account. Please try again later.');
     }
   };
-  
+
   async function removeButtonClickHandler(movieId) {
     if (!user?.token) return;
 
@@ -93,17 +92,17 @@ const Profile = () => {
   };
 
   const shareableLink = user?.id
-  ? `${window.location.origin}/shared-favorites/${user.id}`
-  : "Loading...";
+    ? `${window.location.origin}/shared-favorites/${user.id}`
+    : 'Loading...';
 
-const copyToClipboard = () => {
-  if (!user?.id) {
-    alert("User ID not available. Please try again later.");
-    return;
-  }
-  navigator.clipboard.writeText(shareableLink);
-  alert('Sharable link copied to clipboard!');
-};
+  const copyToClipboard = () => {
+    if (!user?.id) {
+      alert('User ID not available. Please try again later.');
+      return;
+    }
+    navigator.clipboard.writeText(shareableLink);
+    alert('Sharable link copied to clipboard!');
+  };
 
   return (
     <div>
