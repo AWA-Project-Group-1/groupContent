@@ -1,22 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styles from './SharedFavoritesPage.module.css';
+import logo from '../assets/images/movieapplogo.jpg';
 
-const ITEMS_PER_PAGE = 10; // Number of items per page
-
-
+const ITEMS_PER_PAGE = 10;
 
 const SharedFavoritesPage = () => {
-  const { userId } = useParams(); // Get userId from the URL params
+  const { userId } = useParams();
   const [favorites, setFavorites] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
+  const [email, setEmail] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
+    async function fetchUserEmail() {
+      try {
+        const response = await fetch(`http://localhost:3001/api/favorites/user-email/${userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user email');
+        }
+        const data = await response.json();
+        setEmail(data.email);
+      } catch (error) {
+        console.error('Error fetching user email:', error);
+      }
+    }
+
     async function fetchSharedFavorites() {
       try {
         const response = await fetch(
-          `http://localhost:3001/api/favorites/shared-favorites/${userId}` // Use userId from the URL to fetch favorites
+          `http://localhost:3001/api/favorites/shared-favorites/${userId}`
         );
         const data = await response.json();
 
@@ -33,16 +46,16 @@ const SharedFavoritesPage = () => {
           })
         );
 
-        setFavorites(itemDetails); // Update state with the details
+        setFavorites(itemDetails);
       } catch (error) {
         console.error('Error fetching shared favorites:', error);
       }
     }
 
+    fetchUserEmail();
     fetchSharedFavorites();
   }, [userId]);
 
-  // Pagination logic remains unchanged
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const visibleFavorites = favorites.slice(startIndex, endIndex);
@@ -62,7 +75,8 @@ const SharedFavoritesPage = () => {
 
   return (
     <div className={styles.sharedFavoritesContainer}>
-      <h1 className={styles.title}>Shared Favorites of User {userId}</h1>
+      <img src={logo} alt="Logo" className={styles.logo} />
+      <h1 className={styles.title}>Shared Favorites of {email}</h1>
       {visibleFavorites.length > 0 ? (
         <div className={styles.favoritesGrid}>
           {visibleFavorites.map((item) => (
