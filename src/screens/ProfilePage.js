@@ -2,8 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchFavorites, removeFromFavorites } from '../api/favoriteapi';
 import Navigation from '../components/Navigation';
+import axios from 'axios';
 import styles from './ProfilePage.module.css';
 import UserContext from '../context/UserContext';
+import { id } from "../components/SignIn";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -11,7 +13,7 @@ const Profile = () => {
   const [favorites, setFavorites] = useState([]);
   const [favoriteDetails, setFavoriteDetails] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const { user } = useContext(UserContext); // Access the logged-in user's token and email
+  const { user, setUser } = useContext(UserContext); // Access the logged-in user's token and email
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,8 +44,34 @@ const Profile = () => {
     }
     getFavorites();
   }, [user]);
-  
 
+  const handleDeleteAccount = async () => {
+    if (!user?.token) return; // Only check for the token
+  
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+    if (!confirmDelete) return;
+  
+    try {
+      await axios.delete("http://localhost:3001/api/auth/delete-account", {
+        headers: { Authorization: `Bearer ${user.token}` }, // Pass only the token
+      });
+  
+      alert("Your account has been deleted.");
+  
+      // Clear user data from context and localStorage
+      setUser(null);
+      localStorage.clear();
+  
+      // Redirect to the sign-up page
+      navigate("/sign-up");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      alert("Failed to delete account. Please try again later.");
+    }
+  };
+  
   async function removeButtonClickHandler(movieId) {
     if (!user?.token) return;
 
@@ -64,12 +92,18 @@ const Profile = () => {
     setCurrentPage(pageNumber);
   };
 
-  const shareableLink = `${window.location.origin}/shared-favorites/${user.userId}`; // Use the logged-in user's ID
+  const shareableLink = user?.id
+  ? `${window.location.origin}/shared-favorites/${user.id}`
+  : "Loading...";
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(shareableLink);
-    alert('Sharable link copied to clipboard!');
-  };
+const copyToClipboard = () => {
+  if (!user?.id) {
+    alert("User ID not available. Please try again later.");
+    return;
+  }
+  navigator.clipboard.writeText(shareableLink);
+  alert('Sharable link copied to clipboard!');
+};
 
   return (
     <div>
@@ -86,6 +120,11 @@ const Profile = () => {
         <div className={styles.shareableLinkContainer}>
           <button onClick={copyToClipboard} className={styles.copyButton}>
             Copy Link to share favorites
+          </button>
+        </div>
+        <div className={styles.deleteAccountContainer}>
+          <button onClick={handleDeleteAccount} className={styles.deleteAccountButton}>
+            Delete My Account
           </button>
         </div>
       </div>

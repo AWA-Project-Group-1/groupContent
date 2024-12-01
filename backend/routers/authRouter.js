@@ -53,11 +53,20 @@ router.post("/signin", async (req, res) => {
 });
 
 // delete account
+
 router.delete("/delete-account", async (req, res) => {
-  const { userId } = req.body;
+  const token = req.headers.authorization?.split(" ")[1]; // Extract the token
+  if (!token) {
+    return res.status(401).json({ error: "Authorization token required" });
+  }
 
   try {
-    await pool.query("DELETE FROM users WHERE id = $1", [userId]);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Decode the token
+    const userId = decoded.userId; // Extract userId from token payload
+
+    await pool.query("DELETE FROM favorites WHERE users_id = $1", [userId]); // delete favorites first
+
+    await pool.query("DELETE FROM users WHERE id = $1", [userId]); // Use the extracted userId
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {
     console.error("Error deleting account:", error);
