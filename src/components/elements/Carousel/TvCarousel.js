@@ -37,11 +37,11 @@ const CarouselSlide = ({ src, name, tvId, release_date, averageRating, reviewCou
                 <div className="carousel-card">
                     <Photo src={src} alt={name} />
                     <h3 className="carousel-title">{name}</h3>
-                    <p className="carousel-release-date">{formattedReleaseDate}</p>
                     <div className="carousel-rating">
                         {renderStars(averageRating)} {/* Display stars here */}
                         <span className="carousel-review-count">({reviewCount})</span> {/* Display review count inside parentheses */}
                     </div>
+                    <p className="carousel-release-date">{formattedReleaseDate}</p>
                 </div>
             </Link>
         </BearSlideCard>
