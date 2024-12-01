@@ -45,7 +45,7 @@
 
 /* HeroSection.module.css */
 .hero-section {
-  background: url('../assets/images/Houseofdragon.jpg') center/cover no-repeat;
+  background:  center/cover no-repeat;
   color: white;
   min-height: 70vh;
   display: flex;
