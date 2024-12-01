@@ -107,6 +107,13 @@ h5{
   flex:1;
 
 }
+
+.button-click {
+  font-size: 0.8rem;
+  background-color: white!important;
+  color: black;
+
+}
 /* .button-click:hover {
  
 } */
@@ -197,6 +204,9 @@ h5{
   } */
   .button-click {
     font-size: 0.8rem;
+    background-color: white;
+    color: black;
+
   }
     /* padding: 7px 8px; */
 
@@ -258,6 +268,12 @@ h5{
   .button-click {
     font-size: 0.9rem;
     padding: 7px 8px;
+
+
+    background-color: white;
+    color: black;
+
+    
   }
 
 

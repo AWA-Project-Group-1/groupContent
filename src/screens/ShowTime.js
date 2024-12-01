@@ -8,7 +8,7 @@ import axios from 'axios';
 const ShowTime = () => {
     const [showTime, setShowTime] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; 
+    const itemsPerPage = 4; 
 
     const url = `https://www.finnkino.fi/xml/Schedule/`
     useEffect(() => {    
@@ -201,142 +201,190 @@ const ShowTime = () => {
             setError('Please select a movie, area, and date.');
         }
     };
-
-
+// for put all the time slots for one movie
+    const groupedMovies = currentMovies.reduce((acc, movie) => {
+        const { title, image, showStart, showEnd, showUrl } = movie;
+      
+        if (!acc[title]) {
+          acc[title] = {
+            image,
+            title,
+            showtimes: [],
+          };
+        }
+      
+        acc[title].showtimes.push({ showStart, showEnd, showUrl });
+      
+        return acc;
+      }, {});
 
     return (
         <div className={styles["all-container"]}>
-            <div className={styles["navigation-hero-container"]} >
-                <Navigation />
-                <HeroSection  type="movie"/>
-            </div>
+                <div className={styles["navigation-hero-container"]} >
+                    <Navigation />
+                    <HeroSection  type="movie"/>
+                </div>
             
 
-            <>
+                <div className={styles["filter-container"]} >
 
-                {/* Theatre area selection */}
-            <label htmlFor="area">Select a Theatre Area: </label>
-            <select id="area" value={area} onChange={(e) => setArea(e.target.value)}>
-                {theatreAreas.map((areaOption) => (
-                    <option key={areaOption.id} value={areaOption.id}>
-                        {areaOption.name}
-                    </option>
-                ))}
-            </select>
+                    {/* Theatre area selection */}
+                    <div  className={styles["theater-container"]}>
 
-            {/* Movie selection */}
-            <label htmlFor="movie">Select a Movie: </label>
-            <select id="movie" value={movie} onChange={(e) => setMovie(e.target.value)} disabled={area === '1029'}>
-                <option value="">Select a movie</option>
-                {movies.map((movie, index) => (
-                    <option key={index} value={movie}>{movie}</option>
-                ))}
-            </select>
+                        <label htmlFor="area" className={styles["searched-text"]}>Select a Place: </label>
+                        <select id="area" value={area} onChange={(e) => setArea(e.target.value)}>
+                            {theatreAreas.map((areaOption) => (
+                                <option key={areaOption.id} value={areaOption.id}>
+                                    {areaOption.name}
+                                </option>
+                            ))}
+                        </select>
 
-            {/* Date selection dropdown */}
-            <label htmlFor="date">Select a Date: </label>
-            <select
-                id="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                disabled={area === '1029' || !movie}
-            >
-                <option value="">Select a date</option>
-                {generateNext7Days().map((dateOption) => (
-                    <option key={dateOption.value} value={dateOption.value}>
-                        {dateOption.label}
-                    </option>
-                ))}
-            </select>
+                    </div>
+                    <div  className={styles["movie-container"]}>
+                        {/* Movie selection */}
+                        <label htmlFor="movie">Select a Movie: </label>
+                        <select id="movie" value={movie} onChange={(e) => setMovie(e.target.value)} disabled={area === '1029'}>
+                            <option value="">Select a movie</option>
+                            {movies.map((movie, index) => (
+                                <option key={index} value={movie}>{movie}</option>
+                            ))}
+                        </select>
 
-            <button onClick={handleSubmit} disabled={loading || area === '1029' || !movie || !selectedDate}>
-                Fetch Showtimes
-            </button>
 
-            {/* Showtimes or loading/error message */}
-            {loading && <p>Loading...</p>}
-            {error && <p>{error}</p>}
+                    </div>
 
-            <div>
-                <h2>Searched Results:</h2>
-               
-                    {<div>
-                            <div>
+                    
+                    <div  className={styles["date-container"]}>
+                             {/* Date selection dropdown */}
+                        <label htmlFor="date">Select a Date: </label>
+                        <select
+                            id="date"
+                            value={selectedDate}
+                            onChange={(e) => setSelectedDate(e.target.value)}
+                            disabled={area === '1029' || !movie}
+                        >
+                            <option value="">Select a date</option>
+                            {generateNext7Days().map((dateOption) => (
+                                <option key={dateOption.value} value={dateOption.value}>
+                                    {dateOption.label}
+                                </option>
+                            ))}
+                    </select>
 
-                            <img src={showtimes[0]?.image} alt={showtimes[0]?.title} />
 
-                            </div>
-                            <div>
+                    </div>
+                   
+                    <div  className={styles["fetch-showtime-container"]}>       
+                        <button onClick={handleSubmit} disabled={loading || area === '1029' || !movie || !selectedDate}>
+                            Fetch Showtimes
+                        </button>
+                    </div>
+                    
 
-                            {showtimes.map((showtime, index) => (                                
-
-                                    <li key={index}>{showtime.title} - {showtime.time}</li>
-
-                                    ))}
-                               
-                            </div>                            
-                           
-                        </div>
-                        
-                   }
                 
-            </div>
-       
-            
-        </>
-            {/* <div>
-                { showTime.map(
-                    (item)  => (
-                        <div>
-                            <img src={item.image} alt="" />
-                            <h2>{item.title}</h2>
-                            <p>ShowTime: {item.showStart}-{item.showEnd} </p>
-                            <p>Bye Ticket: {item.showUrl}</p>
-                            
+                </div>
 
+                         {/* Showtimes or loading/error message */}
+                         {loading && <p>Loading...</p>}
+                    {error && <p>{error}</p>}
+
+          
+                   
+
+            {/* <div className={styles["searched-results-container"]}> */}
+                
+                
+                {showtimes.length > 0 && (
+                     <div className={styles["searched-container"]}>
+                    {/* <div> */}
+                            <div className={styles["searched-text"]}> <h2>Searched Results:</h2></div>
+                            <div className={styles["searched-show-container"]}>
+                            <div className={styles["searched-movie-card"]}>
+                                <div className={styles["show-left"]}  >
+                                    <div className={styles["image-container"]}>                                    
+                                    <img className={styles["show-image"]} src={showtimes[0]?.image} alt={showtimes[0]?.title} />
+                                    </div>  
+                                </div>
+                            {/* Displaying movie title and showtimes */}
+                                <div className={styles["show-right"]} >
+                                    <h2  >Movie Title:</h2>
+                                    <h5>{showtimes[0]?.title}</h5>
+                                    <h2 className={styles["showtime-container"]}>Show Times:</h2>
+
+                                    {/* Mapping over showtimes and displaying each time */}
+                                    <ul>
+                                        {showtimes.map((showtime, index) => (
+                                            <li key={index}>
+                                                {showtime.title} - {showtime.time}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                            </div>                       
                         </div>
-                        
-                    )                    
-                )}
-            </div> */}
+            )}
+
+       
+
+
+
+         
+                
+     
 
             <div className={styles["OuluMovie-container"]}>
                 <div className={styles["OuluMovie-text"]}><h2>Today's Show In Oulu</h2></div>
 
                 <div className={styles["show-container"]}>
-                    {currentMovies.map((item, index) => (
-                    <div key={index} className={styles["show-time-container"]}>
+                    {Object.values(groupedMovies).map((item, index) => (
+                    // {currentMovies.map((item, index) => (
+                     <div key={index} className={styles["movie-card"]}>
                         
-                        <div className="show-left">
+                        <div className={styles["show-left"]} >
                             {/* <span className={styles["status-badge"]} >{new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}</span>
                             
                             <img src={item.image} alt={item.title} className={styles["show-image"]} /> */}
-                        <div className={styles["image-container"]}>
+                            <div className={styles["image-container"]}>
                                 <span  className={styles["status-badge"]} >
                                     {new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}
                                 </span>
                                 <img src={item.image} alt={item.title} className={styles["show-image"]}/>
-                            </div>
                         </div>
+                        </div>
+                        {/* </div> */}
+
                         <div className={styles["show-right"]}  >
-                            <h3>Movie Title:</h3>
+                            <h2>Movie Title:</h2>
                             <h5>{item.title}</h5>
-                            <h3> Show Time: </h3>
-                            <h5> {item.showStart} - {item.showEnd} </h5>
-                            <h5>
+                            <h2> Show Time: </h2>
+                            {/* <h5> {item.showStart} - {item.showEnd} </h5> */}
+                            {/* <h5> */}
                             
 
-                                <Link to={item.showUrl} className={styles["buy-ticket-button"]}>Buy Ticket</Link>
+                                {/* <Link to={item.showUrl} className={styles["buy-ticket-button"]}>Buy Ticket</Link> */}
 
                                 {/* <a href={item.showUrl} target="_blank" rel="noopener noreferrer" className="buy-ticket-button">
                                     Buy Ticket
                                 </a> */}
-                            </h5>
+                            {/* </h5> */}
+
+                            <ul>
+                                {item.showtimes.map((showtime, idx) => (
+                                    <li key={idx}>
+                                    {showtime.showStart} - {showtime.showEnd} &nbsp;
+                                    <Link to={showtime.showUrl} className={styles["buy-ticket-button"]}>
+                                        Buy Ticket
+                                    </Link>
+                                    </li>
+                                ))}
+                                </ul>
                         </div>
 
-                        <div className={styles["show-rightmost"]}>
+                        {/* <div className={styles["show-rightmost"]}>
 
-                        </div>
+                        </div> */}
                     </div>
                     ))}
                 </div>
@@ -350,7 +398,7 @@ const ShowTime = () => {
 
             </div>
             
-        <Footer />
+        {/* <Footer /> */}
         </div>
     )
 }

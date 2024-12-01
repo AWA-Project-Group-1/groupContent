@@ -100,7 +100,17 @@ const TVCards = ({ movieCards }) => {
         .catch((error) => console.error('Error adding TV show to favorites:', error));
     }
   }
+  function nextPage() {
+    if (currentMovies.length === itemsPerPage) {
+      setCurrentPage(currentPage + 1);
+    }
+  }
 
+  function prevPage() {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }
   const renderStars = (average) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -179,9 +189,9 @@ const TVCards = ({ movieCards }) => {
         ))}
       </div>
       <div className={styles['pagination-controls']}>
-        <button onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}>Previous</button>
+        <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
         <span>Page {currentPage}</span>
-        <button onClick={() => setCurrentPage((page) => page + 1)}>Next</button>
+        <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
       </div>
     </div>
   );

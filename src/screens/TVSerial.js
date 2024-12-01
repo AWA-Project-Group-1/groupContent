@@ -76,18 +76,17 @@ const TVSerial = () => {
     return (
         <div className={styles['nav-herosection-moviescard']}>
             {/* <div className={styles['nav-herosection']}> */}
-            <div className={`${styles['nav-herosection']} flex flex-col md:flex-row`}>
-                <Navigation />
-                {/* <hr /> */}
+            <div className={`${styles['nav-herosection']}`}>
+                <Navigation />               
                 <HeroSection type="tvserial"  />
-                {/* <MovieCarosel images={filteredMovies}/> */}
+           
             </div>
             {/* <div className={styles['allfilter-container']}> */}
             {/* <div className={`${styles['allfilter-container']} flex flex-col md:flex-row justify-between gap-4`}> */}
-            <div className={`${styles['allfilter-container']} flex flex-col md:flex-row justify-between gap-1 items-left md:items-start`}>
+            <div className={styles['allfilter-container']}>            
 
                 <div className={styles['genre-filter-container']}>
-                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Filter by Genre : </label>
+                    <label >Filter by Genre : </label>
                     <select value={selectGenre} onChange={handleGenreChange}>
                         <option value="">All</option>
                         {TVGenreData.length > 0 ? (
@@ -99,39 +98,37 @@ const TVSerial = () => {
                         ) : (
                             <option value="" disabled>Loading genres...</option>
                         )}
-                    </select>                    
-                    
+                    </select>                        
                 </div>
 
 
                 <div className={styles['year-filter-container']}>
-                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Filter by Year : </label>
+                    <label >Filter by Year : </label>
+                
                     <DatePicker
                             selected={selectYear}
                             onChange={ yearChangeHandler }
                             showYearPicker
                             dateFormat="yyyy"
+                            className={styles["custom-datepicker"]}
                         />
                         {/* <p>Selected Year: {selectYear.getFullYear()}</p> */}
 
+
+             
+                
                 </div>
 
-                {/* <div className={styles['popularity-filter-container']}>
-                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Filter by Popularity : </label>
-                    <select value={selectPopularity} onChange={handlePopularityChange}>
-                        <option value="">All</option>
-                        <option value="1000">Popular (&gt;1000)</option>
-                        <option value="5000">Very Popular (&gt;5000)</option>
-                        <option value="10000">Most Popular (&gt;10000)</option>
-                    </select>
-                </div> */}
+
+                
+
                 <div  className={styles['search-container']}>
-                    <label className="text-xs sm:text-base md:text-lg lg:text-xl xl:text-2xl mb-3">Search :  </label>
+                    <label >Search:  </label>
                     <input
                         type="text"
                         value={searchQuery}
                         onChange={handleSearchQueryChange}
-                        placeholder="Search by TV Serial title"
+                        placeholder="  Search by TV Serial title"
                     />
                 </div>
 
