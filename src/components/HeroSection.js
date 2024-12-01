@@ -63,9 +63,9 @@ const HeroSection = ({type}) => {
     }}
   >
       <div className={styles['hero-content']}>
-        <h1>Discover Your {type}</h1>
+        <h1>Discover Your {type.charAt(0).toUpperCase() + type.slice(1)}</h1>
         <h4>Explore the top-rated and latest {type} shows!</h4>
-        <Link className="btn btn-primary mx-2">See More</Link>
+        {/* <Link className="btn btn-primary mx-2">See More</Link> */}
         
       </div>
     </div>
