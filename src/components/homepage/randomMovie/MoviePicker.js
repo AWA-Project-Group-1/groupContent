@@ -37,7 +37,7 @@ const MoviePicker = () => {
     };
 
     return (
-        <div className={styles.moviePickerContainer}>
+        <div className={styles.moviePickerContainer} >
             <h2 className={styles.randomTitle}>Need a Movie? We've Got You Covered!</h2>
             <p className={styles.description}>
                 Feeling overwhelmed by the endless options? Let us help you pick

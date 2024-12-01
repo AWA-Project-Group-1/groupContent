@@ -67,6 +67,33 @@ router.get('/user/:contentType/:movieId', authenticate, (req, res) => {
     });
 });
 
+router.get('/user', authenticate, (req, res) => {
+    const { contentType } = req.query; // Extract 'movie' or 'tv' from query params
+    const userId = req.userId;  // Assuming you have userId from authentication
+
+    // Validate the contentType
+    if (contentType !== 'movie' && contentType !== 'tv') {
+        return res.status(400).json({ error: "Invalid content type. It must be 'movie' or 'tv'" });
+    }
+
+    const query = `SELECT DISTINCT movies_id FROM reviews WHERE users_id = $1 AND type = $2;`;
+
+    pool.query(query, [userId, contentType], (error, result) => {
+        if (error) {
+            return res.status(500).json({ error: error.message });
+        }
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: 'No reviews found for this user and content type' });
+        }
+
+        return res.status(200).json({ movieIds: result.rows.map(row => row.movies_id) });
+    });
+});
+
+
+
+
 // POST request to add a new review
 router.post('/', authenticate, (req, res) => {
     const { movieId, rating, comment, type } = req.body;
@@ -162,5 +189,27 @@ router.delete('/:reviewId', authenticate, (req, res) => {
         });
     });
 });
+
+// Backend API to get reviewed movies for the logged-in user
+export async function fetchReviewedMovies() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.error('User is not logged in. No token found.');
+        throw new Error('User not logged in.');
+    }
+
+    try {
+        const response = await axios.get(`${baseUrlforReviews}/user/reviews`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return response.data; // Return the list of reviewed movie IDs
+    } catch (error) {
+        console.error('Error fetching reviewed movies:', error);
+        throw new Error('Failed to fetch reviewed movies');
+    }
+}
+
 
 export default router;

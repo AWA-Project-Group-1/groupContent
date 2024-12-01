@@ -11,7 +11,7 @@ import { fetchReviews, submitReview, deleteReview, fetchUserReview } from '../ap
 import SubmitReview from '../components/reviews/SubmitReview'
 import ReviewList from '../components/reviews/ReviewList';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const TVDetail = () => {
     const { id } = useParams();  // Get the movieId from the URL
@@ -22,6 +22,7 @@ const TVDetail = () => {
     const [userReview, setUserReview] = useState(null);
     const [previousReviews, setPreviousReviews] = useState([]); // State to track previous reviews data
     const [successMessage, setSuccessMessage] = useState(""); // state for success message
+    const location = useLocation();
 
     const apiKey = '814d8d230ad1294ccbdbb69cccb0bc29';  // API key
     const authorization = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MTRkOGQyMzBhZDEyOTRjY2JkYmI2OWNjY2IwYmMyOSIsIm5iZiI6MTczMTQwMTUxNC4zNzIzMjk1LCJzdWIiOiI2NzMzMTViNjI5YWE4ZmYyNDRjMGUzODEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.0qof6UxtmX1ZydXb7hPBwnROQT3zdyKAbEXhXQ0OO4A';
@@ -49,6 +50,23 @@ const TVDetail = () => {
                 console.error('Error fetching movie details:', err); // Handle errors
             });
     }, [id]);
+
+    useEffect(() => {
+        // Extract the hash from the URL
+        const hash = location.hash;
+
+        if (hash) {
+            const scrollToSection = () => {
+                const element = document.getElementById(hash.substring(1)); // Remove '#' to get the ID
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            };
+
+            // Ensure the DOM is fully loaded before scrolling
+            setTimeout(scrollToSection, 300); // Delay allows the page to load fully
+        }
+    }, [location]);
 
     useEffect(() => {
         const options = {
@@ -295,7 +313,7 @@ const TVDetail = () => {
             </div>
 
             {/* Review Submission Form (conditionally rendered if logged in) */}
-            <div className="container center mt-4" >
+            <div className="container center mt-4" id="reviews" >
 
                 <h2 style={{ marginLeft: "20px", marginTop: '60px' }}>Leave a Review</h2>
                 <div className="my-3 p-3 border rounded mx-auto" style={{ maxWidth: '1440px' }}>

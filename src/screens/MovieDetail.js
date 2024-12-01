@@ -10,10 +10,11 @@ import movieapplogo1 from "../assets/images/movieapplogo1.jpg"
 import { fetchReviews, submitReview, deleteReview, fetchUserReview } from '../api/reviews.js'
 import SubmitReview from '../components/reviews/SubmitReview'
 import ReviewList from '../components/reviews/ReviewList';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const MovieDetail = () => {
     const { id } = useParams();
+    const location = useLocation();
     const [movieDetail, setMovieDetail] = useState(null);
     const [tvSerialCredit, setTvSerialCredit] = useState(null);
     const [reviews, setReviews] = useState([]);
@@ -48,6 +49,23 @@ const MovieDetail = () => {
                 console.error('Error fetching movie details:', err); // Handle errors
             });
     }, [id]);
+
+    useEffect(() => {
+        // Extract the hash from the URL
+        const hash = location.hash;
+
+        if (hash) {
+            const scrollToSection = () => {
+                const element = document.getElementById(hash.substring(1)); // Remove '#' to get the ID
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            };
+
+            // Ensure the DOM is fully loaded before scrolling
+            setTimeout(scrollToSection, 300); // Delay allows the page to load fully
+        }
+    }, [location]);
 
     useEffect(() => {
         const options = {
@@ -292,7 +310,7 @@ const MovieDetail = () => {
             </div>
 
             {/* Review Submission Form (conditionally rendered if logged in) */}
-            <div className="container center mt-4">
+            <div className="container center mt-4" id="reviews">
                 <hr></hr>
                 <h2 style={{ marginLeft: "20px", marginTop: '60px' }}>Leave a Review</h2>
                 <div className="my-3 p-3 border rounded mx-auto" style={{ maxWidth: '1440px' }}>

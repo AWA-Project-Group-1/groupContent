@@ -4,7 +4,7 @@ import styles from "./MovieCards.module.css";
 import { MovieGenreContext } from "../context/MovieGenreProvider";
 import { addToFavorites, removeFromFavorites, fetchFavorites } from '../api/favoriteapi';
 import UserContext from '../context/UserContext';
-import { fetchReviews } from "../api/reviews";
+import { fetchReviews, fetchReviewedContent } from "../api/reviews";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const MovieCards = ({ movieCards }) => {
@@ -19,6 +19,7 @@ const MovieCards = ({ movieCards }) => {
   const genreList = useContext(MovieGenreContext);
   const [averageRatings, setAverageRatings] = useState({}); // Store average ratings
   const [reviewCounts, setReviewCounts] = useState({}); // Store number of reviews
+  const [reviewedContent, setReviewedContent] = useState([]);
 
   useEffect(() => {
     async function loadFavorites() {
@@ -57,6 +58,18 @@ const MovieCards = ({ movieCards }) => {
     loadRatings();
   }, [movieCards]);
 
+  // Fetch the reviewed content for the user
+  useEffect(() => {
+    async function loadReviewedContentData() {
+      if (user?.token) {
+        const contentType = 'movie';  // Set 'movie' or 'tv' dynamically based on context
+        const reviewedIds = await fetchReviewedContent(user.token, contentType);
+        setReviewedContent(reviewedIds);
+      }
+    }
+    loadReviewedContentData();
+  }, [user]);
+
   const filteredMovies = genreName
     ? movieCards.filter((movie) => {
       const movieGenreNames = movie.genre_ids.map(
@@ -71,6 +84,10 @@ const MovieCards = ({ movieCards }) => {
 
   function productClickHandler(movieId) {
     navigate(`/detail/movie/${movieId}`);
+  }
+
+  function reviewsClickHandler(movieId) {
+    navigate(`/detail/movie/${movieId}#reviews`);
   }
 
   function toggleFavoriteHandler(event, movieId) {
@@ -132,7 +149,6 @@ const MovieCards = ({ movieCards }) => {
             </div>
             <div className={styles['text-container']}>
               <h5>{item.title.length > 17 ? `${item.title.slice(0, 17)}...` : item.title}</h5>
-              <p>{item.release_date}</p>
               {/* Render average rating as stars and review count */}
               <div className={styles['rating-container']}>
                 {renderStars(averageRatings[item.id] || 0)}
@@ -140,12 +156,25 @@ const MovieCards = ({ movieCards }) => {
                   ({reviewCounts[item.id] || 0}){/* Display number of reviews */}
                 </span>
               </div>
+              <p>{item.release_date}</p>
               <div className={styles['button-container']}>
-                {/* Review Button */}{/* */}
-                <div className={styles['review-button-container']}>
-                  <button className={styles['button-click']}>
-                    ✍️ Give <br /> Review
-                  </button>
+                {/* Review Button */}
+                <div
+                  className={styles['review-button-container']}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Ensure this click doesn’t trigger parent div
+                    reviewsClickHandler(item.id);
+                  }}
+                >
+                  {reviewedContent.includes(item.id) ? (
+                    <button className={styles['button-click']}>
+                      ✍️ Review  <br />  already provided
+                    </button>
+                  ) : (
+                    <button className={styles['button-click']}>
+                      ✍️ Give <br /> Review
+                    </button>
+                  )}
                 </div>
                 <div className={styles['addfavourites-button-container']}>
                   <button

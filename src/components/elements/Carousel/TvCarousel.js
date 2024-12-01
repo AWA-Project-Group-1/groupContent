@@ -15,8 +15,7 @@ const Photo = ({ src, alt }) => (
 
 const CarouselSlide = ({ src, name, tvId, release_date, averageRating, reviewCount }) => {
     const releaseDate = new Date(release_date);
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const formattedReleaseDate = `${months[releaseDate.getMonth()]} ${releaseDate.getDate()}, ${releaseDate.getFullYear()}`;
+    const formattedReleaseDate = releaseDate.toISOString().split('T')[0];
 
     const renderStars = (average) => {
         const stars = [];

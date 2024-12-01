@@ -51,6 +51,29 @@ export async function fetchUserReview(contentType, movieId) {
     }
 }
 
+// Function to fetch reviewed content for the user
+export const fetchReviewedContent = async (userToken, contentType) => {
+    try {
+        const response = await fetch(`${baseUrlforReviews}/user?contentType=${contentType}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${userToken}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch reviewed content');
+        }
+
+        const data = await response.json();
+        return data.movieIds; // or tvIds if contentType is 'tv'
+    } catch (error) {
+        console.error('Error fetching reviewed content:', error);
+        return [];
+    }
+};
+
+
 
 export const submitReview = async (movieId, { rating, comment, type }) => {
     const token = localStorage.getItem("token");

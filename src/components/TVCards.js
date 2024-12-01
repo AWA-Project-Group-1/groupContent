@@ -6,7 +6,7 @@ import styles from './MovieCards.module.css';
 import { TVGenreContext } from '../context/TVGenreProvider';
 import UserContext from '../context/UserContext';
 
-import { fetchReviews } from "../api/reviews";
+import { fetchReviews, fetchReviewedContent } from "../api/reviews";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const TVCards = ({ movieCards }) => {
@@ -23,6 +23,7 @@ const TVCards = ({ movieCards }) => {
 
   const [averageRatings, setAverageRatings] = useState({}); // Store average ratings
   const [reviewCounts, setReviewCounts] = useState({}); // Store number of reviews
+  const [reviewedContent, setReviewedContent] = useState([]);
 
   useEffect(() => {
     async function loadFavorites() {
@@ -61,6 +62,17 @@ const TVCards = ({ movieCards }) => {
     loadRatings();
   }, [movieCards]);
 
+  // Fetch the reviewed content for the user
+  useEffect(() => {
+    async function loadReviewedContentData() {
+      if (user?.token) {
+        const contentType = 'tv';  // Set 'movie' or 'tv' dynamically based on context
+        const reviewedIds = await fetchReviewedContent(user.token, contentType);
+        setReviewedContent(reviewedIds);
+      }
+    }
+    loadReviewedContentData();
+  }, [user]);
 
   const filteredMovies = genreName
     ? movieCards.filter((movie) => {
@@ -103,6 +115,10 @@ const TVCards = ({ movieCards }) => {
     return stars;
   };
 
+  function reviewsClickHandler(movieId) {
+    navigate(`/detail/tv/${movieId}#reviews`);
+  }
+
   return (
     <div>
       <div className={styles['productcards_container']}>
@@ -131,10 +147,22 @@ const TVCards = ({ movieCards }) => {
               </div>
               <div className={styles['button-container']}>
                 {/* Review Button */}
-                <div className={styles['review-button-container']}>
-                  <button className={styles['button-click']}>
-                    ✍️ Give <br /> Review
-                  </button>
+                <div
+                  className={styles['review-button-container']}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Ensure this click doesn’t trigger parent div
+                    reviewsClickHandler(item.id);
+                  }}
+                >
+                  {reviewedContent.includes(item.id) ? (
+                    <button className={styles['button-click']}>
+                      ✍️ Review  <br />  already provided
+                    </button>
+                  ) : (
+                    <button className={styles['button-click']}>
+                      ✍️ Give <br /> Review
+                    </button>
+                  )}
                 </div>
 
                 <div className={styles['addfavourites-button-container']}>
