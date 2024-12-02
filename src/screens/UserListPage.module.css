@@ -1,0 +1,38 @@
+.userListPage {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .userListContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .userCard {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+  }
+  
+  .userCard h3 {
+    margin-bottom: 15px;
+  }
+  
+  .sharedLinkButton {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .sharedLinkButton:hover {
+    background-color: #218838;
+  }

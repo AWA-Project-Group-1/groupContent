@@ -75,4 +75,15 @@ router.delete("/delete-account", async (req, res) => {
   }
 });
 
+// Get a list of all users (for admin-like functionality)
+router.get('/users', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, email FROM users');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
 export default router;

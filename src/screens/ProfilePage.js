@@ -138,6 +138,11 @@ const Profile = () => {
             Delete My Account
           </button>
         </div>
+        <div className={styles.userListButtonContainer}>
+            <button onClick={() => navigate('/user-list')} className={styles.userListButton}>
+            View All Users
+          </button>
+</div>
       </div>
       <div className={styles.favoritesContainer}>
         <h2 className={styles.favoritesHeading}>Your Favorites</h2>
