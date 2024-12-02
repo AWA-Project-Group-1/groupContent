@@ -83,7 +83,7 @@ export const submitReview = async (movieId, { rating, comment, type }) => {
 
     try {
         const response = await axios.post(
-            'http://localhost:3001/api/reviews',
+            `${baseUrlforReviews}`,
             { movieId, rating, comment, type },
             { headers: { Authorization: `Bearer ${token}` } }
         );
