@@ -37,7 +37,7 @@ const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }
 
             for (const movie of movies) {
                 try {
-                    const reviews = await fetchReviews(movie.id, 'movie');
+                    const reviews = await fetchReviews(movie.id, 'tv');
                     const average =
                         reviews.length > 0
                             ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
@@ -73,6 +73,8 @@ const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }
         src: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
         name: movie.name,
         release_date: movie.first_air_date,
+        averageRating: averageRatings[movie.id] || 0,
+        reviewCount: reviewCounts[movie.id] || 0,
     }));
 
     return (

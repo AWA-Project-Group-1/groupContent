@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import BearCarousel, { BearSlideCard } from 'bear-react-carousel';
 import 'bear-react-carousel/dist/index.css';  // Importing the carousel's default styles
 import './carouselStyles.css'; // Import custom CSS file for additional styles
+import { AverageStars } from '../Stars/AverageStars';
 
 // Photo component to display images
 const Photo = ({ src, alt }) => (
@@ -17,19 +18,6 @@ const CarouselSlide = ({ src, title, movieId, release_date, averageRating, revie
     const releaseDate = new Date(release_date);
     const formattedReleaseDate = releaseDate.toISOString().split('T')[0];
 
-    const renderStars = (average) => {
-        const stars = [];
-        for (let i = 1; i <= 5; i++) {
-            if (average >= i) {
-                stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>); // Filled star
-            } else if (average >= i - 0.5) {
-                stars.push(<i key={i} className="bi bi-star-half text-warning"></i>); // Half-filled star
-            } else {
-                stars.push(<i key={i} className="bi bi-star text-warning"></i>); // Empty star
-            }
-        }
-        return stars;
-    };
 
     return (
         <BearSlideCard>
@@ -38,8 +26,7 @@ const CarouselSlide = ({ src, title, movieId, release_date, averageRating, revie
                     <Photo src={src} alt={title} />
                     <h3 className="carousel-title">{title}</h3>
                     <div className="carousel-rating">
-                        {renderStars(averageRating)} {/* Display stars here */}
-                        <span className="carousel-review-count">({reviewCount})</span> {/* Display review count inside parentheses */}
+                        <AverageStars value={averageRating} reviewCount={reviewCount} showBrackets={true} />
                     </div>
                     <p className="carousel-release-date">{formattedReleaseDate}</p>
                 </div>

@@ -8,6 +8,7 @@ import UserContext from '../context/UserContext';
 
 import { fetchReviews, fetchReviewedContent } from "../api/reviews";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { AverageStars } from './elements/Stars/AverageStars';
 
 const TVCards = ({ movieCards }) => {
   const navigate = useNavigate();
@@ -111,19 +112,6 @@ const TVCards = ({ movieCards }) => {
       setCurrentPage(currentPage - 1);
     }
   }
-  const renderStars = (average) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (average >= i) {
-        stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>); // Filled star
-      } else if (average >= i - 0.5) {
-        stars.push(<i key={i} className="bi bi-star-half text-warning"></i>); // Half-filled star
-      } else {
-        stars.push(<i key={i} className="bi bi-star text-warning"></i>); // Empty star
-      }
-    }
-    return stars;
-  };
 
   function reviewsClickHandler(movieId) {
     navigate(`/detail/tv/${movieId}#reviews`);
@@ -147,14 +135,11 @@ const TVCards = ({ movieCards }) => {
             </div>
             <div className={styles['text-container']}>
               <h5>{item.name.length > 17 ? `${item.name.slice(0, 17)}...` : item.name}</h5>
-              <p>{item.first_air_date}</p>
               {/* Render average rating as stars and review count */}
               <div className={styles['rating-container']}>
-                {renderStars(averageRatings[item.id] || 0)}
-                <span className={styles['review-count']}>
-                  ({reviewCounts[item.id] || 0}){/* Display number of reviews */}
-                </span>
+                <AverageStars value={(averageRatings[item.id] || 0)} reviewCount={reviewCounts[item.id] || 0} showBrackets={true} />
               </div>
+              <p>{item.first_air_date}</p>
               <div className={styles['button-container']}>
                 {/* Review Button */}
                 <div
