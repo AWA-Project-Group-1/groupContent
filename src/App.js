@@ -20,7 +20,9 @@ import {TVGenreProvider} from "./context/TVGenreProvider.js"
 import { MovieGenreProvider} from "./context/MovieGenreProvider.js"
 import Profile from './screens/ProfilePage.js';
 import SharedFavoritesPage from './screens/SharedFavoritesPage.js';
+import UserListPage from './screens/UserListPage';
 // import TVGenreProvider from "./context/TVGenreProvider.js"
+
 
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ShowTime from "./screens/ShowTime.js"
@@ -50,7 +52,7 @@ const App = () => (
                 <Route path="/detail/tv/:id" element={<TVDetail />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/shared-favorites/:userId" element={<SharedFavoritesPage />} />
-              
+                <Route path="/user-list" element={<UserListPage />} />
                 <Route path="/:tvormovie" element={<HeroSection />} />
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />

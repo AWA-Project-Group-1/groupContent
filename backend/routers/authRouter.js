@@ -65,12 +65,24 @@ router.delete("/delete-account", async (req, res) => {
     const userId = decoded.userId; // Extract userId from token payload
 
     await pool.query("DELETE FROM favorites WHERE users_id = $1", [userId]); // delete favorites first
+    await pool.query("DELETE FROM reviews WHERE users_id = $1", [userId]); // delete reviews
 
     await pool.query("DELETE FROM users WHERE id = $1", [userId]); // Use the extracted userId
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {
     console.error("Error deleting account:", error);
     res.status(500).json({ error: "Failed to delete account" });
+  }
+});
+
+// Get a list of all users (for admin-like functionality)
+router.get('/users', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, email FROM users');
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
 

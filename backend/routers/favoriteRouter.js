@@ -3,7 +3,7 @@ import { pool } from '../helpers/db.js';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
-const tmdbApiKey = process.env.API_KEY; // Ensure this is set in your .env file
+const tmdbApiKey = "8e00f8de49614d9ebf140af3901aa5b5"; // Ensure this is set in your .env file
 
 // Middleware to authenticate user and extract user ID
 const authenticate = (req, res, next) => {

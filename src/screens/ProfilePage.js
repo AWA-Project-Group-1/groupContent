@@ -6,13 +6,13 @@ import axios from 'axios';
 import styles from './ProfilePage.module.css';
 import UserContext from '../context/UserContext';
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_GROUP = 5; // 5 movies + 5 TV series per page
 
 const Profile = () => {
   const [favorites, setFavorites] = useState([]);
   const [favoriteDetails, setFavoriteDetails] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const { user, setUser } = useContext(UserContext); // Access the logged-in user's token and email
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Profile = () => {
                   : `https://api.themoviedb.org/3/tv/${movie_id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`;
 
               const response = await fetch(endpoint);
-              return await response.json();
+              return { ...(await response.json()), type };
             })
           );
 
@@ -59,11 +59,9 @@ const Profile = () => {
 
       alert('Your account has been deleted.');
 
-      // Clear user data from context and localStorage
       setUser(null);
       localStorage.clear();
 
-      // Redirect to the sign-up page
       navigate('/sign-up');
     } catch (error) {
       console.error('Error deleting account:', error);
@@ -83,9 +81,23 @@ const Profile = () => {
     }
   }
 
-  const totalPages = Math.ceil(favoriteDetails.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const visibleFavorites = favoriteDetails.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  // Group items by type
+  const movies = favoriteDetails.filter((item) => item.type === 'movie');
+  const tvSeries = favoriteDetails.filter((item) => item.type === 'tv');
+
+  // Mix items: 5 movies and 5 TV series per page
+  const mixedItems = [];
+  for (let i = 0; i < Math.max(movies.length, tvSeries.length); i++) {
+    if (i < movies.length) mixedItems.push(movies[i]);
+    if (i < tvSeries.length) mixedItems.push(tvSeries[i]);
+  }
+
+  // Pagination logic
+  const startIndex = (currentPage - 1) * ITEMS_PER_GROUP * 2;
+  const visibleMovies = movies.slice(startIndex / 2, startIndex / 2 + ITEMS_PER_GROUP);
+  const visibleSeries = tvSeries.slice(startIndex / 2, startIndex / 2 + ITEMS_PER_GROUP);
+
+  const totalPages = Math.ceil(Math.max(movies.length, tvSeries.length) / ITEMS_PER_GROUP);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -126,40 +138,80 @@ const Profile = () => {
             Delete My Account
           </button>
         </div>
+        <div className={styles.userListButtonContainer}>
+            <button onClick={() => navigate('/user-list')} className={styles.userListButton}>
+            View All Users
+          </button>
+</div>
       </div>
       <div className={styles.favoritesContainer}>
         <h2 className={styles.favoritesHeading}>Your Favorites</h2>
-        <div className={styles.moviesContainer}>
-          {visibleFavorites.length > 0 ? (
-            visibleFavorites.map((item) => (
-              <div
-                key={item.id}
-                className={styles.movieCard}
-                onClick={() => navigate(`/detail/${item.type}/${item.id}`)}
-              >
-                <img
-                  src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                  alt={item.title || item.name}
-                  className={styles.movieImage}
-                />
-                <h5>{item.title || item.name}</h5>
-                <p>{item.release_date || item.first_air_date}</p>
-                <button
-                  className={styles.removeButton}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    removeButtonClickHandler(item.id);
-                  }}
+
+        {visibleMovies.length > 0 && (
+          <>
+            <h3>Movies</h3>
+            <div className={styles.moviesContainer}>
+              {visibleMovies.map((item) => (
+                <div
+                  key={item.id}
+                  className={styles.movieCard}
+                  onClick={() => navigate(`/detail/${item.type}/${item.id}`)}
                 >
-                  Remove from favorites
-                </button>
-              </div>
-            ))
-          ) : (
-            <p>No favorites added yet.</p>
-          )}
-        </div>
-        {favoriteDetails.length > ITEMS_PER_PAGE && (
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                    alt={item.title || item.name}
+                    className={styles.movieImage}
+                  />
+                  <h5>{item.title}</h5>
+                  <p>{item.release_date}</p>
+                  <button
+                    className={styles.removeButton}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeButtonClickHandler(item.id);
+                    }}
+                  >
+                    Remove from favorites
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {visibleSeries.length > 0 && (
+          <>
+            <h3>TV Series</h3>
+            <div className={styles.moviesContainer}>
+              {visibleSeries.map((item) => (
+                <div
+                  key={item.id}
+                  className={styles.movieCard}
+                  onClick={() => navigate(`/detail/${item.type}/${item.id}`)}
+                >
+                  <img
+                    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                    alt={item.name}
+                    className={styles.movieImage}
+                  />
+                  <h5>{item.name}</h5>
+                  <p>{item.first_air_date}</p>
+                  <button
+                    className={styles.removeButton}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeButtonClickHandler(item.id);
+                    }}
+                  >
+                    Remove from favorites
+                  </button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {mixedItems.length > ITEMS_PER_GROUP && (
           <div className={styles.pagination}>
             {Array.from({ length: totalPages }, (_, i) => (
               <button
