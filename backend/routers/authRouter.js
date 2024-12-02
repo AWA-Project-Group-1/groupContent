@@ -65,6 +65,7 @@ router.delete("/delete-account", async (req, res) => {
     const userId = decoded.userId; // Extract userId from token payload
 
     await pool.query("DELETE FROM favorites WHERE users_id = $1", [userId]); // delete favorites first
+    await pool.query("DELETE FROM reviews WHERE users_id = $1", [userId]); // delete reviews
 
     await pool.query("DELETE FROM users WHERE id = $1", [userId]); // Use the extracted userId
     res.status(200).json({ message: "Account deleted successfully" });
