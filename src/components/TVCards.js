@@ -180,7 +180,7 @@ const TVCards = ({ movieCards }) => {
                     className={styles['button-click']}
                     onClick={(e) => toggleFavoriteHandler(e, item.id)}
                   >
-                    {favorites.includes(item.id) ? '🖤Delete from favorites' : '❤️Add to favorites'}
+                    {favorites.includes(item.id) ? '🖤Delete favorites' : '❤️Add to favorites'}
                   </button>
                 </div>
               </div>
