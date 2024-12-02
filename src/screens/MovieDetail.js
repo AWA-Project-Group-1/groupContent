@@ -310,10 +310,10 @@ const MovieDetail = () => {
             </div>
 
             {/* Review Submission Form (conditionally rendered if logged in) */}
-            <div className="container center mt-4" id="reviews">
+            <div className="container center mt-4" id="reviews" >
                 <hr></hr>
                 <h2 style={{ marginLeft: "20px", marginTop: '60px' }}>Leave a Review</h2>
-                <div className="my-3 p-3 border rounded mx-auto" style={{ maxWidth: '1440px' }}>
+                <div className="my-3 p-3 border rounded mx-auto" style={{ maxWidth: '1440px', backgroundColor: '#f4f4f9' }}>
                     {token ? (
                         userReview ? (
                             <div style={{ marginTop: '10px' }} className="text-center my-4">

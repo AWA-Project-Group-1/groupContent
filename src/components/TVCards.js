@@ -166,7 +166,7 @@ const TVCards = ({ movieCards }) => {
                 >
                   {reviewedContent.includes(item.id) ? (
                     <button className={styles['button-click']}>
-                      ✍️ Review  <br />  already provided
+                      ✍🏿 Review  <br />  provided
                     </button>
                   ) : (
                     <button className={styles['button-click']}>
