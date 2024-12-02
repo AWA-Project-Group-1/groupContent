@@ -27,20 +27,20 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
         return counts;
     }, [reviews]);
 
-    const renderStars = (rating) => (
-        <>
-            {Array.from({ length: 5 }, (_, index) => (
-                <i
-                    key={index}
-                    className={`bi ${index < rating ? 'bi-star-fill' : 'bi-star'}`}
-                    style={{
-                        color: index < rating ? 'gold' : 'gray',
-                        fontSize: '1.3rem',
-                    }}
-                ></i>
-            ))}
-        </>
-    );
+    const renderStars = (rating) => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            if (rating >= i) {
+                stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>); // Filled star
+            } else if (rating >= i - 0.5) {
+                stars.push(<i key={i} className="bi bi-star-half text-warning"></i>); // Half-filled star
+            } else {
+                stars.push(<i key={i} className="bi bi-star text-warning"></i>); // Empty star
+            }
+        }
+        return stars;
+    };
+
 
     const formatTimestamp = (timestamp) => {
         const date = new Date(timestamp);
@@ -153,8 +153,8 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
                             </div>
 
                             <div className="right-column" style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                <div>
-                                    {renderStars(Math.round(averageRating))}
+                                <div className="d-flex" >
+                                    {renderStars(averageRating)}
                                 </div>
 
                                 <div>
