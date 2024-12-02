@@ -1,5 +1,5 @@
 
-import React, { useContext} from 'react';
+import React, { useContext,useState, useEffect} from 'react';
 import { Link  } from "react-router-dom";
 import styles from "./HeroSection.module.css";
 // import { TVSeriesContext } from '../context/TVSeriesProvider';
@@ -13,63 +13,56 @@ const HeroSection = ({type}) => {
 
  
 
-  const mostPopularSeries = moiveTVSerialData.tvSeries?.reduce((prev, current) => {
-    return prev.popularity > current.popularity ? prev : current;
-  }, {});
-
-  const mostPopularMovies = moiveTVSerialData.movies?.reduce((prev, current) => {
-    return prev.popularity > current.popularity ? prev : current;
-  }, {});
-
-  
+  const backgroundImageforTV = moiveTVSerialData.tvSeries?.map(series => 
+    `https://image.tmdb.org/t/p/original${series.backdrop_path}`
+  ) || [];
+  const backgroundImageforMovie = moiveTVSerialData.movies?.map(movie => 
+    `https://image.tmdb.org/t/p/original${movie.backdrop_path}`
+  ) || [];
  
-  const BackgroundImageHandler = () => {
-
-    
-    // if (!tvormovie) {
-    
-    //   return `https://image.tmdb.org/t/p/original${mostPopularSeries.backdrop_path}`;
-    // }
-
-
-    const backgroundImageforTV = mostPopularSeries?.backdrop_path
-      ? `https://image.tmdb.org/t/p/original${mostPopularSeries.backdrop_path}`
-      : " ";
   
-    const backgroundImageforMovie = mostPopularMovies?.backdrop_path
-      ? `https://image.tmdb.org/t/p/original${mostPopularMovies.backdrop_path}`
-      : "";
-      if (type === "tvserial") {
-        return backgroundImageforTV;
-      } 
-      if (type === "movie") {
-        return backgroundImageforMovie;
+
+    //   : "";
+    const images = type === "tvserial" ? backgroundImageforTV  : backgroundImageforMovie;
+
+    // State to track the current image index
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+    // Automatically cycle through images
+    useEffect(() => {
+      if (images.length > 0) {
+        const interval = setInterval(() => {
+          setCurrentImageIndex(prevIndex => (prevIndex + 1) % images.length);
+        }, 4000); 
+  
+        return () => clearInterval(interval); // Cleanup on component unmount
       }
-      return ""; 
+    }, [images]);
+  
+    // Get the current background image
+    const currentImage = images[currentImageIndex];
+    
+      return (
+        <div
+          className={`${styles["hero-section"]} text-center py-5`}
+          style={{
+            backgroundImage: `url(${currentImage})`,
+            // width: "100%", 
+            // height: "100%",
+            // objectFit: "contain",
+            backgroundSize: "cover",
+            // backgroundRepeat: "no-repeat",
+            backgroundPosition: "center 20%",
+            // backgroundPosition: "center",
+            transition: "background-image 0.5s ease-in-out",
+          }}
+        >
+          <div className={styles["hero-content"]}>
+            <h1>Discover Your {type.charAt(0).toUpperCase() + type.slice(1)}</h1>
+            <h4>Explore the top-rated and latest {type} shows!</h4>
+          </div>
+        </div>
+      );
     };
-
-    // if (type ==tv")) {
-    //   return backgroundImageforTV;
-    // }
-    // if (tvormovie.includes("movie")) {
-    //   return backgroundImageforMovie;
-    // }
-    // return ""; 
-  // };
-
-  return (
-    <div className={`${styles['hero-section']} text-center py-5`} style={{
-      backgroundImage: `url(${ BackgroundImageHandler()})`
-    }}
-  >
-      <div className={styles['hero-content']}>
-        <h1>Discover Your {type.charAt(0).toUpperCase() + type.slice(1)}</h1>
-        <h4>Explore the top-rated and latest {type} shows!</h4>
-        {/* <Link className="btn btn-primary mx-2">See More</Link> */}
-        
-      </div>
-    </div>
-  );
-};
-
-export default HeroSection;
+    
+    export default HeroSection;
