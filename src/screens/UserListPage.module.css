@@ -36,3 +36,25 @@
   .sharedLinkButton:hover {
     background-color: #218838;
   }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .userCard {
+      width: 100%; /* Make user cards take full width on smaller screens */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .userListContainer {
+      gap: 10px; /* Reduce the gap between user cards for small screens */
+    }
+  
+    .userCard {
+      padding: 15px; /* Adjust padding for smaller screens */
+      font-size: 14px; /* Slightly reduce font size */
+    }
+  
+    .sharedLinkButton {
+      padding: 8px 16px; /* Adjust button size for smaller screens */
+    }
+  }

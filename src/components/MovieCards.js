@@ -1,5 +1,5 @@
-import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from "./MovieCards.module.css";
 import { MovieGenreContext } from "../context/MovieGenreProvider";
 import { addToFavorites, removeFromFavorites, fetchFavorites } from '../api/favoriteapi';
@@ -13,6 +13,7 @@ const MovieCards = ({ movieCards }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [favorites, setFavorites] = useState([]);
+  const [showLoginPopup, setShowLoginPopup] = useState(false); // State for login popup
   const { user } = useContext(UserContext); // Access the logged-in user's token
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search); // To parse query parameters
@@ -59,7 +60,6 @@ const MovieCards = ({ movieCards }) => {
     loadRatings();
   }, [movieCards]);
 
-  // Fetch the reviewed content for the user
   useEffect(() => {
     async function loadReviewedContentData() {
       if (user?.token) {
@@ -93,7 +93,11 @@ const MovieCards = ({ movieCards }) => {
 
   function toggleFavoriteHandler(event, movieId) {
     event.stopPropagation();
-    if (!user?.token) return; // Prevent action if user is not logged in
+    if (!user?.token) {
+      setShowLoginPopup(true); // Show the login popup
+      setTimeout(() => setShowLoginPopup(false), 3000); // Auto-hide the popup after 3 seconds
+      return; 
+    }
 
     if (favorites.includes(movieId)) {
       removeFromFavorites(movieId, user.token)
@@ -142,14 +146,10 @@ const MovieCards = ({ movieCards }) => {
               </div>
               <p>{item.release_date}</p>
               <div className={styles['button-container']}>
-                {/* Review Button */}
-                <div
-                  className={styles['review-button-container']}
-                  onClick={(e) => {
-                    e.stopPropagation(); // Ensure this click doesn’t trigger parent div
-                    reviewsClickHandler(item.id);
-                  }}
-                >
+                <div className={styles['review-button-container']} onClick={(e) => {
+                  e.stopPropagation(); // Ensure this click doesn’t trigger parent div
+                  reviewsClickHandler(item.id);
+                }}>
                   {reviewedContent.includes(item.id) ? (
                     <button className={styles['button-click']}>
                       ✍🏿 Review  <br />  provided
@@ -178,7 +178,12 @@ const MovieCards = ({ movieCards }) => {
         <span>Page {currentPage}</span>
         <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
       </div>
-    </div >
+      {showLoginPopup && (
+        <div className={styles['login-popup']}>
+          Please log in to save movies to your favorites.
+        </div>
+      )}
+    </div>
   );
 };
 

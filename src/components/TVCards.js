@@ -16,6 +16,8 @@ const TVCards = ({ movieCards }) => {
   const itemsPerPage = 10;
 
   const [favorites, setFavorites] = useState([]);
+  const [showLoginPopup, setShowLoginPopup] = useState(false); // State for login popup
+
   const { user } = useContext(UserContext); // Access the logged-in user's token
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search); // To parse query parameters
@@ -89,8 +91,11 @@ const TVCards = ({ movieCards }) => {
 
   function toggleFavoriteHandler(event, movieId) {
     event.stopPropagation();
-    if (!user?.token) return; // Prevent action if user is not logged in
-
+    if (!user?.token) {
+      setShowLoginPopup(true); // Show the login popup
+      setTimeout(() => setShowLoginPopup(false), 3000); // Auto-hide the popup after 3 seconds
+      return; 
+    }
     if (favorites.includes(movieId)) {
       removeFromFavorites(movieId, user.token)
         .then(() => setFavorites(favorites.filter((id) => id !== movieId)))
@@ -178,7 +183,12 @@ const TVCards = ({ movieCards }) => {
         <span>Page {currentPage}</span>
         <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
       </div>
-    </div>
+    {showLoginPopup && (
+      <div className={styles['login-popup']}>
+        Please log in to save series to your favorites.
+      </div>
+    )}
+  </div>
   );
 };
 
