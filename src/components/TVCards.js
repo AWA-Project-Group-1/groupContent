@@ -94,7 +94,7 @@ const TVCards = ({ movieCards }) => {
     if (!user?.token) {
       setShowLoginPopup(true); // Show the login popup
       setTimeout(() => setShowLoginPopup(false), 3000); // Auto-hide the popup after 3 seconds
-      return; 
+      return;
     }
     if (favorites.includes(movieId)) {
       removeFromFavorites(movieId, user.token)
@@ -120,7 +120,17 @@ const TVCards = ({ movieCards }) => {
 
   function reviewsClickHandler(movieId) {
     navigate(`/detail/tv/${movieId}#reviews`);
+
+    // Poll for the target element
+    const intervalId = setInterval(() => {
+      const reviewsElement = document.querySelector('#reviews');
+      if (reviewsElement) {
+        clearInterval(intervalId); // Stop checking once the element exists
+        reviewsElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100); // Check every 100ms
   }
+
 
   return (
     <div>
@@ -183,12 +193,12 @@ const TVCards = ({ movieCards }) => {
         <span>Page {currentPage}</span>
         <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
       </div>
-    {showLoginPopup && (
-      <div className={styles['login-popup']}>
-        Please log in to save series to your favorites.
-      </div>
-    )}
-  </div>
+      {showLoginPopup && (
+        <div className={styles['login-popup']}>
+          Please log in to save series to your favorites.
+        </div>
+      )}
+    </div>
   );
 };
 

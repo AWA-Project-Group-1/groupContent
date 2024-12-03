@@ -89,6 +89,15 @@ const MovieCards = ({ movieCards }) => {
 
   function reviewsClickHandler(movieId) {
     navigate(`/detail/movie/${movieId}#reviews`);
+
+    // Poll for the target element
+    const intervalId = setInterval(() => {
+      const reviewsElement = document.querySelector('#reviews');
+      if (reviewsElement) {
+        clearInterval(intervalId); // Stop checking once the element exists
+        reviewsElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100); // Check every 100ms
   }
 
   function toggleFavoriteHandler(event, movieId) {
@@ -96,7 +105,7 @@ const MovieCards = ({ movieCards }) => {
     if (!user?.token) {
       setShowLoginPopup(true); // Show the login popup
       setTimeout(() => setShowLoginPopup(false), 3000); // Auto-hide the popup after 3 seconds
-      return; 
+      return;
     }
 
     if (favorites.includes(movieId)) {
