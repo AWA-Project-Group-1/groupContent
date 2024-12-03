@@ -33,7 +33,7 @@ router.delete('/delete/:id',auth,(req, res, next) => {
     });
 });
 
-
+/*
 router.get('/group/:id', async (req, res) => {
     console.log("Group ID requested:", req.params.id);
     const { id } = req.params;
@@ -43,7 +43,7 @@ router.get('/group/:id', async (req, res) => {
     }
     res.json(group);
 });
-
+*/
 // server/routes/groupRouter.js
 /*
 router.get("/group/:id/authorize", async (req, res) => {
@@ -69,6 +69,7 @@ router.get("/group/:id/authorize", async (req, res) => {
   });
 
 */
+/*
 router.get("/group/:id/authorize", (req, res) => {
   //const { groupid } = req.params;
 
@@ -79,6 +80,7 @@ router.get("/group/:id/authorize", (req, res) => {
     res.status(403).json({ authorized: false });
   }
 });
+*/
 /*
 router.post('/:id/content', async (req, res) => {
     const { id } = req.params;

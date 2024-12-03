@@ -1,279 +1,105 @@
-import React, { useState, useEffect } from 'react';
-import './GroupDetails.css';
-import ReactPaginate from 'react-paginate';
-import { useParams } from 'react-router-dom';
-import useUser from '../context/useUser.js';
-import { useCallback } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import ContentList from "../components/ContentList";
+import AddContent from "../components/AddContent";
+import AddMovie from "../components/AddMovie";
+import AddShowtime from "../components/AddShowtime";
+import { useParams } from "react-router-dom";
+import useUser from "../context/useUser";
+import axios from "axios";
+import "./GroupDetails.css";
 
-axios.defaults.baseURL = 'http://localhost:3001';
+const GroupDetails = () => {
+  const [activeTab, setActiveTab] = useState("list");
+  const [role, setRole] = useState(null); // Trạng thái quyền hạn của người dùng
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { id: groupId } = useParams();
+  const { user } = useUser();
 
-const SearchMovies = ({ groupId }) => {
-    const { user } = useUser(); // Sử dụng context để lấy user
-    const [movies, setMovies] = useState([]);
-    const [page, setPage] = useState(1);
-    const [pageCount, setPageCount] = useState(0);
-    const [query, setQuery] = useState('Avatar');
-    const [selectedMovies, setSelectedMovies] = useState({});
-
-    const fetchMovies = useCallback(() => {
-        fetch(
-            `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${page}`,
-            {
-                headers: {
-                    Authorization:
-                        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ZjZhY2ZhNDZjMGExOWM5OGUwMjQwYzdjY2M3YTRlNiIsIm5iZiI6MTczMTk0OTYyMS4zMzQ1MTM0LCJzdWIiOiI2NzM0OTcwYjMwZWUxMGFhMWI5YjNiODkiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ibcOCPjPpcJ_lk7zJ82exhSIYBV6iJSvtAO9ibqMBBM',
-                    'Content-Type': 'application/json',
-                },
-            }
-        )
-            .then((response) => response.json())
-            .then((json) => {
-                setMovies(json.results);
-                setPageCount(json.total_pages);
-            })
-            .catch((err) => console.log(err));
-    }, [query, page]);
-
-    useEffect(() => {
-        fetchMovies();
-    }, [fetchMovies]);
-
-    const handleCheckboxChange = (movieId) => {
-        setSelectedMovies((prev) => ({
-            ...prev,
-            [movieId]: !prev[movieId],
-        }));
+  useEffect(() => {
+    const fetchRole = async () => {
+      try {
+        if (user) {
+          const response = await axios.get(
+            `http://localhost:3001/content/${groupId}/${user.id}/permissions`
+          );
+          console.log(groupId, user.id);
+          setRole(response.data.role);
+        } else {
+          setRole("none"); // Không đăng nhập thì không có quyền
+        }
+      } catch (err) {
+        console.error("Error fetching role:", err);
+        setError("Failed to check user permissions.");
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const handleSubmit = () => {
-        if (!user?.token) {
-            alert('User is not authenticated!');
-            return;
-          }
-      
-        const selectedMovieData = movies
-            .filter((movie) => selectedMovies[movie.id])
-            .map((movie) => ({
-                id: movie.id,
-                title: movie.title,
-                poster_path: movie.poster_path,
-                }));
+    fetchRole();
+  }, [groupId, user]);
 
-        const headers = {headers: {'Content-Type': 'application/json', Authorization: `Bearer ${user.token}`}};
-        console.log('Group ID:', groupId);
-        console.log('User context:', user);
-        console.log('Movies:', selectedMovieData);
-        console.log('POST URL:',`/content/${groupId}/content`);
-        axios.post(`/content/${groupId}/content`, {
-                userId: user.id,
-                movies: selectedMovieData,
-                showTimes: [], 
-            }, headers)
-            
-            .then((response) => {
-                console.log('Movies added:', response.data);
-                alert('Movies added successfully!');
-            })
-            .catch((error) => {
-                const errorMessage = error.response?.data?.error || 'An error occurred!';
-                alert(errorMessage);
-                console.error(error);
-            });
-    };
+  if (!groupId) {
+    return <div>Group ID is missing!</div>;
+  }
 
-    return (
-        <div>
-            <h4>Movie Search</h4>
-            <div>
-                <input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search movies..."
-                />
-                <button onClick={fetchMovies} type="button">
-                    Search
-                </button>
-            </div>
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-            <div className="movie-list-container">
-                {movies &&
-                    movies.map((movie) => (
-                        <div className="movie-item" key={movie.id}>
-                            <img
-                                className="movie-poster"
-                                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                alt={movie.title}
-                            />
-                            <div className="movie-title">{movie.title}</div>
-                            <input
-                                type="checkbox"
-                                checked={!!selectedMovies[movie.id]}
-                                onChange={() => handleCheckboxChange(movie.id)}
-                                className="movie-checkbox"
-                            />
-                        </div>
-                    ))}
-            </div>
+  if (error) {
+    return <div style={{ color: "red" }}>{error}</div>;
+  }
 
-            <ReactPaginate
-                breakLabel={'...'}
-                nextLabel={'>'}
-                onPageChange={(e) => setPage(e.selected + 1)}
-                pageRangeDisplayed={5}
-                pageCount={pageCount}
-                previousLabel={'<'}
-                containerClassName={'pagination'}
-                activeClassName={'active'}
-            />
+  const isOwnerOrMember = role === "owner" || role === "member";
 
-            <button onClick={handleSubmit} type="button">
-                Submit Selected Movies to Group
-            </button>
-        </div>
-    );
+  return (
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h2>Group Content</h2>
+      <nav style={{ marginBottom: "20px" }}>
+        <a href="#!" onClick={() => setActiveTab("list")} style={{ marginRight: "10px" }}>
+          View Content
+        </a>
+        <a
+          href="#!"
+          onClick={() => isOwnerOrMember && setActiveTab("addContent")}
+          style={{
+            marginRight: "10px",
+            color: isOwnerOrMember ? "blue" : "gray",
+            pointerEvents: isOwnerOrMember ? "auto" : "none",
+          }}
+        >
+          Add Content
+        </a>
+        <a
+          href="#!"
+          onClick={() => isOwnerOrMember && setActiveTab("addMovie")}
+          style={{
+            marginRight: "10px",
+            color: isOwnerOrMember ? "blue" : "gray",
+            pointerEvents: isOwnerOrMember ? "auto" : "none",
+          }}
+        >
+          Add Movies
+        </a>
+        <a
+          href="#!"
+          onClick={() => isOwnerOrMember && setActiveTab("addShowtime")}
+          style={{
+            color: isOwnerOrMember ? "blue" : "gray",
+            pointerEvents: isOwnerOrMember ? "auto" : "none",
+          }}
+        >
+          Add Show Time
+        </a>
+      </nav>
+
+      {activeTab === "list" && <ContentList groupId={parseInt(groupId)} />}
+      {activeTab === "addContent" && isOwnerOrMember && <AddContent groupId={parseInt(groupId)} />}
+      {activeTab === "addMovie" && isOwnerOrMember && <AddMovie groupId={parseInt(groupId)} />}
+      {activeTab === "addShowtime" && isOwnerOrMember && <AddShowtime groupId={parseInt(groupId)} />}
+    </div>
+  );
 };
 
-const ShowTime = ({ groupId }) => {
-    const { user } = useUser(); // Sử dụng context để lấy thông tin người dùng
-    const [showTime, setShowTime] = useState([]);
-    const [selectedShowTimes, setSelectedShowTimes] = useState({}); // Lưu trạng thái checkbox
-
-    // URL API cho Showtime
-    const url = `https://www.finnkino.fi/xml/Schedule/`;
-
-    // Lấy dữ liệu showtime từ API
-    useEffect(() => {
-        fetch(url)
-            .then((res) => res.text())
-            .then((data) => {
-                const parser = new DOMParser();
-                const dataDocument = parser.parseFromString(data, 'application/xml');
-
-                const showstime = Array.from(
-                    dataDocument.getElementsByTagName('Show')
-                ).map((show) => ({
-                    id: show.getElementsByTagName('ID')[0]?.textContent, // ID duy nhất
-                    title: show.getElementsByTagName('Title')[0]?.textContent,
-                    showStart: show.getElementsByTagName('dttmShowStart')[0]?.textContent,
-                    showEnd: show.getElementsByTagName('dttmShowEnd')[0]?.textContent,
-                    image: show.getElementsByTagName('EventMediumImagePortrait')[0]?.textContent,
-                }));
-
-                setShowTime(showstime);
-            })
-            .catch((err) => {
-                console.error('Error fetching showtime:', err);
-            });
-    }, [url]);
-
-    // Thay đổi trạng thái checkbox khi người dùng chọn showtime
-    const handleCheckboxChangeShowTimes = (showId) => {
-        setSelectedShowTimes((prev) => ({
-            ...prev,
-            [showId]: !prev[showId], // Toggle trạng thái checkbox
-        }));
-    };
-
-    // Xử lý khi submit các showtime được chọn
-    const handleSubmitShowTimes = () => {
-        
-        //const selected = showTime.filter((item) => selectedShowTimes[item.id]);
-        const selectedShowTimesData = showTime
-        ?.filter((show) => selectedShowTimes[show.id]) // Chỉ lấy những showtime được chọn
-        .map((show) => ({
-            id: show.id,
-            title: show.title,
-            showStart: new Date(show.showStart).toISOString().replace('T', ' ').slice(0, 23),
-            showEnd: new Date(show.showEnd).toISOString().replace('T', ' ').slice(0, 23),
-            image: show.image,
-        }));
-
-        const headers = {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${user.token}`, // Lấy token từ context
-            },
-        };
-        
-        console.log('ShowTimes:', selectedShowTimesData);
-
-        axios
-            .post(`/content/${groupId}/content`, {
-                userId: user.id, // ID của người dùng từ context
-                movies: [], // Không gửi phim vì chỉ có showtimes
-                showTimes: selectedShowTimesData, // Danh sách các showtime được chọn
-            }, headers)
-        
-            .then((response) => {
-                console.log('ShowTimes added:', response.data);
-                alert('ShowTimes added successfully!');
-            })
-            .catch((error) => {
-                const errorMessage = error.response?.data?.error || 'An error occurred!';
-                alert(errorMessage);
-                console.error(error);
-            });
-    };
-
-    return (
-        <div>
-            <h4>Showtime</h4>
-            <div className="movie-list-container">
-                {showTime.map((item, index) => (
-                    <div key={index} className="show-time-container">
-                        <img
-                            src={item.image}
-                            alt={item.title}
-                            className="show-image"
-                        />
-                        <div className="movie-title">{item.title}</div>
-                        <div className="show-time">
-                            Show time: {item.showStart} to {item.showEnd}
-                        </div>
-
-                        <input
-                            type="checkbox"
-                            checked={!!selectedShowTimes[item.id]}
-                            onChange={() => handleCheckboxChangeShowTimes(item.id)}
-                            className="showtime-checkbox"
-                        />
-                    </div>
-                ))}
-            </div>
-
-            <button
-                onClick={handleSubmitShowTimes}
-                type="button"
-                style={{ marginTop: '20px' }}
-            >
-                Submit Selected Showtimes to Group
-            </button>
-        </div>
-    );
-};
-
-/*
-const useUser = () => {
-    return { loggedInUserId: 1 }; // Thay giá trị thực tế nếu cần
-};
-*/
-const MoviePage = () => {
-    const { id: groupId } = useParams(); // Lấy groupId từ URL
-    const { user } = useUser(); // Lấy thông tin user từ context
-
-    if (!user) {
-        return <div>User is not logged in!</div>;
-    }
-
-    return (
-        <div>
-            <h2>Add Movies and Showtimes to group {groupId}</h2>
-            <SearchMovies groupId={groupId} />
-            <hr />
-            <ShowTime groupId={groupId} />
-            <hr />
-        </div>
-    );
-};
-export default MoviePage;
+export default GroupDetails;
