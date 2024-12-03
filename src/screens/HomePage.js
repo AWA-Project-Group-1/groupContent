@@ -64,7 +64,7 @@ const HomePage = () => {
 
     return (
         <div>
-            <div>
+            <div style={{ position: 'relative', zIndex: 10 }}>{/*  heyanwen made  */}
                 <Navigation />
             </div>
 

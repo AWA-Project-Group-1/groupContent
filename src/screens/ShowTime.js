@@ -202,22 +202,49 @@ const ShowTime = () => {
         }
     };
 // for put all the time slots for one movie
-    const groupedMovies = currentMovies.reduce((acc, movie) => {
-        const { title, image, showStart, showEnd, showUrl } = movie;
+    // const groupedMovies = currentMovies.reduce((acc, movie) => {
+    //     const { title, image, showStart, showEnd, showUrl } = movie;
       
+    //     if (!acc[title]) {
+    //       acc[title] = {
+    //         image,
+    //         title,
+    //         showtimes: [],
+    //       };
+    //     }
+      
+    //     acc[title].showtimes.push({ showStart, showEnd, showUrl });
+      
+    //     return acc;
+    //   }, {});
+    
+    
+
+
+
+    const groupedMovies1 = showTime.reduce((acc, movie) => {
+        const { title, image, showStart, showEnd, showUrl } = movie;
+
         if (!acc[title]) {
-          acc[title] = {
+            acc[title] = {
             image,
             title,
             showtimes: [],
-          };
+            };
         }
-      
-        acc[title].showtimes.push({ showStart, showEnd, showUrl });
-      
-        return acc;
-      }, {});
 
+        acc[title].showtimes.push({ showStart, showEnd, showUrl });
+
+        return acc;
+    }, {});
+
+    const groupedMoviesArray = Object.values(groupedMovies1);
+    const paginatedMovies = groupedMoviesArray.slice(startIndex, endIndex);
+    const now = new Date();
+    const upcomingMovies = paginatedMovies.filter((item) =>
+    item.showtimes.some(showtime => new Date(showtime.showStart) > now)
+    );
+    
     return (
         <div className={styles["all-container"]}>
                 <div className={styles["navigation-hero-container"]} >
@@ -338,7 +365,7 @@ const ShowTime = () => {
                 <div className={styles["OuluMovie-text"]}><h2>Today's Show In Oulu</h2></div>
 
                 <div className={styles["show-container"]}>
-                    {Object.values(groupedMovies).map((item, index) => (
+                {upcomingMovies.map((item, index) => (
                     // {currentMovies.map((item, index) => (
                      <div key={index} className={styles["movie-card"]}>
                         
@@ -369,16 +396,18 @@ const ShowTime = () => {
                                     Buy Ticket
                                 </a> */}
                             {/* </h5> */}
-
+                                    
                             <ul>
-                                {item.showtimes.map((showtime, idx) => (
-                                    <li key={idx}>
+                            {item.showtimes
+                            .filter(showtime => new Date(showtime.showStart) > now)
+                            .map((showtime, idx) => (
+                                <li key={idx}>
                                     {showtime.showStart} - {showtime.showEnd} &nbsp;
                                     <Link to={showtime.showUrl} className={styles["buy-ticket-button"]}>
                                         Buy Ticket
                                     </Link>
-                                    </li>
-                                ))}
+                                </li>
+                            ))}
                                 </ul>
                         </div>
 

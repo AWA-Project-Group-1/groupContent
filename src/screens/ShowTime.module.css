@@ -52,6 +52,15 @@
    /* margin-bottom: 30px; */
    padding: 0;
 }
+.show-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Create a responsive grid with a minimum column width of 300px */
+  gap: 20px;
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+}
+
 @media (max-width: 1024px) {
   .theater-container, .movie-container, .date-container, .fetch-showtime-container {
       flex: 1 1 calc(50% - 20px); /* 2 filters in one row */
@@ -67,6 +76,7 @@
 /* Today's Show in Oulu */
 .show-container {
   display: flex;
+
   flex-wrap: wrap;
   gap: 20px;
   width: 100%;
@@ -83,6 +93,7 @@
   padding: 15px;
   gap: 15px;
   flex: 1 1 calc(50% - 20px); /* 2 cards per row on large screens */
+  min-height: 550px;
   background-color: #95d2d8;
 }
 
@@ -125,7 +136,7 @@
 
 @media (max-width: 1024px) {
   .movie-card {
-      flex: 1 1 100%; /* 1 card per row on medium screens */
+      flex: 1 1 100%; 
   }
 }
 
