@@ -7,7 +7,12 @@ import poster3 from "../assets/images/poster3 (2).jpg";
 const About = () => {
     return (
         <div>
-            <Navigation />
+            {/* zindex */}
+            <div style={{ position: 'relative', zIndex: 100 }}> 
+                <Navigation  />
+
+            </div>
+            
             <div className="container my-5">
                 <div className="row">
                     <div className="col-lg-8 offset-lg-2">
