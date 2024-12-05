@@ -9,23 +9,32 @@ const router = express.Router();
 router.post("/signup", async (req, res) => {
   const { email, password } = req.body;
 
+  // Validate input
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email and password are required" });
+  }
+
   try {
+    // Check if the email is already registered
     const existingUser = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
     if (existingUser.rows.length > 0) {
       return res.status(400).json({ error: "Email already registered" });
     }
 
+    // Hash password and store user
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
       "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id",
       [email, hashedPassword]
     );
+
     res.status(201).json({ userId: result.rows[0].id });
   } catch (error) {
     console.error("Error signing up:", error);
     res.status(500).json({ error: "Failed to sign up" });
   }
 });
+
 
 // sign in
 router.post("/signin", async (req, res) => {
@@ -45,8 +54,10 @@ router.post("/signin", async (req, res) => {
 
     // creat JWT token
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.status(200).json({ token, id: user.id, email: user.email,
-      username: user.email }); //heyanwen added
+    res.status(200).json({
+      token, id: user.id, email: user.email,
+      username: user.email
+    }); //heyanwen added
   } catch (error) {
     console.error("Error signing in:", error);
     res.status(500).json({ error: "Failed to sign in" });
