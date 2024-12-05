@@ -27,3 +27,6 @@ CREATE TABLE reviews (
 INSERT INTO users (email, password) VALUES ('test@email', '123456');
 INSERT INTO reviews (users_id, movies_id, rating, comment, type) VALUES ('1', '1', '4','test review to get tv series review for a spesific one', 'tv' );
 INSERT INTO reviews (users_id, movies_id, rating, comment, type) VALUES ('1', '1', '4','test review to get tv series review for a spesific one', 'movie' );
+-- Zhang Ke add
+INSERT INTO users (email, password) VALUES ('testuser1@example.com', 'password123');
+INSERT INTO users (email, password) VALUES ('testuser2@example.com', 'password456');

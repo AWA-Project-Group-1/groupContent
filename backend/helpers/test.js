@@ -36,4 +36,13 @@ const getToken = (email, userId) => {
     return sign({ email, userId }, process.env.JWT_SECRET);
 };
 
-export { initializeTestDb, insertTestUser, getToken };
+// Addition: Helper for resetting the test database
+const resetTestDb = async () => {
+    const sql = fs.readFileSync(
+      path.resolve(__dirname, "../test_db.sql"),
+      "utf-8"
+    );
+    await pool.query(sql);
+  };
+
+export { initializeTestDb, insertTestUser, getToken, resetTestDb };
