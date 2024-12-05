@@ -43,29 +43,33 @@ function Group() {
   const deleteGroup = (id) => {
     const token = user.token || sessionStorage.getItem('token');
 
-    console.log("Token before delete request:", token); // Log token trước khi gửi request
+    //console.log("Token before delete request:", token); // Log token trước khi gửi request
+    console.log("GroupId before delete request:", id);
+    console.log("UserId before delete request:", user.id);
 
     if (!token) {
         alert("User is not authenticated.");
         return;
     }
 
-    const headers = { headers: { Authorization: `Bearer ${user.token}` } };
-    axios.delete(url + '/delete/' + id, headers)
+    const headers = { headers: { Authorization: `Bearer ${token}` } };
+    console.log("Token used for deletion:", token);
+    axios
+        .delete(`${url}/delete/${id}`, headers)
         .then(() => {
             const withoutRemoved = groupss.filter(item => item.id !== id);
             setGroupss(withoutRemoved);
-            alert("Group and its content deleted successfully with ID: ", id);
+            alert(`Group with ID ${id} deleted successfully.`);
         })
         .catch(error => {
-          console.error("Error during delete request:", error); // debug
-          alert(error.response?.data?.error || "An error occurred when fetching!!!");
+          console.error("Error during delete request:", error);
+          alert(error.response?.data?.error || "An error occurred.");
         });
 };
   
   return (
     <div id="container">
-      <h3>Add new group page</h3>
+      <h3>Group page</h3>
       <form onSubmit={(e) => e.preventDefault()}>
         <input
           placeholder="Group name"

@@ -60,7 +60,12 @@ router.post("/login",(req, res, next) => {
                         return next(new Error("Invalid password for email"))
                     };
                         
-                    const token = sign({ user: req.body.email }, process.env.JWT_SECRET_KEY);
+                    const token = jwt.sign(
+                        { userId: req.body.id, user: req.body.email },
+                        process.env.JWT_SECRET_KEY, 
+                        { expiresIn: "1h" }
+                    );
+
                     const user = result.rows[0];
                     console.log("User logged in successfully with email:", req.body.email);
 
