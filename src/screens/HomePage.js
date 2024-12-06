@@ -9,11 +9,8 @@ import Navigation from "../components/Navigation";
 import poster from "../assets/images/poster.png";
 import poster2 from "../assets/images/poster2.jpg";
 import poster3 from "../assets/images/poster3 (2).jpg";
-<<<<<<< HEAD
 import Footer from "../components/Footer"
-=======
-import Footer from '../components/Footer';
->>>>>>> e375476712710d03bc75abd47f157d824505aaae
+
 
 import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider";
 
@@ -208,7 +205,6 @@ const HomePage = () => {
                 viewAllLink="/tvserial"
             />
 
-<<<<<<< HEAD
             <hr></hr>
 
             <CarouselSelectionTV
@@ -218,9 +214,6 @@ const HomePage = () => {
 
            <Footer />
 
-=======
-            <Footer />
->>>>>>> e375476712710d03bc75abd47f157d824505aaae
         </div>
     );
 }

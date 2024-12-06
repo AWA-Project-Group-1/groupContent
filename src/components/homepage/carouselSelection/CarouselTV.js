@@ -42,7 +42,6 @@ const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }
             const ratings = {};
             const counts = {};
 
-<<<<<<< HEAD
             try {
                 const reviewsData = await Promise.all(
                     movies.map((movie) =>
@@ -58,21 +57,6 @@ const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }
                             .catch(() => ({ id: movie.id, average: 0, count: 0 }))
                     )
                 );
-=======
-            for (const movie of movies) {
-                try {
-                    const reviews = await fetchReviews(movie.id, 'tv');
-                    const average =
-                        reviews.length > 0
-                            ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
-                            : 0;
-                    ratings[movie.id] = average;
-                    counts[movie.id] = reviews.length;
-                } catch (error) {
-                    console.error('Error fetching reviews for movie ID:', movie.id, error);
-                }
-            }
->>>>>>> e375476712710d03bc75abd47f157d824505aaae
 
                 reviewsData.forEach(({ id, average, count }) => {
                     ratings[id] = average;
@@ -91,29 +75,6 @@ const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }
         }
     }, [movies]);
 
-<<<<<<< HEAD
-=======
-    // Show first 10 movies for carousel
-    const carouselMovies = movies.slice(0, 15).map((movie) => ({
-        id: movie.id,
-        src: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        name: movie.name,
-        release_date: movie.first_air_date,
-        averageRating: averageRatings[movie.id] || 0,
-        reviewCount: reviewCounts[movie.id] || 0,
-    }));
-
-    // Show all movies when "View All" button is clicked
-    const allMovies = movies.map((movie) => ({
-        id: movie.id,
-        src: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-        name: movie.name,
-        release_date: movie.first_air_date,
-        averageRating: averageRatings[movie.id] || 0,
-        reviewCount: reviewCounts[movie.id] || 0,
-    }));
-
->>>>>>> e375476712710d03bc75abd47f157d824505aaae
     return (
         <div className="carousel-selection">
             <div className="carousel-selection-header">
@@ -160,4 +121,3 @@ const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }
 };
 
 export default CarouselSelection;
-
