@@ -3,12 +3,13 @@ import CarouselSelection from '../components/homepage/carouselSelection/Carousel
 import CarouselSelectionTV from '../components/homepage/carouselSelection/CarouselTV';
 import MoviePicker from '../components/homepage/randomMovie/MoviePicker';
 import { discoverMovies, discoverOldMovies, fetchTopMovies, fetchUpcomingMovies } from '../api/movieFetch';
-import { topTVSeries } from '../api/tvFetch';
+import { topTVSeries, discoverOldTv } from '../api/tvFetch';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "../components/Navigation";
 import poster from "../assets/images/poster.png";
 import poster2 from "../assets/images/poster2.jpg";
 import poster3 from "../assets/images/poster3 (2).jpg";
+import Footer from "../components/Footer"
 
 import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider";
 
@@ -38,6 +39,16 @@ const HomePage = () => {
         sort_by: 'release_date.asc',
         'release_date.gte': new Date().toISOString().split('T')[0],  // Ensures only upcoming movies
     });
+
+    const fetchOldTV = () => discoverOldTv({
+        sort_by: 'release_date.asc',
+        'release_date.gte': new Date().toISOString().split('T')[0],  
+    });
+   
+    
+    
+    
+
 
     const [searchQuery, setSearchQuery] = useState('');
     const moiveTVSerialData = useContext(MoiveTVSerialContext);
@@ -192,6 +203,16 @@ const HomePage = () => {
                 fetchMovies={topTVSeries}
                 viewAllLink="/tvserial"
             />
+
+            <hr></hr>
+
+            <CarouselSelectionTV
+                title="Classic TV Gems from the 1900s" // Changed title
+                fetchMovies={fetchOldTV} // Changed function to fetch top rated TV series
+            />
+
+           <Footer />
+
         </div>
     );
 }
