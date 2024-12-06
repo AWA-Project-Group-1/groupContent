@@ -52,17 +52,10 @@
    /* margin-bottom: 30px; */
    padding: 0;
 }
-.show-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Create a responsive grid with a minimum column width of 300px */
-  gap: 20px;
-  width: 100%;
-  margin: 0;
-  padding: 10px;
-}
+
 
 @media (max-width: 1024px) {
-  .theater-container, .movie-container, .date-container, .fetch-showtime-container {
+  .theater-container, .movie-container, .date-container, .fetch-showtime-container{
       flex: 1 1 calc(50% - 20px); /* 2 filters in one row */
   }
 }
@@ -92,8 +85,8 @@
   background-color: #f9f9f9;
   padding: 15px;
   gap: 15px;
-  flex: 1 1 calc(50% - 20px); /* 2 cards per row on large screens */
-  min-height: 550px;
+  flex: 1 1 calc(50% - 20px); 
+  min-height: 350px;
   background-color: #95d2d8;
 }
 
@@ -103,8 +96,18 @@
   align-items: center;
   justify-content: center;
 }
-
+.show-left1 {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .image-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+.image-container1 {
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -134,11 +137,89 @@
   gap: 10px;
 }
 
+
+
+.show-right1 {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.show-right ul {
+  max-height: 150px; /* Adjust as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  background-color:lightgray;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  /* border: solid;
+  border-color: #65a1a8; */
+}
+.show-right1 ul {
+  max-height: 150px; /* Adjust as needed */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+  margin: 0;
+  list-style: none;
+  background-color:lightgray;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  /* border: solid;
+  border-color: #65a1a8; */
+}
+
+.show-right ul li {
+  margin-bottom: 10px;
+}
+.show-right1 ul li {
+  margin-bottom: 10px;
+}
+
+.show-right ul::-webkit-scrollbar {
+  width: 8px;
+}
+.show-right1 ul::-webkit-scrollbar {
+  width: 8px;
+}
+
+.show-right ul::-webkit-scrollbar-thumb {
+  background-color: #95d2d8; /* Match theme color */
+  border-radius: 5px;
+}
+.show-right1 ul::-webkit-scrollbar-thumb {
+  background-color: #95d2d8; /* Match theme color */
+  border-radius: 5px;
+}
+
+.show-right ul::-webkit-scrollbar-track {
+  background: gray;
+  border-radius: 5px;
+}
+.show-right1 ul::-webkit-scrollbar-track {
+  background: gray;
+  border-radius: 5px;
+}
+.buy-ticket-button{
+color:  #f23030;
+}
+.buy-ticket-button:hover{
+  color:#a0183c
+  }
+
+
 @media (max-width: 1024px) {
   .movie-card {
       flex: 1 1 100%; 
   }
+  .searched-movie-card{
+    flex: 1 1 100%; 
+  }
 }
+
 
 /* Searched Results */
 .searched-container {
@@ -146,6 +227,20 @@
   margin-top: 20px;
 }
 
+
+.searched-show-container {
+  display: flex;
+
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+}
+@media (min-width: 820x) {
+  .searched-show-container {width: 50%;}
+  
+}
 .searched-movie-card {
   display: flex;
   flex-direction: row;
@@ -154,14 +249,15 @@
   background-color: #f9f9f9;
   padding: 15px;
   gap: 15px;
-  flex: 1 1 100%; /* Single card layout */
- background-color:  #95d2d8;
-}
-.searched-show-container {
-  padding: 10px;
+  flex: 1 1 calc(50% - 20px); /* 2 cards per row on large screens */
+  min-height: 150px;
+  background-color: #95d2d8;
 }
 
-
+.show-image1 {
+  height: 100%;
+  border-radius: 10px;
+}
 .pagination-controls {
   display: flex;
   justify-content: center; /* Center the pagination buttons */
