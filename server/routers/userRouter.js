@@ -4,7 +4,7 @@ import { hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ApiError } from "../helpers/ApiError.js";
 
-const { sign } = jwt;
+//const { sign } = jwt;
 const router = Router();
 
 router.post("/register", async (req, res, next) => {
@@ -49,7 +49,8 @@ router.post("/login",(req, res, next) => {
                     console.error("No user found for email:", req.body.email);
                     return next(new Error("No user found for email:"))
                 };
-                    
+                
+                const user = result.rows[0];
                 compare(req.body.password, result.rows[0].password, (error, match) => {
                     if (error) {
                         console.error("Error comparing passwords", error);
@@ -61,12 +62,12 @@ router.post("/login",(req, res, next) => {
                     };
                         
                     const token = jwt.sign(
-                        { userId: req.body.id, user: req.body.email },
-                        process.env.JWT_SECRET_KEY, 
+                        { userId: user.id, user: user.email },
+                        process.env.JWT_SECRET_KEY,
                         { expiresIn: "1h" }
                     );
 
-                    const user = result.rows[0];
+                    //const user = result.rows[0];
                     console.log("User logged in successfully with email:", req.body.email);
 
                     return res.status(200).json({ 

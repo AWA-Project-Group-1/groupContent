@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import userRouter from './routers/userRouter.js';
 import groupRouter from './routers/groupRouter.js';
 import groupContentRouter from './routers/groupContentRouter.js';
+import groupMemberRouter from './routers/groupMemberRouter.js';
+import groupOwnerRouter from './routers/groupOwnerRouter.js';
 
 dotenv.config();
 
@@ -18,6 +20,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/', groupRouter);
 app.use('/user', userRouter);
 app.use('/content', groupContentRouter);
+app.use('/manage', groupMemberRouter);
+app.use('/manage', groupOwnerRouter);
 
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
