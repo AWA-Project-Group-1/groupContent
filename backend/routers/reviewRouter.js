@@ -4,6 +4,11 @@ import { pool } from '../helpers/db.js';
 import jwt from 'jsonwebtoken';
 
 const router = express.Router();
+import axios from 'axios';
+
+const baseUrl = process.env.REACT_APP_BACKEND_URL;
+const baseUrlforReviews = `${baseUrl}/api/reviews`;
+
 
 export const authenticate = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];

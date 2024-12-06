@@ -45,7 +45,8 @@ router.post("/signin", async (req, res) => {
 
     // creat JWT token
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.status(200).json({ token, id: user.id });
+    res.status(200).json({ token, id: user.id, email: user.email,
+      username: user.email }); //heyanwen added
   } catch (error) {
     console.error("Error signing in:", error);
     res.status(500).json({ error: "Failed to sign in" });

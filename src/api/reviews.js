@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const baseUrl = process.env.REACT_APP_BACKEND_URL;
-const baseUrlforReviews = `${baseUrl}/api/reviews`;
+const baseUrlforReviews = "http://localhost:3001/api/reviews";
 
 export const fetchReviews = async (movieId, contentType) => {
     try {
@@ -77,6 +77,7 @@ export const fetchReviewedContent = async (userToken, contentType) => {
 
 export const submitReview = async (movieId, { rating, comment, type }) => {
     const token = localStorage.getItem("token");
+    console.log("Token:", localStorage.getItem("token"));
     if (!token) {
         throw new Error("User not logged in.");
     }

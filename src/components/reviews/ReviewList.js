@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Ensure Bootstrap Icons are imported
+import { AverageStars } from '../elements/Stars/AverageStars';
+import { RatingStars } from '../elements/Stars/RatingStars';
 
 const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
     const [sortOption, setSortOption] = useState('');
@@ -26,20 +28,6 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
         });
         return counts;
     }, [reviews]);
-
-    const renderStars = (rating) => {
-        const stars = [];
-        for (let i = 1; i <= 5; i++) {
-            if (rating >= i) {
-                stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>); // Filled star
-            } else if (rating >= i - 0.5) {
-                stars.push(<i key={i} className="bi bi-star-half text-warning"></i>); // Half-filled star
-            } else {
-                stars.push(<i key={i} className="bi bi-star text-warning"></i>); // Empty star
-            }
-        }
-        return stars;
-    };
 
 
     const formatTimestamp = (timestamp) => {
@@ -125,7 +113,7 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
                         </div>
                         <div className="mb-3">
                             <div className="d-flex mb-2" style={{ marginLeft: '10px' }}>
-                                {renderStars(userReview.rating)}
+                                <RatingStars rating={(userReview.rating)} />
                             </div>
                             <p className="d-flex mb-2" style={{ marginLeft: '10px' }}>
                                 {userReview.comment}
@@ -154,9 +142,8 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
 
                             <div className="right-column" style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                 <div className="d-flex" >
-                                    {renderStars(averageRating)}
+                                    <AverageStars value={(averageRating)} showBrackets={false} />
                                 </div>
-
                                 <div>
                                     <span>from {totalReviews} reviews</span>
                                 </div>
@@ -215,7 +202,7 @@ const ReviewList = ({ reviews, onDeleteReview, userReview }) => {
                                     </div>
                                     <div className="mb-3">
                                         <div className="d-flex mb-2" style={{ marginLeft: '10px' }}>
-                                            {renderStars(review.rating)}
+                                            <RatingStars rating={(review.rating)} />
                                         </div>
                                         <p className="d-flex mb-2" style={{ marginLeft: '10px' }}>
                                             {review.comment}

@@ -9,10 +9,15 @@ export const UserProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
     const id = localStorage.getItem("id"); // Retrieve the user ID
-    if (token && email && id) {
-      setUser({ token, email, id }); // Include the ID in the user object
+    const username = localStorage.getItem("username");  //heyanwen added
+    console.log(token, email, id, username);   //heyanwen added
+    if (token && email && id && username) {  //heyanwen added username 
+      setUser({ token, email, id, username}); // Include the ID in the user object
     }
   }, []);
+
+
+  
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
