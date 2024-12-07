@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CustomCarouselTV from '../../elements/Carousel/TvCarousel'; // Assuming CustomCarouselTV is the carousel component
 import ViewAllButton from '../../elements/Button/ViewAllButton'; // Import ViewAllButton component
-import './CarouselSelection.css'; // Import the CSS file
+import './CarouselSelection.css';
 import { fetchReviews } from "../../../api/reviews";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -78,7 +78,7 @@ const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }
     return (
         <div className="carousel-selection">
             <div className="carousel-selection-header">
-                <h2 className="carousel-selection-title">{title}</h2>
+                <h2 className="carousel-selection-title" style={{ marginBottom: '20px' }}><span style={{ fontSize: '50px', color: '#d24747' }}>I</span>{title}</h2>
                 {viewAllLink && <ViewAllButton link={viewAllLink} />}
             </div>
 
@@ -102,7 +102,7 @@ const CarouselSelection = ({ title, fetchMovies, searchedTVseries, viewAllLink }
                                 <h5>{movie.name}</h5>
                                 <p>{new Date(movie.release_date).toLocaleDateString()}</p>
                                 <p>
-                                    <i className="bi bi-star-fill text-warning"></i> {movie.averageRating} 
+                                    <i className="bi bi-star-fill text-warning"></i> {movie.averageRating}
                                     <span className="text-muted">({movie.reviewCount} reviews)</span>
                                 </p>
                             </div>

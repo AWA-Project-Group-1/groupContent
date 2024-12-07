@@ -27,7 +27,7 @@ function SignIn() {
       localStorage.setItem("email", email);
       localStorage.setItem("id", response.data.id);
       localStorage.setItem("username", response.data.username); //heyanwen added
-      localStorage.setItem("email",response.data.email);//heyanwen added
+      localStorage.setItem("email", response.data.email);//heyanwen added
 
       // Set global user information
       setUser({ token: response.data.token, email, id: response.data.id, username: response.data.username });

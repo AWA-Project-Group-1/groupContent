@@ -66,7 +66,7 @@ const CarouselSelection = ({ title, fetchMovies, searchedmovies, viewAllLink }) 
     return (
         <div className="carousel-selection">
             <div className="carousel-selection-header">
-                <h2 className="carousel-selection-title">{title}</h2>
+                <h2 className="carousel-selection-title"><span style={{ fontSize: '50px', color: '#d24747' }}>I</span> {title}</h2>
                 {viewAllLink && <ViewAllButton link={viewAllLink} />}
             </div>
             {movies.length > 0 ? (
