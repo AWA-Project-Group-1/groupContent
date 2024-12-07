@@ -248,8 +248,7 @@ color:  #f23030;
    
     
   }
-  .searched-show-container {
-  
+  .searched-show-container {  
     width: 100%;
   
   }
@@ -263,6 +262,7 @@ color:  #f23030;
   .searched-movie-card {
     flex: 1 1 100%; /* Each card takes full width */
     max-width: 100%; /* Ensures the card spans the entire row */
+    box-sizing: border-box;
   }
  
 }
@@ -277,6 +277,7 @@ color:  #f23030;
   flex: 1 1 calc(50% - 20px); 
   min-height: 350px;
   background-color: #95d2d8;
+  box-sizing: border-box;
 }
 
 .show-image1 {

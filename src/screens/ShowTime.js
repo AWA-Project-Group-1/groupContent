@@ -49,15 +49,17 @@ const ShowTime = () => {
       const nextPage = () => {
           if (currentPage < totalPages) {
               setCurrentPage(currentPage + 1);
+              window.dispatchEvent(new Event('resize'));
           }
       };
   
       const prevPage = () => {
           if (currentPage > 1) {
               setCurrentPage(currentPage - 1);
+              window.dispatchEvent(new Event('resize'));
           }
       };
-  
+    
 
      const groupedMovies1 = showTime.reduce((acc, movie) => {
         const { title, image, showStart, showEnd, showUrl } = movie;
