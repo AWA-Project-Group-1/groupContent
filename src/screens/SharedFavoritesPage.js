@@ -79,10 +79,16 @@ const SharedFavoritesPage = () => {
     if (i < tvSeries.length) mixedItems.push(tvSeries[i]);
   }
 
-  // Pagination logic
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const visibleItems = mixedItems.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  const totalPages = Math.ceil(mixedItems.length / ITEMS_PER_PAGE);
+  
+ // Pagination logic
+const startIndexMovies = (currentPage - 1) * 5; 
+const startIndexSeries = (currentPage - 1) * 5; 
+const visibleMovies = movies.slice(startIndexMovies, startIndexMovies + 5);
+const visibleSeries = tvSeries.slice(startIndexSeries, startIndexSeries + 5);
+
+// Combine movies and series for the current page
+const visibleItems = [...visibleMovies, ...visibleSeries];
+const totalPages = Math.ceil(Math.max(movies.length, tvSeries.length) / 5);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
