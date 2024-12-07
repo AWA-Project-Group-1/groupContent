@@ -1,0 +1,236 @@
+[33mcommit 8df72257705f3544ccd92c3c9de63c41beeac5ee[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Merge: e993826 3863a69
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Sat Dec 7 14:38:39 2024 +0200
+
+    Merge branch 'main' of https://github.com/AWA-Project-Group-1/MovieApp-Group-1
+
+[33mcommit e9938263093d04725888f5dfe723da69b67b9031[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Sat Dec 7 14:37:11 2024 +0200
+
+    removed incorrectly placed line during implementation
+
+[33mcommit 3863a691fc78371d6811d3fc6ffacbcf5cd2b0b4[m
+Author: Robin Holzheuer <robin.holzheuer@student.hnu.de>
+Date:   Sat Dec 7 14:01:47 2024 +0200
+
+    Added / Changed styling of favorites parts
+
+[33mcommit 6350c05f8a16d08c9565bbe9e09e985a86c52b1e[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Sat Dec 7 14:00:57 2024 +0200
+
+    add homepage style and improve responsiveness, fix signup redirect to signin
+
+[33mcommit d5c058269c7546c331f9fd80f1e4f9ba955b040b[m
+Author: Robin Holzheuer <robin.holzheuer@student.hnu.de>
+Date:   Sat Dec 7 13:46:00 2024 +0200
+
+    removed API key and wrote it in backend
+
+[33mcommit e943000bb03efa0e8eae9f50c893ddbc702e9ef3[m[33m ([m[1;31morigin/group-page[m[33m)[m
+Author: shr0m0 <t3hosh00@students.oamk.fi>
+Date:   Fri Dec 6 13:06:36 2024 +0200
+
+    fixing changes
+
+[33mcommit 34d8ef61934b8cb03c4bb16fdda48f5c4f961f73[m
+Merge: 99b2903 e375476
+Author: shr0m0 <t3hosh00@students.oamk.fi>
+Date:   Fri Dec 6 13:03:47 2024 +0200
+
+    Merge branch 'main' of https://github.com/AWA-Project-Group-1/MovieApp-Group-1
+
+[33mcommit 99b29036b433675c955eff0fd013165959d8f110[m
+Author: shr0m0 <t3hosh00@students.oamk.fi>
+Date:   Fri Dec 6 13:02:53 2024 +0200
+
+    1900 tv and footer on homepage
+
+[33mcommit e375476712710d03bc75abd47f157d824505aaae[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Fri Dec 6 11:16:01 2024 +0200
+
+    email lenth limit
+
+[33mcommit e5800e188121c1f3e8f6e90a052baa332cd69a97[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Fri Dec 6 11:06:34 2024 +0200
+
+    using scroller to display the time slots
+
+[33mcommit c1da723de9bb6b70b7d014323790a82c7de08300[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Wed Dec 4 21:31:57 2024 +0200
+
+    zindex conflit in About
+    nav bar color change
+
+[33mcommit 39f9225ff337f11007c653b820408f4430f76719[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Tue Dec 3 22:56:16 2024 +0200
+
+    Fix loading issue for give review button navigation
+
+[33mcommit be40f55ed84249db61767260bb9ee090de2f9b02[m
+Author: Robin Holzheuer <robin.holzheuer@student.hnu.de>
+Date:   Tue Dec 3 21:28:29 2024 +0200
+
+    Implement login popup for favorite actions and enhance responsive design in user-related components
+
+[33mcommit 14b3bc44091bebbb63a2e20359e78a824f6a5d5d[m
+Merge: d635fd2 9bdfbe5
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Tue Dec 3 21:05:40 2024 +0200
+
+    Merge branch 'main' of https://github.com/AWA-Project-Group-1/MovieApp-Group-1
+
+[33mcommit 9bdfbe52f444f42b6cc36e3db8a22877165f7947[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Tue Dec 3 21:42:31 2024 +0200
+
+    UserContext signin endpoint changechange
+    extracting email to display.
+    Sigin/signup changes to welcome useremail
+    profile and group page are displayed only after
+    users login.
+
+[33mcommit d635fd2cfc6ee4b6a09279df45aec11cf807afcb[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Tue Dec 3 21:03:54 2024 +0200
+
+    add footer and about
+
+[33mcommit cd14f24c0f86d0d3329c78ee8eb33ca8c1bccb9b[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Mon Dec 2 19:59:45 2024 +0200
+
+    Consolidate star component import for consistent usage
+
+[33mcommit 5606ff31736ab5c6b2eda73689726e23a5786456[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Mon Dec 2 17:05:23 2024 +0200
+
+    Fix the issue with the average rating value on the details page to ensure the correct display of half stars.
+
+[33mcommit 23dd1c68663cd76801eaee1f1838976f52754071[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Mon Dec 2 16:45:16 2024 +0200
+
+    Refactor review deletion endpoint
+
+[33mcommit 2ac3265500c5fe6832a6ed1d0291d8c54a471092[m
+Merge: d47b341 4eda686
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Mon Dec 2 16:10:47 2024 +0200
+
+    Merge branch 'main' of https://github.com/AWA-Project-Group-1/MovieApp-Group-1
+
+[33mcommit d47b3416462543962371a683ba868d739e808b11[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Mon Dec 2 16:09:05 2024 +0200
+
+    change styles for reviews part in cards and details page
+
+[33mcommit 4eda686c66d06ae2e74c5cf1830e74fd20fbb6f9[m
+Merge: 475c21d 4e877be
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Mon Dec 2 15:20:00 2024 +0200
+
+    Merge branch 'main' of https://github.com/AWA-Project-Group-1/MovieApp-Group-1
+
+[33mcommit 475c21ddf96a98c3bcc8029fb58a0a93fb4ab4bc[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Mon Dec 2 15:19:06 2024 +0200
+
+    movie card button text changes
+
+[33mcommit 4e877be7b17bcb95bc2861cb71678330710db590[m
+Author: Robin Holzheuer <robin.holzheuer@student.hnu.de>
+Date:   Mon Dec 2 11:14:49 2024 +0200
+
+    Added UserListPage so every user have access to shared favorites
+
+[33mcommit c096a89d895dab94cd60d8b9671dbc18247399d2[m
+Author: Robin Holzheuer <robin.holzheuer@student.hnu.de>
+Date:   Mon Dec 2 09:39:42 2024 +0200
+
+    Update favorite and review deletion logic; enhance user profile pagination and display
+
+[33mcommit ccfb1b5629293c114035a2e7a4b063642ad05932[m
+Merge: b70581d 6e750a8
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Mon Dec 2 08:02:15 2024 +0200
+
+    Merge branch 'main' of https://github.com/AWA-Project-Group-1/MovieApp-Group-1
+
+[33mcommit b70581d22953c76216d82536f6b7eed66f2323c6[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Mon Dec 2 08:01:46 2024 +0200
+
+    HeroSection effect imporvement
+
+[33mcommit 9a73d4ef9fac74f527e2b6785601bccb8a464a48[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Sun Dec 1 22:30:01 2024 +0200
+
+    clearing
+
+[33mcommit 8c1fb5ade1e2414823f19351cf49ca0eefb210c9[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Sun Dec 1 22:20:49 2024 +0200
+
+    remove my redundant files
+
+[33mcommit c1db96d3ce1eac2cc1e132c94fbb52bbb4e4e144[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Sun Dec 1 22:14:18 2024 +0200
+
+    herosection update
+
+[33mcommit 335256e22a309596d8defeee131d2650d037cfd2[m
+Author: He Yanwen <t3heya00@students.oamk.com>
+Date:   Sun Dec 1 22:07:22 2024 +0200
+
+    functionality updata in showtime page,
+    responvienees in movie,tvserial,
+    detail and showtime
+
+[33mcommit 6e750a841c821948d97074ec94589d0b449e872c[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Sun Dec 1 21:50:12 2024 +0200
+
+    Update carousel styles to match movie/tv card style changes.
+
+[33mcommit 8306d145057e46d1d100f4449992f846e813c631[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Sun Dec 1 19:22:26 2024 +0200
+
+    Add 'Give Review' button functionality: toggles between 'Give Review' and 'Review Already Submitted' based on user's review status, and navigates to review section on details page when clicked.
+
+[33mcommit 63de0fd8a42d2bec60059f8ef37e3eb0747983d3[m
+Author: Robin Holzheuer <robin.holzheuer@student.hnu.de>
+Date:   Sun Dec 1 17:02:56 2024 +0200
+
+    Add user email retrieval and enhance SharedFavoritesPage & ProfilePage UI
+
+[33mcommit 5c2ba64310298827a41107ae9f4f4e623c6dbf28[m
+Author: Robin Holzheuer <robin.holzheuer@student.hnu.de>
+Date:   Sun Dec 1 14:22:56 2024 +0200
+
+    Fixed SharedFavorites for the changing user ID's
+
+[33mcommit 7569785e05428325d715ed17e4102df4ce852e84[m
+Author: Robin Holzheuer <robin.holzheuer@student.hnu.de>
+Date:   Sun Dec 1 12:55:43 2024 +0200
+
+    Implement account deletion feature with token verification and favorites cleanup
+
+[33mcommit f8f35bca2085dd88bb1ed9bf88dfaf5050bf9d00[m
+Author: suheda-seyda-sener <t3sesu00@students.oamk.fi>
+Date:   Sat Nov 30 20:36:11 2024 +0200
+
+    add margin and <hr> element for visual separation
+
+
