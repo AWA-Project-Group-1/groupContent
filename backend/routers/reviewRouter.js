@@ -6,10 +6,6 @@ import jwt from 'jsonwebtoken';
 const router = express.Router();
 import axios from 'axios';
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL;
-const baseUrlforReviews = `${baseUrl}/api/reviews`;
-
-
 export const authenticate = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
 
@@ -194,27 +190,5 @@ router.delete('/:reviewId', authenticate, (req, res) => {
         });
     });
 });
-
-// Backend API to get reviewed movies for the logged-in user
-export async function fetchReviewedMovies() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error('User is not logged in. No token found.');
-        throw new Error('User not logged in.');
-    }
-
-    try {
-        const response = await axios.get(`${baseUrlforReviews}/user/reviews`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        });
-        return response.data; // Return the list of reviewed movie IDs
-    } catch (error) {
-        console.error('Error fetching reviewed movies:', error);
-        throw new Error('Failed to fetch reviewed movies');
-    }
-}
-
 
 export default router;
