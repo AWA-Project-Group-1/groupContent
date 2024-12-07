@@ -19,6 +19,12 @@
     width: 300px;
     text-align: center;
   }
+
+  .userIcon {
+    font-size: 2rem; 
+    color: #555; 
+    margin-bottom: 0.5rem; 
+  }
   
   .userCard h3 {
     margin-bottom: 15px;
@@ -26,7 +32,7 @@
   
   .sharedLinkButton {
     padding: 10px 20px;
-    background-color: #28a745;
+    background-color: #e74c3c;
     color: white;
     border: none;
     border-radius: 5px;
@@ -34,7 +40,7 @@
   }
   
   .sharedLinkButton:hover {
-    background-color: #218838;
+    background-color: #d9594b;
   }
   
   /* Responsive Design */
