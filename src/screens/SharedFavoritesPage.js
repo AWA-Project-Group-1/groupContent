@@ -79,10 +79,16 @@ const SharedFavoritesPage = () => {
     if (i < tvSeries.length) mixedItems.push(tvSeries[i]);
   }
 
-  // Pagination logic
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const visibleItems = mixedItems.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  const totalPages = Math.ceil(mixedItems.length / ITEMS_PER_PAGE);
+  
+ // Pagination logic
+const startIndexMovies = (currentPage - 1) * 5; 
+const startIndexSeries = (currentPage - 1) * 5; 
+const visibleMovies = movies.slice(startIndexMovies, startIndexMovies + 5);
+const visibleSeries = tvSeries.slice(startIndexSeries, startIndexSeries + 5);
+
+// Combine movies and series for the current page
+const visibleItems = [...visibleMovies, ...visibleSeries];
+const totalPages = Math.ceil(Math.max(movies.length, tvSeries.length) / 5);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -98,78 +104,83 @@ const SharedFavoritesPage = () => {
 
   return (
     <div className={styles.sharedFavoritesContainer}>
-  <img src={logo} alt="Logo" className={styles.logo} />
-  <h1 className={styles.title}>Shared Favorites of {email}</h1>
-  {visibleItems.length > 0 ? (
-    <>
-      {visibleItems.some((item) => item.type === 'movie') && (
-        <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>Movies</h3>
-          <div className={styles.favoritesGrid}>
-            {visibleItems
-              .filter((item) => item.type === 'movie')
-              .map((item) => (
-                <div
-                  key={item.id}
-                  className={styles.favoriteCard}
-                  onClick={() => handleCardClick(item)}
-                >
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                    alt={item.title || item.name}
-                    className={styles.favoriteImage}
-                  />
-                  <h5>{item.title || item.name}</h5>
-                  <p>{item.release_date || item.first_air_date}</p>
-                </div>
-              ))}
-          </div>
+      <img src={logo} alt="Logo" className={styles.logo} />
+      <button
+        className={styles.homeButton}
+        onClick={() => navigate('/')}>
+          Go back to Homepage
+      </button>
+      <h1 className={styles.title}>Shared Favorites of {email}</h1>
+      {visibleItems.length > 0 ? (
+        <>
+          {visibleItems.some((item) => item.type === 'movie') && (
+            <div className={styles.section}>
+              <h3 className={styles.sectionHeading}>Movies</h3>
+              <div className={styles.favoritesGrid}>
+                {visibleItems
+                  .filter((item) => item.type === 'movie')
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className={styles.favoriteCard}
+                      onClick={() => handleCardClick(item)}
+                    >
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                        alt={item.title || item.name}
+                        className={styles.favoriteImage}
+                      />
+                      <h5>{item.title || item.name}</h5>
+                      <p>{item.release_date || item.first_air_date}</p>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+          {visibleItems.some((item) => item.type === 'tv') && (
+            <div className={styles.section}>
+              <h3 className={styles.sectionHeading}>TV Series</h3>
+              <div className={styles.favoritesGrid}>
+                {visibleItems
+                  .filter((item) => item.type === 'tv')
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className={styles.favoriteCard}
+                      onClick={() => handleCardClick(item)}
+                    >
+                      <img
+                        src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
+                        alt={item.title || item.name}
+                        className={styles.favoriteImage}
+                      />
+                      <h5>{item.title || item.name}</h5>
+                      <p>{item.release_date || item.first_air_date}</p>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <p>No favorites available.</p>
+      )}
+      {mixedItems.length > ITEMS_PER_PAGE && (
+        <div className={styles.pagination}>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => handlePageChange(i + 1)}
+              className={`${styles.pageButton} ${
+                currentPage === i + 1 ? styles.activePage : ''
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
       )}
-      {visibleItems.some((item) => item.type === 'tv') && (
-        <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>TV Series</h3>
-          <div className={styles.favoritesGrid}>
-            {visibleItems
-              .filter((item) => item.type === 'tv')
-              .map((item) => (
-                <div
-                  key={item.id}
-                  className={styles.favoriteCard}
-                  onClick={() => handleCardClick(item)}
-                >
-                  <img
-                    src={`https://image.tmdb.org/t/p/w500${item.poster_path}`}
-                    alt={item.title || item.name}
-                    className={styles.favoriteImage}
-                  />
-                  <h5>{item.title || item.name}</h5>
-                  <p>{item.release_date || item.first_air_date}</p>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-    </>
-  ) : (
-    <p>No favorites available.</p>
-  )}
-  {mixedItems.length > ITEMS_PER_PAGE && (
-    <div className={styles.pagination}>
-      {Array.from({ length: totalPages }, (_, i) => (
-        <button
-          key={i + 1}
-          onClick={() => handlePageChange(i + 1)}
-          className={`${styles.pageButton} ${
-            currentPage === i + 1 ? styles.activePage : ''
-          }`}
-        >
-          {i + 1}
-        </button>
-      ))}
     </div>
-  )}
-</div>
   );
 };
 

@@ -403,3 +403,22 @@ h5{
     font-size: 1rem;
   }
 } */ 
+
+.login-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #e74c3c; 
+  color: #ffffff; 
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); 
+  z-index: 1000;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px; 
+  line-height: 1.5; 
+}
+

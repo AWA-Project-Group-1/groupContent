@@ -1,17 +1,19 @@
-import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from "./MovieCards.module.css";
 import { MovieGenreContext } from "../context/MovieGenreProvider";
 import { addToFavorites, removeFromFavorites, fetchFavorites } from '../api/favoriteapi';
 import UserContext from '../context/UserContext';
 import { fetchReviews, fetchReviewedContent } from "../api/reviews";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { AverageStars } from './elements/Stars/AverageStars';
 
 const MovieCards = ({ movieCards }) => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [favorites, setFavorites] = useState([]);
+  const [showLoginPopup, setShowLoginPopup] = useState(false); // State for login popup
   const { user } = useContext(UserContext); // Access the logged-in user's token
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search); // To parse query parameters
@@ -58,7 +60,6 @@ const MovieCards = ({ movieCards }) => {
     loadRatings();
   }, [movieCards]);
 
-  // Fetch the reviewed content for the user
   useEffect(() => {
     async function loadReviewedContentData() {
       if (user?.token) {
@@ -88,11 +89,24 @@ const MovieCards = ({ movieCards }) => {
 
   function reviewsClickHandler(movieId) {
     navigate(`/detail/movie/${movieId}#reviews`);
+
+    // Poll for the target element
+    const intervalId = setInterval(() => {
+      const reviewsElement = document.querySelector('#reviews');
+      if (reviewsElement) {
+        clearInterval(intervalId); // Stop checking once the element exists
+        reviewsElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100); // Check every 100ms
   }
 
   function toggleFavoriteHandler(event, movieId) {
     event.stopPropagation();
-    if (!user?.token) return; // Prevent action if user is not logged in
+    if (!user?.token) {
+      setShowLoginPopup(true); // Show the login popup
+      setTimeout(() => setShowLoginPopup(false), 3000); // Auto-hide the popup after 3 seconds
+      return;
+    }
 
     if (favorites.includes(movieId)) {
       removeFromFavorites(movieId, user.token)
@@ -117,20 +131,6 @@ const MovieCards = ({ movieCards }) => {
     }
   }
 
-  const renderStars = (average) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (average >= i) {
-        stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>); // Filled star
-      } else if (average >= i - 0.5) {
-        stars.push(<i key={i} className="bi bi-star-half text-warning"></i>); // Half-filled star
-      } else {
-        stars.push(<i key={i} className="bi bi-star text-warning"></i>); // Empty star
-      }
-    }
-    return stars;
-  };
-
   return (
     <div>
       <div className={styles['productcards_container']}>
@@ -151,21 +151,14 @@ const MovieCards = ({ movieCards }) => {
               <h5>{item.title.length > 17 ? `${item.title.slice(0, 17)}...` : item.title}</h5>
               {/* Render average rating as stars and review count */}
               <div className={styles['rating-container']}>
-                {renderStars(averageRatings[item.id] || 0)}
-                <span className={styles['review-count']}>
-                  ({reviewCounts[item.id] || 0}){/* Display number of reviews */}
-                </span>
+                <AverageStars value={(averageRatings[item.id] || 0)} reviewCount={reviewCounts[item.id] || 0} showBrackets={true} />
               </div>
               <p>{item.release_date}</p>
               <div className={styles['button-container']}>
-                {/* Review Button */}
-                <div
-                  className={styles['review-button-container']}
-                  onClick={(e) => {
-                    e.stopPropagation(); // Ensure this click doesn’t trigger parent div
-                    reviewsClickHandler(item.id);
-                  }}
-                >
+                <div className={styles['review-button-container']} onClick={(e) => {
+                  e.stopPropagation(); // Ensure this click doesn’t trigger parent div
+                  reviewsClickHandler(item.id);
+                }}>
                   {reviewedContent.includes(item.id) ? (
                     <button className={styles['button-click']}>
                       ✍🏿 Review  <br />  provided
@@ -194,6 +187,11 @@ const MovieCards = ({ movieCards }) => {
         <span>Page {currentPage}</span>
         <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
       </div>
+      {showLoginPopup && (
+        <div className={styles['login-popup']}>
+          Please log in to save movies to your favorites.
+        </div>
+      )}
     </div>
   );
 };

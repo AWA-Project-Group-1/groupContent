@@ -38,23 +38,67 @@ const ShowTime = () => {
       }, []);
       
    
+      const filteredMovies = showTime.filter(movie => movie.theatreID === "1038");
 
+    //   const startIndex = (currentPage - 1) * itemsPerPage;
+    //   const endIndex = startIndex + itemsPerPage;
+    //   const currentMovies = filteredMovies.slice(startIndex, endIndex);
+  
+    //   const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
+  
+      const nextPage = () => {
+          if (currentPage < totalPages) {
+              setCurrentPage(currentPage + 1);
+              window.dispatchEvent(new Event('resize'));
+          }
+      };
+  
+      const prevPage = () => {
+          if (currentPage > 1) {
+              setCurrentPage(currentPage - 1);
+              window.dispatchEvent(new Event('resize'));
+          }
+      };
+    
+
+     const groupedMovies1 = showTime.reduce((acc, movie) => {
+        const { title, image, showStart, showEnd, showUrl } = movie;
+
+        if (!acc[title]) {
+            acc[title] = {
+            image,
+            title,
+            showtimes: [],
+            };
+        }
+
+        acc[title].showtimes.push({ showStart, showEnd, showUrl });
+
+        return acc;
+    }, {});
+
+
+    const groupedMoviesArray = Object.values(groupedMovies1);
+    const now = new Date();
+
+    // Filter upcoming movies before pagination
+    const upcomingGroupedMovies = groupedMoviesArray.filter(item =>
+        item.showtimes.some(showtime => new Date(showtime.showStart) > now)
+    );
+
+    const totalPages = Math.ceil(upcomingGroupedMovies.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentMovies1 = showTime.filter(item => item.theatreID === "1038")
-    const currentMovies = currentMovies1.slice(startIndex, endIndex);
-      
-    function nextPage() {
-        if (currentMovies.length === itemsPerPage) {
-        setCurrentPage(currentPage + 1);
-        }
-    }
+    const paginatedMovies = upcomingGroupedMovies.slice(startIndex, endIndex);
 
-    function prevPage() {
-        if (currentPage > 1) {
-        setCurrentPage(currentPage - 1);
-        }
-    }
+
+    // const groupedMoviesArray = Object.values(groupedMovies1);
+    // const paginatedMovies = groupedMoviesArray.slice(startIndex, endIndex);
+    // const now = new Date();
+    // const upcomingMovies = paginatedMovies.filter((item) =>
+    // item.showtimes.some(showtime => new Date(showtime.showStart) > now)
+    // );
+    
     const [area, setArea] = useState('1029');  // Default area: 'Valitse alue/teatteri'
     const [movie, setMovie] = useState('');  // Default empty movie selection
     const [showtimes, setShowtimes] = useState([]);
@@ -165,12 +209,19 @@ const ShowTime = () => {
                     return false;
                 })
                 .map(show => {
+                //     showStart: show.getElementsByTagName("dttmShowStart")[0].textContent,
+                // showEnd: show.getElementsByTagName("dttmShowEnd")[0].textContent,
+                    const showStarttime = show.getElementsByTagName('dttmShowStart')[0]?.textContent;
+                    const showEndtime = show.getElementsByTagName("dttmShowEnd")[0].textContent;
                     const time = show.getElementsByTagName('dttmShowStart')[0]?.textContent;
-                    const showtime = time ? time.split('T')[1] : 'N/A';  // Extract showtime part
+                    // const showtime = time ? time.split('T')[1] : 'N/A';  // Extract showtime part
                     // const imageUrl = show.getElementsByTagName('ImageURL')?.textContent || '';
                     return {
                         title: show.getElementsByTagName('Title')[0]?.textContent,
-                        time: showtime,
+                        showStarttime:showStarttime,
+                        showEndtime: showEndtime,
+                        time: time,
+                        showUrl:show.getElementsByTagName("ShowURL")[0].textContent,
                         image: show.getElementsByTagName("EventMediumImagePortrait")[0].textContent,
                         date: time ? time.split('T')[0] : 'N/A',  // Extract date
                     };
@@ -201,23 +252,12 @@ const ShowTime = () => {
             setError('Please select a movie, area, and date.');
         }
     };
-// for put all the time slots for one movie
-    const groupedMovies = currentMovies.reduce((acc, movie) => {
-        const { title, image, showStart, showEnd, showUrl } = movie;
-      
-        if (!acc[title]) {
-          acc[title] = {
-            image,
-            title,
-            showtimes: [],
-          };
-        }
-      
-        acc[title].showtimes.push({ showStart, showEnd, showUrl });
-      
-        return acc;
-      }, {});
 
+    
+
+
+
+   
     return (
         <div className={styles["all-container"]}>
                 <div className={styles["navigation-hero-container"]} >
@@ -300,28 +340,32 @@ const ShowTime = () => {
                     {/* <div> */}
                             <div className={styles["searched-text"]}> <h2>Searched Results:</h2></div>
                             <div className={styles["searched-show-container"]}>
-                            <div className={styles["searched-movie-card"]}>
-                                <div className={styles["show-left"]}  >
-                                    <div className={styles["image-container"]}>                                    
-                                    <img className={styles["show-image"]} src={showtimes[0]?.image} alt={showtimes[0]?.title} />
-                                    </div>  
-                                </div>
+                                <div className={styles["searched-movie-card"]}>
+                                    <div className={styles["show-left1"]}  >
+                                        <div className={styles["image-container1"]}>                                    
+                                            <img className={styles["show-image"]} src={showtimes[0]?.image} alt={showtimes[0]?.title} />
+                                        </div>  
+                                    </div>
                             {/* Displaying movie title and showtimes */}
-                                <div className={styles["show-right"]} >
-                                    <h2  >Movie Title:</h2>
-                                    <h5>{showtimes[0]?.title}</h5>
-                                    <h2 className={styles["showtime-container"]}>Show Times:</h2>
+                                    <div className={styles["show-right1"]} >
+                                        <h2  >Movie Title:</h2>
+                                        <h5>{showtimes[0]?.title}</h5>
+                                        <h2 className={styles["showtime-container"]}>Show Times:</h2>
 
-                                    {/* Mapping over showtimes and displaying each time */}
-                                    <ul>
-                                        {showtimes.map((showtime, index) => (
-                                            <li key={index}>
-                                                {showtime.title} - {showtime.time}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                        {/* Mapping over showtimes and displaying each time */}
+                                        <ul>
+                                            {showtimes.map((showtime, index) => (
+                                                <li key={index}>
+                                                    {showtime.time}
+                                                   { new Date(showtime.showStarttime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(showtime.showEndtime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} &nbsp;
+                                                   <Link to={showtime.showUrl} className={styles["buy-ticket-button"]}>
+                                                        Buy Ticket
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
                             </div>                       
                         </div>
             )}
@@ -338,61 +382,57 @@ const ShowTime = () => {
                 <div className={styles["OuluMovie-text"]}><h2>Today's Show In Oulu</h2></div>
 
                 <div className={styles["show-container"]}>
-                    {Object.values(groupedMovies).map((item, index) => (
-                    // {currentMovies.map((item, index) => (
-                     <div key={index} className={styles["movie-card"]}>
-                        
-                        <div className={styles["show-left"]} >
-                            {/* <span className={styles["status-badge"]} >{new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}</span>
-                            
-                            <img src={item.image} alt={item.title} className={styles["show-image"]} /> */}
+                {paginatedMovies.map((item, index) => (
+                    <div key={index} className={styles["movie-card"]}>
+                        <div className={styles["show-left"]}>
                             <div className={styles["image-container"]}>
-                                <span  className={styles["status-badge"]} >
-                                    {new Date(item.showStart) > new Date() ? 'Coming Soon' : 'Now Showing'}
+                                <span className={styles["status-badge"]}>
+                                    {new Date(item.showtimes[0].showStart) > now ? 'Coming Soon' : 'Now Showing'}
                                 </span>
-                                <img src={item.image} alt={item.title} className={styles["show-image"]}/>
+                                <img src={item.image} alt={item.title} className={styles["show-image"]} />
+                            </div>
                         </div>
-                        </div>
-                        {/* </div> */}
-
-                        <div className={styles["show-right"]}  >
+                        <div className={styles["show-right"]}>
                             <h2>Movie Title:</h2>
                             <h5>{item.title}</h5>
-                            <h2> Show Time: </h2>
-                            {/* <h5> {item.showStart} - {item.showEnd} </h5> */}
-                            {/* <h5> */}
-                            
-
-                                {/* <Link to={item.showUrl} className={styles["buy-ticket-button"]}>Buy Ticket</Link> */}
-
-                                {/* <a href={item.showUrl} target="_blank" rel="noopener noreferrer" className="buy-ticket-button">
-                                    Buy Ticket
-                                </a> */}
-                            {/* </h5> */}
-
+                            <h2>Show Time:</h2>
                             <ul>
-                                {item.showtimes.map((showtime, idx) => (
-                                    <li key={idx}>
-                                    {showtime.showStart} - {showtime.showEnd} &nbsp;
-                                    <Link to={showtime.showUrl} className={styles["buy-ticket-button"]}>
-                                        Buy Ticket
-                                    </Link>
-                                    </li>
-                                ))}
-                                </ul>
+                                {item.showtimes
+                                    .filter(showtime => new Date(showtime.showStart) > now)
+                                    .map((showtime, idx) => (
+                                        <li key={idx}>
+                                            {new Date(showtime.showStart).toLocaleTimeString([], {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}{' '}
+                                            -{' '}
+                                            {new Date(showtime.showEnd).toLocaleTimeString([], {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                            })}{' '}
+                                            &nbsp;
+                                            <Link to={showtime.showUrl} className={styles["buy-ticket-button"]}>
+                                                Buy Ticket
+                                            </Link>
+                                        </li>
+                                    ))}
+                            </ul>
                         </div>
-
-                        {/* <div className={styles["show-rightmost"]}>
-
-                        </div> */}
                     </div>
-                    ))}
+                ))}
+
                 </div>
 
                 <div className={styles['pagination-controls']}>
-                    <button onClick={prevPage} disabled={currentPage === 1}>Previous</button>
-                    <span>Page {currentPage}</span>
-                    <button onClick={nextPage} disabled={currentMovies.length < itemsPerPage}>Next</button>
+                    <button onClick={prevPage} disabled={currentPage === 1}>
+                        Previous
+                    </button>
+                    <span>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button onClick={nextPage} disabled={currentPage === totalPages}>
+                        Next
+                    </button>
                 </div>
 
 

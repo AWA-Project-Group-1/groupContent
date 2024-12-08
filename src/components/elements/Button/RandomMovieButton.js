@@ -4,7 +4,7 @@ import classes from './RandomMovieButton.module.css'
 
 const RandomMovieButton = ({ onClick, loading, disabled }) => {
     return (
-        <div>
+        <div class="button-container">
             <button onClick={onClick} disabled={disabled} className={classes.RandomButton} >
                 {loading ? 'Loading...' : 'Pick a Movie!'}
             </button>
