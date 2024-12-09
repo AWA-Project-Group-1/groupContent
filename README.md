@@ -90,14 +90,14 @@ REACT_APP_API_KEY=your_tmdb_api_key
 REACT_APP_BACKEND_URL=http://localhost:DB_PORT`
 
 ## 4. Running the Backend Server
-`cd ./backend`   # Navigate to the backend directory  
+`cd ./backend`   # Navigate to the backend  directory  
 `npm install`    # Install dependencies  
 `npm run start`    # Start the backend server
 
 ## 5. Running the Frontend Server
-`cd ./frontend`  # Navigate to the frontend directory  
+`cd ..`  # Navigate to the frontend directory  
 `npm install`    # Install dependencies  
-`npm run dev`    # Start the frontend server
+`npm start`    # Start the frontend server
 
 
 
