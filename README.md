@@ -23,12 +23,12 @@ This project is designed for movie enthusiasts, providing features to search for
 
 ## Project Team Roles and Responsibilities
 
-- Yanwen He: Movies- and TVSeries Page
+- Yanwen He: Movies- and TVSeries Page, Showtimes
 - Ke Zhang: SignUp, SignIn, DeleteAccount
 - Suheda Sener: Reviews and Homepage
 - Shromona Hossain: Homepage
 - Thanh Nghi Vu Vo: Grouppage
-- Seraj Shekh: Groupage
+- Seraj Shekh: Grouppage
 - Robin Holzheuer: Profile-/Favoritespage, SharedFavorites-Page
 
 ## Database Structure
