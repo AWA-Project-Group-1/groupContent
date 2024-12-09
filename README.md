@@ -1,6 +1,10 @@
-# Feature-Rich Web Application for Movies and TV Series
 
-<img src="src/assets/images/movieapplogo.jpg" alt="Logo of MovieApp" width="400">
+<div align="center">
+    <img src="src/assets/images/movieapplogo.jpg" alt="Logo of MovieApp" width="400">
+</div>
+
+
+# Feature-Rich Web Application for Movies and TV Series
 
 
 ## About
@@ -54,7 +58,7 @@ This project is designed for movie enthusiasts, providing features to search for
 - **Favorites Page**: Access and manage favorite movies/TV shows, share links, and delete accounts.
 - **Groups Page**: Create, join, or leave groups; interact and share posts with members.
 - **Authentication**: Sign up for new accounts and sign in for existing users.
-
+*
 # Application Installation Instructions
 
 
