@@ -48,6 +48,15 @@
 
 .favoritesHeading {
   text-align: center;
+  font-size: 2rem;
+  color: #333333;
+  font-weight: 700;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px; 
+  margin-bottom: 1rem; 
+  border-bottom: 2px solid #e74c3c; 
+  padding-bottom: 0.5rem; 
 }
 
 .moviesContainer {
