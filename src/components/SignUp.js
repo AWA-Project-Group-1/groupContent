@@ -21,7 +21,7 @@ function SignUp() {
       setEmail("");
       setPassword("");
       setTimeout(() => {
-        navigate("/"); // Jump to sign in page
+        navigate("/sign-in"); // Jump to sign in page
       }, 2000);
     } catch (error) {
       setMessage(error.response?.data?.error || "Sign up failed");

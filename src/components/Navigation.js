@@ -172,9 +172,11 @@ const Navitation = () => {
       
        
         {user ? (
-          <li className={styles["nav-link"]}>
+          <li className={styles["nav-link"]} style={{ backgroundColor: "  #f44336",fontWeight:"bold", borderRadius:"5px",paddingLeft:"2px"}}>
+              Welcome, {user.username && user.username.length > 10 ? `${user.username.slice(0, 10)}...` : user.username || "❤️"}
+              <span style={{ verticalAlign: 'middle', position: 'relative', top: '-4px', fontWeight: "lighter" }}>&#8964;</span>
            
-            <li  style={{ backgroundColor: "  #f44336", borderRadius:"5px",paddingLeft:"2px"}}> Welcome, {user.username || ""}<span style={{ verticalAlign: 'middle', position: 'relative', top: '-4px' , fontWeight:"lighter"}}>&#8964;</span></li>
+            {/* <li  style={{ backgroundColor: "  #f44336", borderRadius:"5px",paddingLeft:"2px"}}> Welcome, {user.username || "❤️"}<span style={{ verticalAlign: 'middle', position: 'relative', top: '-4px' , fontWeight:"lighter"}}>&#8964;</span></li> */}
             {/* <li ><span style={{ verticalAlign: 'middle', position: 'relative', top: '-4px' , fontWeight:"lighter"}}>&#8964;</span></li> */}
             <ul className={styles["dropdown2"]}>  
                 <li className={styles["profile-grouppage-innav"]}><Link className={styles["profile-group-link"]} onClick={homeclickedHandler} to="/profile">Profile Page</Link></li>

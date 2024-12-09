@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaUser } from 'react-icons/fa'; // Import user icon
 import styles from './UserListPage.module.css';
 import Navigation from '../components/Navigation';
 
@@ -27,6 +28,7 @@ const UserListPage = () => {
       <div className={styles.userListContainer}>
         {users.map((user) => (
           <div key={user.id} className={styles.userCard}>
+            <FaUser className={styles.userIcon} /> {/* User icon */}
             <h3>{user.email}</h3>
             <button
               className={styles.sharedLinkButton}
