@@ -1,70 +1,98 @@
-# MovieApp-Group-1# Getting Started with Create React App
+# Feature-Rich Web Application for Movies and TV Series
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<img src="src/assets/images/movieapplogo.jpg" alt="Logo of MovieApp" width="400">
 
-## Available Scripts
 
-In the project directory, you can run:
+## About
 
-### `npm start`
+This project is designed for movie enthusiasts, providing features to search for movies, join and interact in groups, and manage personal preferences.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technology Stack
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **React**: A library for building user interfaces, enabling modular components and dynamic, state-driven UI with a virtual DOM.
+- **Express & Node.js**: Backend routes such as sign-in, sign-up, favorites, groups, and reviews are handled by Express, while Node.js ensures smooth server-side operation.
+- **PostgreSQL**: Database for storing user data, favorites, groups, and reviews.
+- **CSS, Bootstrap**: Styling and responsiveness.
+- **APIs**:
+  - **TMDB API**: Provides movie data such as title, release date, description, and cast.
+  - **Finnkino API**: Supplies showtimes information.
 
-### `npm test`
+## Project Team Roles and Responsibilities
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Yanwen He: Movies- and TVSeries Page
+- Ke Zhang: SignUp, SignIn, DeleteAccount
+- Suheda Sener: Reviews and Homepage
+- Shromona Hossain: Homepage
+- Thanh Nghi Vu Vo: Grouppage
+- Seraj Shekh: Groupage
+- Robin Holzheuer: Profile-/Favoritespage, SharedFavorites-Page
 
-### `npm run build`
+## Database Structure
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<img src="src/assets/images/DatabaseDiagram.png" alt="Database-Diagram" width="500">
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Tables:
 
-### `npm run eject`
+1. **Users**: Stores user data (email, password, created_at).
+2. **Favorites**: Tracks users' favorite movies/TV shows (movie_id, users_id, title, type, added_at).
+3. **Groups**: Manages user-created groups (name, id, owner, description).
+4. **GroupMembers**: Tracks group membership (id, role, group_id, user_id, status).
+5. **GroupContent**: Stores posts shared within groups (text, group_id, movie references, showtimes).
+6. **Reviews**: Contains user reviews (movie_id, user_id, created_at, rating, comments, type).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Relationships:
+- Users are linked to groups, favorites, and reviews.
+- Groups connect to group members and content.
+- Favorites and reviews relate to users and media items.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Interface Description
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **Home Page**: Search for movies/TV series and view content from TMDB endpoints.
+- **Movie/TV Series Page**: View movie/TV cards and access detailed information (e.g., title, description, crew, cast). Authenticated users can provide reviews.
+- **Showtime Page**: Filter showtimes by location, date, or cinema, with links for ticket booking.
+- **Favorites Page**: Access and manage favorite movies/TV shows, share links, and delete accounts.
+- **Groups Page**: Create, join, or leave groups; interact and share posts with members.
+- **Authentication**: Sign up for new accounts and sign in for existing users.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Application Installation Instructions
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 1. Clone Repository from GitHub
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+ `git clone https://github.com/AWA-Project-Group-1/MovieApp-Group-1.git`
 
-### Code Splitting
+## 2. Database Setup
+Create a new PostgreSQL database  
+Import the SQL schema from ./backend/db.sql into the new database  
+`psql -U your_username -d your_database_name -f ./backend/db.sql`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 3. Environment Variables Configuration
 
-### Analyzing the Bundle Size
+### Backend (backend/.env)
+PORT=the_port_number_your_backend_server_is_running_on 
+DB_USER=your_database_username  
+DB_HOST=the_host_of_your_database (e.g., localhost if running locally)  
+DB_NAME=the_name_of_your_database  
+DB_PASSWORD=your_database_password 
+DB_PORT=the_port_your_database_server_is_running_on (e.g., 5432/5435)  
+JWT_SECRET=a_secret_key_used_to_sign_JWT_tokens_for_authentication
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Frontend (.env)
+REACT_APP_BASE_URL=https://api.themoviedb.org/3
+REACT_APP_API_KEY=your_tmdb_api_key
+REACT_APP_BACKEND_URL=http://localhost:DB_PORT
 
-### Making a Progressive Web App
+## 4. Running the Backend Server
+`cd ./backend`   # Navigate to the backend directory  
+`npm install`    # Install dependencies  
+`npm run start`    # Start the backend server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 5. Running the Frontend Server
+`cd ./frontend`  # Navigate to the frontend directory  
+`npm install`    # Install dependencies  
+`npm run dev`    # Start the frontend server
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
