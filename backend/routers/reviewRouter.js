@@ -26,6 +26,15 @@ export const authenticate = (req, res, next) => {
 router.get('/:contentType/:movieId', (req, res) => {
     const { contentType, movieId } = req.params;
 
+    if (!contentType || (contentType !== 'movie' && contentType !== 'tv')) {
+        return res.status(400).json({ error: 'Missing or invalid contentType. Expected "movie" or "tv".' });
+    }
+
+    // Validate movieId (ensure it's a valid number or ID format, if applicable)
+    if (!movieId || isNaN(movieId)) {
+        return res.status(400).json({ error: 'Missing or invalid movieId.' });
+    }
+
     const query = `
         SELECT reviews.id, reviews.movies_id, reviews.rating, reviews.comment, reviews.type, reviews.created_at, users.email
         FROM reviews
@@ -42,7 +51,7 @@ router.get('/:contentType/:movieId', (req, res) => {
     });
 });
 
-// GET request for fetching reviews for a specific movie or TV show of the logged-in user
+// GET request for fetching reviews for a specific movie or TV show of the logged-in user (for the card give review/ already reviwewd toggle functionality)
 router.get('/user/:contentType/:movieId', authenticate, (req, res) => {
     const { contentType, movieId } = req.params;
     const userId = req.userId; // Use the user ID from the token
@@ -70,7 +79,7 @@ router.get('/user/:contentType/:movieId', authenticate, (req, res) => {
 
 router.get('/user', authenticate, (req, res) => {
     const { contentType } = req.query; // Extract 'movie' or 'tv' from query params
-    const userId = req.userId;  // Assuming you have userId from authentication
+    const userId = req.userId;
 
     // Validate the contentType
     if (contentType !== 'movie' && contentType !== 'tv') {
