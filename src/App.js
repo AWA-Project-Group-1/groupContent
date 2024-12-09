@@ -5,7 +5,9 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import AllMovies from './screens/AllMovies';
 import HomePage from './screens/HomePage';
 import './App.css';
-
+import { GroupProvider } from "./context/GroupProvider";
+import GroupPage from "./screens/GroupPage";
+import GroupDetailsPage from "./components/GroupDetailsPage.js"; // Import new page
 
 // heyanwen
 import TVSerial from "./screens/TVSerial.js"
@@ -38,10 +40,13 @@ const App = () => (
     <MoiveTVSerialProvider>
       <TVGenreProvider>
         <MovieGenreProvider>
-
+        <GroupProvider>
           <Router>
             <Routes>
-              <Route path="/" Component={HomePage} />
+                  {/* Add a new route for group functionality */}
+                  <Route path="/group" element={<GroupPage />} />
+                  <Route path="/group/:id" element={<GroupDetailsPage />} />
+              <Route path="/" element={<HomePage/>} />
               {/* <Route path="/movie/:id" Component={MovieDetails} /> */}
               {/* <Route path="/movies/top-rated" element={<AllMovies type="top-rated" />} />
                 <Route path="/movies/upcoming" element={<AllMovies type="upcoming" />} /> */}
@@ -62,7 +67,7 @@ const App = () => (
 
             </Routes>
           </Router>
-
+            </GroupProvider>
         </MovieGenreProvider>
       </TVGenreProvider>
 
