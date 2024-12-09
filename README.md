@@ -70,18 +70,20 @@ Import the SQL schema from ./backend/db.sql into the new database
 ## 3. Environment Variables Configuration
 
 ### Backend (backend/.env)
-PORT=the_port_number_your_backend_server_is_running_on 
-DB_USER=your_database_username  
+`
+PORT=the_port_number_your_backend_server_is_running_on
+DB_USER=your_database_username 
 DB_HOST=the_host_of_your_database (e.g., localhost if running locally)  
 DB_NAME=the_name_of_your_database  
 DB_PASSWORD=your_database_password 
 DB_PORT=the_port_your_database_server_is_running_on (e.g., 5432/5435)  
-JWT_SECRET=a_secret_key_used_to_sign_JWT_tokens_for_authentication
+JWT_SECRET=a_secret_key_used_to_sign_JWT_tokens_for_authentication`
 
 ### Frontend (.env)
+`
 REACT_APP_BASE_URL=https://api.themoviedb.org/3
 REACT_APP_API_KEY=your_tmdb_api_key
-REACT_APP_BACKEND_URL=http://localhost:DB_PORT
+REACT_APP_BACKEND_URL=http://localhost:DB_PORT`
 
 ## 4. Running the Backend Server
 `cd ./backend`   # Navigate to the backend directory  
