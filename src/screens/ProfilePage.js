@@ -8,7 +8,7 @@ import styles from './ProfilePage.module.css';
 import UserContext from '../context/UserContext';
 import Footer from "../components/Footer";
 
-const ITEMS_PER_GROUP = 5; // 5 movies + 5 TV series per page
+const ITEMS_PER_GROUP = 5; 
 
 const Profile = () => {
   const [favorites, setFavorites] = useState([]);
@@ -28,8 +28,8 @@ const Profile = () => {
             favoriteItems.map(async ({ movie_id, type }) => {
               const endpoint =
                 type === 'movie'
-                  ? `https://api.themoviedb.org/3/movie/${movie_id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`
-                  : `https://api.themoviedb.org/3/tv/${movie_id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`;
+                  ? `https://api.themoviedb.org/3/movie/${movie_id}?api_key=${process.env.REACT_APP_API_KEY}`
+                  : `https://api.themoviedb.org/3/tv/${movie_id}?api_key=${process.env.REACT_APP_API_KEY}`;
 
               const response = await fetch(endpoint);
               return { ...(await response.json()), type };

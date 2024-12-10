@@ -4,7 +4,7 @@ import styles from './SharedFavoritesPage.module.css';
 import logo from '../assets/images/movieapplogo.jpg';
 import Footer from '../components/Footer';
 
-const ITEMS_PER_PAGE = 10; // 5 movies + 5 TV series
+const ITEMS_PER_PAGE = 10; 
 
 const SharedFavoritesPage = () => {
   const { userId } = useParams();
@@ -42,8 +42,8 @@ const SharedFavoritesPage = () => {
             try {
               const endpoint =
                 type === 'movie'
-                  ? `https://api.themoviedb.org/3/movie/${id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`
-                  : `https://api.themoviedb.org/3/tv/${id}?api_key=8e00f8de49614d9ebf140af3901aa5b5`;
+                  ? `https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.REACT_APP_API_KEY}`
+                  : `https://api.themoviedb.org/3/tv/${id}?api_key=${process.env.REACT_APP_API_KEY}`;
 
               const response = await fetch(endpoint);
               if (!response.ok) {
