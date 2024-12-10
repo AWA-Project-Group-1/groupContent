@@ -3,8 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import GroupContext from "../context/GroupProvider";
 import UserContext from "../context/UserContext"; // Import UserContext to get current user
 import styles from "./GroupDetailsPage.module.css"; // Add your styles
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import Navigation from './Navigation';
+import Footer from "../components/Footer"
 
 const GroupDetailsPage = () => {
   const { id } = useParams(); // Get the group ID from the URL
