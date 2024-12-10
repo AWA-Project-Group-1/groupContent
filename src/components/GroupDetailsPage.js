@@ -117,7 +117,7 @@ const GroupDetailsPage = () => {
         {/* Admin Delete Button */}
           <div className={styles["delete-leave-back-button-container"]}>
               {isOwner && (
-                <button className={styles["delete-group-button"]} onClick={() => handleDeleteGroup(group.id)}>Delete Group</button>
+                <button  onClick={() => handleDeleteGroup(group.id)}>Delete Group</button>
               )}
 
               {/* Member Leave Group Button */}
@@ -125,7 +125,7 @@ const GroupDetailsPage = () => {
                 <button onClick={() => handleLeaveGroup(group.id)}>Leave Group</button>
               )}
 
-              <button className={styles["backtogroup-button"]} onClick={() => navigate("/group")}>Back to Groups</button>
+              <button onClick={() => navigate("/group")}>Back to Groups</button>
           </div>
 
         </div>
