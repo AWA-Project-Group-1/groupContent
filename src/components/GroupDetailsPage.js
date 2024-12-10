@@ -115,17 +115,21 @@ const GroupDetailsPage = () => {
         )}
 
         {/* Admin Delete Button */}
-        {isOwner && (
-          <button onClick={() => handleDeleteGroup(group.id)}>Delete Group</button>
-        )}
+          <div className={styles["delete-leave-back-button-container"]}>
+              {isOwner && (
+                <button className={styles["delete-group-button"]} onClick={() => handleDeleteGroup(group.id)}>Delete Group</button>
+              )}
 
-        {/* Member Leave Group Button */}
-        {!isOwner && (
-          <button onClick={() => handleLeaveGroup(group.id)}>Leave Group</button>
-        )}
+              {/* Member Leave Group Button */}
+              {!isOwner && (
+                <button onClick={() => handleLeaveGroup(group.id)}>Leave Group</button>
+              )}
 
-        <button onClick={() => navigate("/group")}>Back to Groups</button>
-      </div>
+              <button className={styles["backtogroup-button"]} onClick={() => navigate("/group")}>Back to Groups</button>
+          </div>
+
+        </div>
+        
       <Footer />
     </div>
   );
