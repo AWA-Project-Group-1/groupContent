@@ -13,7 +13,8 @@ const authenticate = (req, res, next) => {
     } catch (error) {
         console.error('JWT verification error:', error.message); // Log the error message
         return res.status(403).json({ error: "Invalid or expired token" });
-    }
+    } 
+        
 }
 
 

@@ -1,6 +1,5 @@
-
 import React, { useContext,useState, useEffect} from 'react';
-import { Link  } from "react-router-dom";
+//import { Link  } from "react-router-dom";
 import styles from "./HeroSection.module.css";
 // import { TVSeriesContext } from '../context/TVSeriesProvider';
 import { MoiveTVSerialContext } from "../context/MoiveTVSerialProvider"

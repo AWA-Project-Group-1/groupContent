@@ -1,41 +1,48 @@
-//this is backend/routes/groupRoutes.js file
-import express from 'express';
-import { createGroup, getGroups, deleteGroup, getGroupById, sendJoinRequest, acceptJoinRequest, rejectJoinRequest, removeMember, leaveGroup, getUserGroups } from '../controllers/groupController.js';
-import authenticate from '../helpers/auth.js';
-const router = express.Router();
+import { pool } from '../helpers/db.js';
+import { Router } from 'express';
+import authenticate from '../helpers/authenticate.js';
+import { getGroups, postGroup } from '../controllers/GroupController.js';
 
-// Route for creating a group (POST)
-router.post('/create', authenticate, createGroup);
+const router = Router();
 
-// Route for listing all groups (GET)
 router.get('/', getGroups);
-router.get('/users/:userId/groups', authenticate, getUserGroups);
 
+router.post('/create', postGroup);
 
+router.delete('/delete/:groupId', authenticate, async(req, res) => {
+  const { groupId } = req.params;
+  const {id: userId} = req.user;
+    
+  console.log("User in request:", req.user);
+  //console.log('Stored Token:', localStorage.getItem('token')); // for testing purposes  
+    try {
+      const groupResult = await pool.query(
+        "SELECT owners_id FROM groups WHERE id = $1",
+        [groupId]
+      );
+      const group = groupResult.rows[0];
+  
+      if (!group) {
+        return res.status(404).json({ error: "Group not found" });
+      }
+  
+      if (group.owners_id !== userId) {
+        return res.status(403).json({ error: "You are not authorized to delete this group" });
+      }
+  
 
-// Route for getting a specific group by ID (GET)
-router.get('/:id', authenticate, getGroupById);
+      await pool.query('DELETE FROM groupContent WHERE group_id = $1', [groupId]);
+      await pool.query('DELETE FROM groupMembers WHERE group_id = $1', [groupId]);
+      await pool.query("DELETE FROM groups WHERE id = $1", [groupId]);
 
-// Route for deleting a group (DELETE)
-// Route for deleting a group
-router.delete('/:groupId', authenticate, deleteGroup);
-
-
-// Route to send a join request
-router.post('/join-request', authenticate, sendJoinRequest);
-
-// Route to accept a join request
-router.post('/accept-request', authenticate, acceptJoinRequest);
-
-// Route to reject a join request
-router.post('/reject-request', authenticate, rejectJoinRequest);
-
-// Route to remove a member (only for the owner)
-router.post('/remove-member', authenticate, removeMember);
-
-// Route to leave the group (only for members)
-router.post('/:groupId/leave-group', authenticate, leaveGroup);
-
+      res.status(200).json({ message: "Group deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      res.status(500).json({ error: "An error occurred while deleting the group" });
+    }
+});
 
 
 export default router;
+
+

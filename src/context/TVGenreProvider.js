@@ -31,7 +31,7 @@ export function TVGenreProvider({ children }) {
             .catch((err) => {
                 console.error('Error fetching data:', err); // Handle errors
             });
-    }, []);
+    }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
     return (
         <TVGenreContext.Provider value={genreForTV}>

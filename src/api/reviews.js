@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL;
+//const baseUrl = process.env.REACT_APP_BACKEND_URL;
 const baseUrlforReviews = "http://localhost:3001/api/reviews";
 
 export const fetchReviews = async (movieId, contentType) => {

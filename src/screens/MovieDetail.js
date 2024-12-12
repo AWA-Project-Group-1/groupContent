@@ -48,7 +48,7 @@ const MovieDetail = () => {
             .catch((err) => {
                 console.error('Error fetching movie details:', err); // Handle errors
             });
-    }, [id]);
+    }, [id]); // Trigger when the movie ID changes
 
     useEffect(() => {
         // Extract the hash from the URL
@@ -88,7 +88,7 @@ const MovieDetail = () => {
             .catch((err) => {
                 console.error('Error fetching movie details:', err); // Handle errors
             });
-    }, []);
+    }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
     // Fetch reviews when the `id` changes
     const getReviews = async () => {
@@ -250,7 +250,7 @@ const MovieDetail = () => {
                                             <img
                                                 className={sytles['poster-container']}
                                                 src={movieapplogo1}
-                                                alt={`No image available for ${actor.name}`}
+                                                alt={`No pic. available for ${actor.name}`}
                                             />
                                         )}
                                     </div>

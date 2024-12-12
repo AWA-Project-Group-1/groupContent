@@ -6,12 +6,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './screens/HomePage';
 import './App.css';
 import { GroupProvider } from "./context/GroupProvider";
-import GroupPage from "./screens/GroupPage";
-import GroupDetailsPage from "./components/GroupDetailsPage.js"; // Import new page
+import Group from "./screens/Group";
+import GroupDetails from "./screens/GroupDetails";
+//import GroupPage from "./screens/GroupPage";
+//import GroupDetailsPage from "./components/GroupDetailsPage.js"; // Import new page
 
 // heyanwen
 import TVSerial from "./screens/TVSerial.js"
-import MovieShowtimes from "./screens/MovieShowtimes.js"
+//import MovieShowtimes from "./screens/MovieShowtimes.js"
 // import TVDetail from "./screens/TVDetail.js"
 import { MoiveTVSerialProvider } from "./context/MoiveTVSerialProvider"
 import MoviePage from "./screens/MoviePage.js"
@@ -44,8 +46,12 @@ const App = () => (
           <Router>
             <Routes>
                   {/* Add a new route for group functionality */}
-                  <Route path="/group" element={<GroupPage />} />
-                  <Route path="/group/:id" element={<GroupDetailsPage />} />
+                  {/*<Route path="/group" element={<GroupPage />} /> */}
+                  {/*<Route path="/group/:id" element={<GroupDetailsPage />} /> */} 
+
+                  <Route path="/group" element={<Group />} />
+                  <Route path="/group/:id" element={<GroupDetails />} />
+                  
               <Route path="/" element={<HomePage/>} />
               {/* <Route path="/movie/:id" Component={MovieDetails} /> */}
               {/* <Route path="/movies/top-rated" element={<AllMovies type="top-rated" />} />

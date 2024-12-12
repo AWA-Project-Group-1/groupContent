@@ -64,7 +64,7 @@ export function MoiveTVSerialProvider({ children }) {
         };
         
         fetchData();
-    }, []);
+    }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         console.log(`This is movieTVSerialData: ${JSON.stringify(movieTVSerialData)}`);

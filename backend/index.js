@@ -6,7 +6,11 @@ import favoriteRouter from './routers/favoriteRouter.js';
 import reviewsRouter from './routers/reviewRouter.js'
 import authRouter from './routers/authRouter.js';
 import { pool } from './helpers/db.js'; // Optional: test database connection on startup
-import groupRoutes from './routers/groupRouter.js';
+//import groupRoutes from './routers/groupRouter.js';
+import groupRouter from './routers/groupRouter.js';
+import groupContentRouter from './routers/groupContentRouter.js';
+import groupMemberRouter from './routers/groupMemberRouter.js';
+import groupOwnerRouter from './routers/groupOwnerRouter.js';
 
 dotenv.config();
 console.log('DB_USER:', process.env.DB_USER);
@@ -37,8 +41,13 @@ app.use("/api/auth", authRouter);
 app.use('/api/favorites', favoriteRouter);
 // Use the reviews router for /reviews endpoint
 app.use('/api/reviews', reviewsRouter);
-
-app.use('/api/groups', groupRoutes);
+app.use('/group', groupRouter);
+app.use('/content', groupContentRouter);
+app.use('/manage', groupMemberRouter);
+app.use('/manage', groupOwnerRouter);
+//app.use('/create', groupRouter);
+//app.use('/api/', groupRoutes);
+//app.use('/user', userRouter);
 // Fallback route for 404 errors
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });

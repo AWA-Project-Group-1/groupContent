@@ -61,6 +61,11 @@ const Navitation = () => {
   function profileclickHandler(){
     navigate("/profile")
   }
+
+  function groupPageClickHandler() {
+    navigate("/group");
+  }
+
   // heyanwen added
   const logoutHandler = () => {
     setUser(null);
@@ -104,7 +109,7 @@ const Navitation = () => {
             <li className={styles["nav-link" ]}><Link onClick={tvserialClickHandler} to="/tvserial">TV Serial</Link></li>
             <li className={styles["nav-link" ]}><Link onClick={showtimeClickHandler} to="/showtime">Show Time</Link></li>
             <li className={styles["nav-link" ]}><Link onClick={profileclickHandler} to="/profile">Profile Page</Link></li>
-            <li className={styles["nav-link" ]}><Link onClick={homeclickedHandler} to="/group">Group Page</Link></li>
+            <li className={styles["nav-link" ]}><Link onClick={groupPageClickHandler} to="/group">Group Page</Link></li>
             {/* <li className={styles["logout-button-hamburgerbar-container"]}> */}
               <button onClick={logoutHandler} className={styles["logout-button-hamburgerbar"]}>Logout</button>
             {/* </li> */}
@@ -185,7 +190,7 @@ const Navitation = () => {
             {/* <li ><span style={{ verticalAlign: 'middle', position: 'relative', top: '-4px' , fontWeight:"lighter"}}>&#8964;</span></li> */}
             <ul className={styles["dropdown2"]}>  
                 <li className={styles["profile-grouppage-innav"]}><Link className={styles["profile-group-link"]} onClick={homeclickedHandler} to="/profile">Profile Page</Link></li>
-                <li className={styles["profile-grouppage-innav"]}><Link  className={styles["profile-group-link"]}  onClick={homeclickedHandler} to="/group">Group Page</Link></li>
+                <li className={styles["profile-grouppage-innav"]}><Link  className={styles["profile-group-link"]}  onClick={groupPageClickHandler} to="/group">Group Page</Link></li>
                 <li className={styles["profile-grouppage-innav"]}><button onClick={logoutHandler} className={styles["logout-button"]}>Logout</button></li>
             </ul>
        

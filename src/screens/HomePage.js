@@ -77,7 +77,7 @@ const HomePage = () => {
                     <img
                         key={index}
                         src={image.src}
-                        alt={`Slideshow Image ${index + 1}`}
+                        alt={`Slideshow ${index + 1}`}
                         className={`${styles.slideshowImage} ${index === currentImage ? '' : 'd-none'}`}
                         style={{ objectPosition: image.position }}
                     />

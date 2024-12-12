@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './About.module.css';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
-import poster3 from "../assets/images/poster3 (2).jpg";
+//import poster3 from "../assets/images/poster3 (2).jpg";
 
 const About = () => {
     return (
